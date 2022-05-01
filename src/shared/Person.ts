@@ -1,7 +1,7 @@
 class Person {
-	private name: string;
-	private age: number;
-	private gender: boolean;
+	name: string;
+	age: number;
+	gender: boolean;
 
 	constructor(name: string, age: number, gender: boolean) {
 		this.gender = gender;
@@ -9,7 +9,7 @@ class Person {
 		this.age = age;
 	}
 
-	displayInfo() {
+	public displayInfo() {
 		let genderName = "";
 		if (this.gender) {
 			genderName = "Male";
@@ -17,6 +17,18 @@ class Person {
 			genderName = "Female";
 		}
 		print(string.format("%s | %s | %d", this.name, genderName, this.age));
+	}
+
+	public getName() {
+		return this.name;
+	}
+
+	public getAge() {
+		return this.age;
+	}
+
+	public getGender() {
+		return this.gender;
 	}
 }
 
