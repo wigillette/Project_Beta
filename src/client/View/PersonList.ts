@@ -1,28 +1,35 @@
-import { Players, ReplicatedStorage } from "@rbxts/services";
+import { Players } from "@rbxts/services";
 import Person from "shared/Person";
+import PersonTemplate from "../Components/PersonTemplate";
+import Roact from "@rbxts/roact";
 
-// UI Objects
-const client = Players.LocalPlayer;
-const playerGUI = client.WaitForChild("PlayerGui");
-const main = playerGUI.WaitForChild("Main");
-const personList = main.WaitForChild("PersonList");
-const personTemplate = ReplicatedStorage.WaitForChild("PersonTemplate");
+// PersonTemplate Properties
+interface UIProps {
+	Name: string;
+	Age: number;
+	Gender: string;
+}
 
 // Person Frame Class
 class PersonFrame {
 	constructor(person: Person) {
+		// Load UI Objects
+		const client = Players.LocalPlayer;
+		const pg = client.WaitForChild("PlayerGui");
+		const main = pg.WaitForChild("Main");
+		const personList = main.WaitForChild("PersonList");
+
 		// Template Objects
-		const newPersonFrame = personTemplate.Clone();
-		const dataLabel = newPersonFrame.WaitForChild("DataLabel") as TextLabel;
+		const props: UIProps = {
+			Age: person.age,
+			Name: person.name,
+			Gender: (person.gender && "Male") || "Female",
+		};
 
-		// Initializing Template Properties
-		const name = person.name;
-		const age = tostring(person.age);
-		const gender = (person.gender && "Male") || "Female";
-		dataLabel.Text = string.format("%s | %s | %s", name, age, gender);
-
-		// Insert Into List
-		newPersonFrame.Parent = personList;
+		// Create the template element
+		const newTemplate = Roact.createElement(PersonTemplate, props);
+		// Mount it to the main UI
+		Roact.mount(newTemplate, personList);
 	}
 }
 
