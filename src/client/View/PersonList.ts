@@ -28,6 +28,7 @@ class PersonFrame {
 
 		// Create the template element
 		const newTemplate = Roact.createElement(PersonTemplate, props);
+
 		// Mount it to the main UI
 		Roact.mount(newTemplate, personList);
 	}
