@@ -32,6 +32,7 @@ class Circle extends Roact.Component<UIProps> {
 	}
 
 	didMount() {
+		print("Executing");
 		const circle = this.circleRef.getValue();
 		const frame = this.props.frame;
 		if (circle && frame) {
@@ -40,10 +41,12 @@ class Circle extends Roact.Component<UIProps> {
 				const newY = this.props.yPos - circle.AbsolutePosition.Y;
 				circle.Position = new UDim2(0, newX, 0, newY);
 				let size = 0;
-				if (frame.AbsolutePosition.X > frame.AbsolutePosition.Y) {
+				if (frame.AbsoluteSize.X > frame.AbsoluteSize.Y) {
 					size = frame.AbsoluteSize.X * 1.5;
 				} else if (frame.AbsoluteSize.X < frame.AbsoluteSize.Y) {
 					size = frame.AbsoluteSize.Y * 1.5;
+				} else {
+					size = frame.AbsoluteSize.X * 1.5;
 				}
 
 				const time = 0.5;
@@ -64,6 +67,7 @@ class Circle extends Roact.Component<UIProps> {
 				wait(time);
 				circle.Destroy();
 			})();
+			print("Successful");
 		}
 	}
 }

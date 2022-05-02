@@ -1,5 +1,5 @@
 import Roact from "@rbxts/roact";
-import { TweenService } from "@rbxts/services";
+import { TweenService, Players } from "@rbxts/services";
 import Circle from "./Circle";
 
 interface UIProps {
@@ -75,7 +75,9 @@ class PersonTemplate extends Roact.Component<UIProps> {
 							ZIndex={1}
 							Ref={this.buttonRef}
 							Event={{
-								MouseButton1Down: (rbx, x, y) => {
+								MouseButton1Click: () => {
+									const client = Players.LocalPlayer;
+									const mouse = client.GetMouse();
 									const label = this.labelRef.getValue();
 									const frame = this.frameRef.getValue();
 									if (label && frame) {
@@ -85,8 +87,8 @@ class PersonTemplate extends Roact.Component<UIProps> {
 											label.Text = "Press Here";
 										})();
 										const newCircle = Roact.createElement(Circle, {
-											xPos: x,
-											yPos: y,
+											xPos: mouse.X,
+											yPos: mouse.Y,
 											frame: frame,
 										});
 
