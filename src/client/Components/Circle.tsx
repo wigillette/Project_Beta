@@ -32,7 +32,6 @@ class Circle extends Roact.Component<UIProps> {
 	}
 
 	didMount() {
-		print("Executing");
 		const circle = this.circleRef.getValue();
 		const frame = this.props.frame;
 		if (circle && frame) {
@@ -67,7 +66,6 @@ class Circle extends Roact.Component<UIProps> {
 				wait(time);
 				circle.Destroy();
 			})();
-			print("Successful");
 		}
 	}
 }

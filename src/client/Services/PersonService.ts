@@ -1,5 +1,5 @@
 import { KnitClient as Knit } from "@rbxts/knit";
-import PersonFrame from "../View/PersonList";
+import PersonFrame from "../Controllers/PersonList";
 import Person from "shared/Person";
 
 // Access the person service

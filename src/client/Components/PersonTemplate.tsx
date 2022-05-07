@@ -1,6 +1,8 @@
 import Roact from "@rbxts/roact";
-import { TweenService, Players } from "@rbxts/services";
-import Circle from "./Circle";
+import { Players } from "@rbxts/services";
+import { RectShadow, RectBG, RectText, RectContainer, RippleFrame, RectButtonText } from "client/UIProperties/RectUI";
+import { rippleEffect, popText, tweenColor } from "client/UIProperties/ButtonEffects";
+import { tweenPos, tweenTransparency } from "client/UIProperties/FrameEffects";
 
 interface UIProps {
 	Name: string;
@@ -12,11 +14,13 @@ class PersonTemplate extends Roact.Component<UIProps> {
 	labelRef;
 	buttonRef;
 	frameRef;
+	containerRef;
 	constructor(props: UIProps) {
 		super(props);
 		this.labelRef = Roact.createRef<TextLabel>();
 		this.buttonRef = Roact.createRef<ImageButton>();
 		this.frameRef = Roact.createRef<Frame>();
+		this.containerRef = Roact.createRef<Frame>();
 	}
 
 	render() {
@@ -25,19 +29,10 @@ class PersonTemplate extends Roact.Component<UIProps> {
 				Size={new UDim2(0.92, 0, 0.06, 0)}
 				AnchorPoint={new Vector2(0.5, 0)}
 				Position={new UDim2(0.5, 0, 0, 0)}
-				BackgroundTransparency={1}
+				Ref={this.containerRef}
+				{...RectContainer}
 			>
-				<imagelabel
-					ZIndex={1}
-					Size={new UDim2(1, 0, 1, 0)}
-					AnchorPoint={new Vector2(0.5, 0.5)}
-					Position={new UDim2(0.5, 0, 0.5, 0)}
-					Image="http://www.roblox.com/asset/?id=5350360532"
-					ImageColor3={Color3.fromRGB(200, 0, 0)}
-					ScaleType={Enum.ScaleType.Slice}
-					BackgroundTransparency={1}
-					SliceCenter={new Rect(350, 350, 350, 350)}
-				>
+				<imagelabel ImageColor3={Color3.fromRGB(200, 0, 0)} {...RectBG}>
 					<textlabel
 						Text={string.format(
 							"%s | %s | %s",
@@ -47,32 +42,22 @@ class PersonTemplate extends Roact.Component<UIProps> {
 						)}
 						AnchorPoint={new Vector2(0.5, 0.05)}
 						Position={new UDim2(0.5, 0, 0.05, 0)}
+						Size={new UDim2(0.95, 0, 0.5, 0)}
 						TextColor3={Color3.fromRGB(255, 255, 255)}
-						Size={new UDim2(0.9, 0, 0.45, 0)}
-						Font={"Gotham"}
-						TextScaled={true}
-						BackgroundTransparency={1}
 						TextStrokeTransparency={0.8}
+						{...RectText}
 					></textlabel>
 
 					<frame
 						Size={new UDim2(0.4, 0, 0.4, 0)}
 						AnchorPoint={new Vector2(0.5, 0.95)}
 						Position={new UDim2(0.5, 0, 0.95, 0)}
-						BackgroundTransparency={1}
 						Ref={this.frameRef}
-						ClipsDescendants={true}
+						{...RippleFrame}
 					>
 						<imagebutton
-							Image="http://www.roblox.com/asset/?id=5350360532"
 							ImageColor3={Color3.fromRGB(120, 120, 120)}
-							Position={new UDim2(0.5, 0, 0.5, 0)}
-							Size={new UDim2(1, 0, 1, 0)}
-							AnchorPoint={new Vector2(0.5, 0.5)}
-							ScaleType={Enum.ScaleType.Slice}
-							SliceCenter={new Rect(350, 350, 350, 350)}
-							BackgroundTransparency={1}
-							ZIndex={1}
+							{...RectBG}
 							Ref={this.buttonRef}
 							Event={{
 								MouseButton1Click: () => {
@@ -80,104 +65,57 @@ class PersonTemplate extends Roact.Component<UIProps> {
 									const mouse = client.GetMouse();
 									const label = this.labelRef.getValue();
 									const frame = this.frameRef.getValue();
-									if (label && frame) {
+									const container = this.containerRef.getValue();
+									if (label && frame && container) {
 										coroutine.wrap(() => {
-											label.Text = tostring(100 - this.props.Age);
-											wait(2);
-											label.Text = "Press Here";
-										})();
-										const newCircle = Roact.createElement(Circle, {
-											xPos: mouse.X,
-											yPos: mouse.Y,
-											frame: frame,
-										});
-
-										coroutine.wrap(() => {
-											// Mount the newCircle onto the label
-											const tree = Roact.mount(newCircle, frame);
-											wait(0.5);
-											Roact.unmount(tree);
+											popText(label, "Press Here", tostring(100 - this.props.Age), 2);
+											rippleEffect(frame, mouse);
+											wait(0.3);
+											tweenTransparency(container, true, false);
+											wait(0.4);
+											container.Visible = false;
 										})();
 									}
 								},
-								MouseEnter: (rbx, x, y) => {
-									const button = this.buttonRef.getValue();
-									if (button) {
-										TweenService.Create(
-											button,
-											new TweenInfo(
-												0.3,
-												Enum.EasingStyle.Quad,
-												Enum.EasingDirection.Out,
-												0,
-												false,
-												0,
-											),
-											{ ImageColor3: Color3.fromRGB(160, 160, 160) },
-										).Play();
-									} else {
-										print("NULL");
-									}
+								MouseEnter: (rbx) => {
+									tweenColor(rbx, Color3.fromRGB(160, 160, 160));
 								},
-								MouseLeave: (rbx, x, y) => {
-									const button = this.buttonRef.getValue();
-									if (button) {
-										TweenService.Create(
-											button,
-											new TweenInfo(
-												0.3,
-												Enum.EasingStyle.Quad,
-												Enum.EasingDirection.Out,
-												0,
-												false,
-												0,
-											),
-											{ ImageColor3: Color3.fromRGB(120, 120, 120) },
-										).Play();
-									}
+								MouseLeave: (rbx) => {
+									tweenColor(rbx, Color3.fromRGB(120, 120, 120));
 								},
 							}}
 						>
 							<textlabel
 								Ref={this.labelRef}
 								Text={"Press Here"}
-								AnchorPoint={new Vector2(0.5, 0.5)}
-								Position={new UDim2(0.5, 0, 0.5, 0)}
-								TextColor3={new Color3(255, 255, 255)}
-								Size={new UDim2(0.95, 0, 0.95, 0)}
-								Font={"Gotham"}
-								TextScaled={true}
-								BackgroundTransparency={1}
-								TextStrokeTransparency={0.8}
+								ZIndex={2}
+								{...RectButtonText}
 							></textlabel>
 						</imagebutton>
-						<imagelabel
-							Image="http://www.roblox.com/asset/?id=5350360532"
-							ImageColor3={Color3.fromRGB(80, 80, 80)}
-							Position={new UDim2(0.5, 0, 0.5, 3)}
-							Size={new UDim2(1, 0, 1, 0)}
-							ZIndex={0}
-							AnchorPoint={new Vector2(0.5, 0.5)}
-							ScaleType={Enum.ScaleType.Slice}
-							SliceCenter={new Rect(350, 350, 350, 350)}
-							BackgroundTransparency={1}
-						></imagelabel>
+						<imagelabel ImageColor3={Color3.fromRGB(80, 80, 80)} {...RectShadow}></imagelabel>
 					</frame>
 				</imagelabel>
-				<imagelabel
-					Image="http://www.roblox.com/asset/?id=5350360532"
-					AnchorPoint={new Vector2(0.5, 0.5)}
-					ZIndex={0}
-					Position={new UDim2(0.5, 0, 0.5, 3)}
-					Size={new UDim2(1, 0, 1, 0)}
-					ImageColor3={Color3.fromRGB(160, 0, 0)}
-					BackgroundTransparency={1}
-					ScaleType={Enum.ScaleType.Slice}
-					SliceCenter={new Rect(350, 350, 350, 350)}
-				></imagelabel>
+				<imagelabel ImageColor3={Color3.fromRGB(160, 0, 0)} {...RectShadow}></imagelabel>
 			</frame>
 		);
 	}
+
+	/*
+	protected didMount(): void {
+		const container = this.containerRef.getValue();
+
+		// Tween in the transparency
+		if (container) {
+			coroutine.wrap(() => {
+				container.Visible = false;
+				tweenTransparency(container, true, false);
+				wait(0.4);
+				container.Visible = true;
+				tweenTransparency(container, true, true);
+			})();
+		}
+	}
+	*/
 }
 
 export default PersonTemplate;
