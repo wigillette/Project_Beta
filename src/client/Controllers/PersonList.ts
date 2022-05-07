@@ -1,6 +1,6 @@
 import { Players } from "@rbxts/services";
 import Person from "shared/Person";
-import PersonTemplate from "../Components/PersonTemplate";
+import PersonTemplate from "../Components/Person/PersonTemplate";
 import Roact from "@rbxts/roact";
 
 // PersonTemplate Properties

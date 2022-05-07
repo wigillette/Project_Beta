@@ -14,41 +14,23 @@ export const tweenSize = (frame: Frame, size: UDim2) => {
 
 export const tweenPos = (frame: Frame, direction: string, magnitude: number) => {
 	let newPos: UDim2 = frame.Position;
+	let magnitudes = [0, 0];
 	switch (direction) {
 		case "Up":
-			newPos = new UDim2(
-				frame.Position.X.Scale,
-				frame.Position.X.Offset,
-				frame.Position.Y.Scale - magnitude,
-				frame.Position.Y.Offset,
-			);
+			magnitudes = [0, -magnitude];
 			break;
 		case "Down":
-			newPos = new UDim2(
-				frame.Position.X.Scale,
-				frame.Position.X.Offset,
-				frame.Position.Y.Scale + magnitude,
-				frame.Position.Y.Offset,
-			);
+			magnitudes = [0, magnitude];
 			break;
 		case "Left":
-			newPos = new UDim2(
-				frame.Position.X.Scale - magnitude,
-				frame.Position.X.Offset,
-				frame.Position.Y.Scale,
-				frame.Position.Y.Offset,
-			);
+			magnitudes = [-magnitude, 0];
 			break;
 		case "Right":
-			newPos = new UDim2(
-				frame.Position.X.Scale + magnitude,
-				frame.Position.X.Offset,
-				frame.Position.Y.Scale,
-				frame.Position.Y.Offset,
-			);
+			magnitudes = [magnitude, 0];
 			break;
 	}
 
+	newPos = UDim2.fromScale(frame.Position.X.Scale + magnitudes[0], frame.Position.Y.Scale + magnitudes[1]);
 	frame.TweenPosition(newPos, Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 1, true, undefined);
 };
 

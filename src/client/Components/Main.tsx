@@ -1,5 +1,5 @@
 import Roact from "@rbxts/roact";
-import PersonList from "./PersonList";
+import PersonList from "./Person/PersonList";
 
 const Main = () => {
 	return (

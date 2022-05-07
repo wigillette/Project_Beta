@@ -26,12 +26,17 @@ class PersonTemplate extends Roact.Component<UIProps> {
 	render() {
 		return (
 			<frame
-				Size={new UDim2(0.92, 0, 0.06, 0)}
+				Size={new UDim2(0.9, 0, 0.1, 0)}
 				AnchorPoint={new Vector2(0.5, 0)}
 				Position={new UDim2(0.5, 0, 0, 0)}
 				Ref={this.containerRef}
 				{...RectContainer}
 			>
+				<uiaspectratioconstraint
+					AspectRatio={3}
+					DominantAxis={Enum.DominantAxis.Width}
+					AspectType={Enum.AspectType.ScaleWithParentSize}
+				></uiaspectratioconstraint>
 				<imagelabel ImageColor3={Color3.fromRGB(200, 0, 0)} {...RectBG}>
 					<textlabel
 						Text={string.format(
@@ -74,6 +79,7 @@ class PersonTemplate extends Roact.Component<UIProps> {
 											tweenTransparency(container, true, false);
 											wait(0.4);
 											container.Visible = false;
+											container.Destroy();
 										})();
 									}
 								},
@@ -99,23 +105,6 @@ class PersonTemplate extends Roact.Component<UIProps> {
 			</frame>
 		);
 	}
-
-	/*
-	protected didMount(): void {
-		const container = this.containerRef.getValue();
-
-		// Tween in the transparency
-		if (container) {
-			coroutine.wrap(() => {
-				container.Visible = false;
-				tweenTransparency(container, true, false);
-				wait(0.4);
-				container.Visible = true;
-				tweenTransparency(container, true, true);
-			})();
-		}
-	}
-	*/
 }
 
 export default PersonTemplate;
