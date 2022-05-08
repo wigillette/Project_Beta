@@ -2,7 +2,8 @@ import Roact from "@rbxts/roact";
 import { Players } from "@rbxts/services";
 import { RectShadow, RectBG, RectText, RectContainer, RippleFrame, RectButtonText } from "client/UIProperties/RectUI";
 import { rippleEffect, popText, tweenColor } from "client/UIProperties/ButtonEffects";
-import { tweenPos, tweenTransparency } from "client/UIProperties/FrameEffects";
+import { tweenTransparency } from "client/UIProperties/FrameEffects";
+import { googleMaterial } from "client/UIProperties/ColorSchemes";
 
 interface UIProps {
 	Name: string;
@@ -37,7 +38,7 @@ class PersonTemplate extends Roact.Component<UIProps> {
 					DominantAxis={Enum.DominantAxis.Width}
 					AspectType={Enum.AspectType.ScaleWithParentSize}
 				></uiaspectratioconstraint>
-				<imagelabel ImageColor3={Color3.fromRGB(200, 0, 0)} {...RectBG}>
+				<imagelabel ImageColor3={googleMaterial.outerBG} {...RectBG}>
 					<textlabel
 						Text={string.format(
 							"%s | %s | %s",
@@ -48,20 +49,19 @@ class PersonTemplate extends Roact.Component<UIProps> {
 						AnchorPoint={new Vector2(0.5, 0.05)}
 						Position={new UDim2(0.5, 0, 0.05, 0)}
 						Size={new UDim2(0.95, 0, 0.5, 0)}
-						TextColor3={Color3.fromRGB(255, 255, 255)}
-						TextStrokeTransparency={0.8}
+						TextColor3={googleMaterial.cardFont}
 						{...RectText}
 					></textlabel>
 
 					<frame
-						Size={new UDim2(0.4, 0, 0.4, 0)}
+						Size={new UDim2(0.8, 0, 0.4, 0)}
 						AnchorPoint={new Vector2(0.5, 0.95)}
 						Position={new UDim2(0.5, 0, 0.95, 0)}
 						Ref={this.frameRef}
 						{...RippleFrame}
 					>
 						<imagebutton
-							ImageColor3={Color3.fromRGB(120, 120, 120)}
+							ImageColor3={googleMaterial.buttonColor}
 							{...RectBG}
 							Ref={this.buttonRef}
 							Event={{
@@ -84,10 +84,10 @@ class PersonTemplate extends Roact.Component<UIProps> {
 									}
 								},
 								MouseEnter: (rbx) => {
-									tweenColor(rbx, Color3.fromRGB(160, 160, 160));
+									tweenColor(rbx, googleMaterial.buttonHover);
 								},
 								MouseLeave: (rbx) => {
-									tweenColor(rbx, Color3.fromRGB(120, 120, 120));
+									tweenColor(rbx, googleMaterial.buttonColor);
 								},
 							}}
 						>
@@ -95,13 +95,15 @@ class PersonTemplate extends Roact.Component<UIProps> {
 								Ref={this.labelRef}
 								Text={"Press Here"}
 								ZIndex={2}
+								TextColor3={googleMaterial.butttonFont}
+								TextStrokeTransparency={0.9}
 								{...RectButtonText}
 							></textlabel>
 						</imagebutton>
-						<imagelabel ImageColor3={Color3.fromRGB(80, 80, 80)} {...RectShadow}></imagelabel>
+						<imagelabel ImageColor3={googleMaterial.buttonShadow} {...RectShadow}></imagelabel>
 					</frame>
 				</imagelabel>
-				<imagelabel ImageColor3={Color3.fromRGB(160, 0, 0)} {...RectShadow}></imagelabel>
+				<imagelabel ImageColor3={googleMaterial.outerShadow} {...RectShadow}></imagelabel>
 			</frame>
 		);
 	}

@@ -15,7 +15,7 @@ const PersonService = Knit.CreateService({
 
 	Client: {
 		// Handles client-server communication; OnServerEvent
-		GetPeople(player: Player) {
+		GetPeople() {
 			return this.Server.GetPeople();
 		},
 	},

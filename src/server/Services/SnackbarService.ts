@@ -1,6 +1,4 @@
 import { KnitServer as Knit, RemoteSignal } from "@rbxts/knit";
-import Person from "../../shared/Person";
-import PersonData from "shared/PersonData";
 
 declare global {
 	interface KnitServices {

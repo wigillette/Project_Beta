@@ -1,10 +1,10 @@
 export const RectBG: Partial<WritableInstanceProperties<ImageLabel>> = {
-	Image: "http://www.roblox.com/asset/?id=5350360532",
+	Image: "http://www.roblox.com/asset/?id=5295627555",
 	Position: new UDim2(0.5, 0, 0.5, 0),
 	Size: new UDim2(1, 0, 1, 0),
 	AnchorPoint: new Vector2(0.5, 0.5),
 	ScaleType: Enum.ScaleType.Slice,
-	SliceCenter: new Rect(350, 350, 350, 350),
+	SliceCenter: new Rect(10, 10, 10, 10),
 	BackgroundTransparency: 1,
 	ZIndex: 1,
 };
