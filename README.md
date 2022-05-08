@@ -30,7 +30,7 @@
 - Initializes the client-side services
 ### **TASK LIST**
 
-### UI Properties Setup
+> UI Properties Setup
 - [x] Tween Animation Handler, Ripple Effect
 - [x] Color Schemes
 - [x] Dynamic Scrolling
@@ -38,11 +38,11 @@
 - [ ] Dynamic/Spinning Viewport Frame
 - [ ] Spritesheets
 
-### Data Storage
+> Data Storage
 - [ ] SQL Database vs. Datastore2
 - [ ] User Data Module
 
-### Services
+> Services
 - [ ] Map Service
 - [ ] Mode Service
 - [ ] Gold Service

@@ -21,6 +21,7 @@ export default function init() {
 		}
 	});
 
+	// Check the triggers on every frame
 	RunService.RenderStepped.Connect((dt) => {
 		const character = client.Character;
 		if (character) {
