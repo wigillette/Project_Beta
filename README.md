@@ -32,9 +32,9 @@
 
 ### UI Properties Setup
 - [x] Tween Animation Handler, Ripple Effect
-- [ ] UI Property Layouts
 - [x] Color Schemes
-- [x] Dynamic Scrollbar List Example
+- [x] Dynamic Scrolling
+- [ ] UI Property Layouts
 - [ ] Dynamic/Spinning Viewport Frame
 - [ ] Spritesheets
 
@@ -57,7 +57,8 @@
 
 ### Material Components:
 - [x] Snackbar Component/Service/Controller
-- [x] Slider Component
+- [x] Dynamic List Component
+- [ ] Slider Component
 - [ ] Progress Bar Component
 - [ ] Card Component
 - [ ] Navigation Bar Component
