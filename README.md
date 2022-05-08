@@ -3,9 +3,9 @@
 ### This codebase uses Roact, Rodux, and Knit from the roblox-ts library.
 ### 1. SHARED
 > src/shared:
-- Contains datatypes and various settings relevant to both the client and server sides
-- Enables the client side to display this information on the view
-- Allows the server side to use this information in various algorithms
+> - Contains datatypes and various settings relevant to both the client and server sides
+> - Enables the client side to display this information on the view
+> - Allows the server side to use this information in various algorithms
 ### 2. SERVER
 > src/server/Services:
 - Contains the server-side business logic for the Knit services, facilitating client-server communication by organizing server-side information and remotes
