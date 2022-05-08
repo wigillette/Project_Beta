@@ -1,5 +1,6 @@
 # Project Beta
-## Refining my codebase from project alpha to incorporate better organization and scalability to limit redundancy and promote efficiency. This codebase uses Roact, Rodux, and Knit from the roblox-ts library.
+## Refining my codebase from project alpha to incorporate better organization and scalability to limit redundancy and promote efficiency. 
+## This codebase uses Roact, Rodux, and Knit from the roblox-ts library.
 ### SHARED
 1. src/shared:
 - Contains datatypes and various settings relevant to both the client and server sides
