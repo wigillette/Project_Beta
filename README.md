@@ -28,3 +28,45 @@
 > client/main.client.ts:
 - Executes on the client directly after the respective player connects to the game
 - Initializes the client-side services
+### **TASK LIST**
+
+### UI Properties Setup
+- [x] Tween Animation Handler, Ripple Effect
+- [ ] UI Property Layouts
+- [x] Color Schemes
+- [x] Dynamic Scrollbar List Example
+- [ ] Dynamic/Spinning Viewport Frame
+- [ ] Spritesheets
+
+### Data Storage
+- [ ] SQL Database vs. Datastore2
+- [ ] User Data Module
+
+### Services
+- [ ] Map Service
+- [ ] Mode Service
+- [ ] Gold Service
+- [ ] Trading Service
+- [ ] Crafting Service
+- [ ] Interaction Service
+
+### Shared
+- [ ] Sword Data
+- [ ] Level Data
+
+
+### Material Components:
+- [x] Snackbar Component/Service/Controller
+- [x] Slider Component
+- [ ] Progress Bar Component
+- [ ] Card Component
+- [ ] Navigation Bar Component
+- [ ] Toggle Button Component
+- [ ] Text Box Component
+
+### Other UI:
+- [ ] Intro UI
+- [ ] Shop UI
+- [ ] Crafting UI
+- [ ] Trading UI
+- [ ] Interaction UI
