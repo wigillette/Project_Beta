@@ -1,12 +1,13 @@
 import Roact from "@rbxts/roact";
 import { Players, Workspace } from "@rbxts/services";
 import Grid from "client/Components/Material/Grid";
-
+import Textbox from "client/Components/Material/Textbox";
 // Run on client service startup
 export default function init() {
 	// Create the manager object
 
-	const cardModel = Workspace.WaitForChild("PetExample") as Model;
+	//const cardModel = Workspace.WaitForChild("PetExample") as Model;
+	/*
 	const cardObject = Roact.createElement(Grid, {
 		Header: "Pet Shop",
 		CardInfo: [
@@ -27,10 +28,18 @@ export default function init() {
 			{ Name: "Pet 15", Price: 250, Model: cardModel },
 		],
 	});
+    */
+
+	const textboxObject = Roact.createElement(Textbox, {
+		placeholderText: "Enter your input..",
+		Position: new UDim2(0.5, 0, 0.5, 0),
+		Size: new UDim2(0.5, 0, 0.1, 0),
+		AnchorPoint: new Vector2(0.5, 0.5),
+	});
 
 	const client = Players.LocalPlayer;
 	const pg = client.WaitForChild("PlayerGui");
 	const main = pg.WaitForChild("Main");
 
-	Roact.mount(cardObject, main);
+	Roact.mount(textboxObject, main);
 }
