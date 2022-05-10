@@ -49,7 +49,7 @@
 - [ ] Trading Service
 - [ ] Crafting Service
 - [ ] Interaction Service
-- [ ] Touch Service
+- [x] Touch Service
 
 > Shared
 - [ ] Sword Data
@@ -67,7 +67,7 @@
 - [x] Card Component
 - [ ] Navigation Bar Component
 - [ ] Toggle Button Component
-- [ ] Text Box Component
+- [x] Text Box Component
 
 ### Other UI:
 - [ ] Intro UI

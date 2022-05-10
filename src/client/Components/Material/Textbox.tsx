@@ -1,10 +1,10 @@
 import Roact from "@rbxts/roact";
-import { Players } from "@rbxts/services";
-import { RectShadow, RectBG, RippleFrame, RectButtonText, RectContainer } from "client/UIProperties/RectUI";
+import { RectShadow, RectBG, RectButtonText, RectContainer } from "client/UIProperties/RectUI";
 import { tweenTransparency } from "client/UIProperties/FrameEffects";
 import { googleMaterial, gradientProperties, whiteGradientProperties } from "client/UIProperties/ColorSchemes";
 
 interface UIProps {
+	onEnter: (text: string) => void;
 	placeholderText: string;
 	Size: UDim2;
 	Position: UDim2;
@@ -36,7 +36,13 @@ class RectButton extends Roact.Component<UIProps> {
 					DominantAxis={Enum.DominantAxis.Width}
 					AspectType={Enum.AspectType.ScaleWithParentSize}
 				></uiaspectratioconstraint>
-				<imagelabel ImageColor3={googleMaterial.cardBG} {...RectBG} ZIndex={3}>
+
+				<imagelabel
+					ImageColor3={googleMaterial.cardBG}
+					{...RectBG}
+					Size={new UDim2(0.975, 0, 0.85, 0)}
+					ZIndex={3}
+				>
 					<uigradient {...gradientProperties}></uigradient>
 					<textbox
 						PlaceholderText={this.props.placeholderText}
@@ -63,7 +69,7 @@ class RectButton extends Roact.Component<UIProps> {
 									tweenTransparency(shadow, true, false);
 									textbox.PlaceholderText = this.props.placeholderText;
 									if (enterPressed) {
-										print(textbox.Text);
+										this.props.onEnter(textbox.Text);
 										textbox.Text = "";
 									}
 								}
@@ -77,12 +83,12 @@ class RectButton extends Roact.Component<UIProps> {
 					{...RectContainer}
 					Position={new UDim2(0.5, 0, 0.5, 0)}
 					AnchorPoint={new Vector2(0.5, 0.5)}
-					Size={new UDim2(1, 40, 1, 40)}
+					Size={new UDim2(1, 0, 1, 0)}
 				>
 					<imagelabel
 						ImageColor3={googleMaterial.buttonColor}
 						{...RectBG}
-						Size={new UDim2(1, -20, 1, -20)}
+						Size={new UDim2(1, 0, 1, 0)}
 						ImageTransparency={1}
 					>
 						<uigradient {...whiteGradientProperties}></uigradient>
@@ -90,9 +96,9 @@ class RectButton extends Roact.Component<UIProps> {
 					<imagelabel
 						ImageColor3={googleMaterial.buttonColor}
 						{...RectBG}
-						Size={new UDim2(0.6, 0, 0.2, 0)}
-						AnchorPoint={new Vector2(0.5, 0)}
-						Position={new UDim2(0.5, 0, 0, 0)}
+						Size={new UDim2(0.6, 0, 0.3, 0)}
+						AnchorPoint={new Vector2(0.5, -0.2)}
+						Position={new UDim2(0.5, 0, -0.2, 0)}
 						ImageTransparency={1}
 					>
 						<textlabel
@@ -106,7 +112,11 @@ class RectButton extends Roact.Component<UIProps> {
 					</imagelabel>
 				</frame>
 
-				<imagelabel ImageColor3={googleMaterial.cardFont} {...RectShadow}></imagelabel>
+				<imagelabel
+					ImageColor3={googleMaterial.cardFont}
+					{...RectShadow}
+					Size={new UDim2(0.975, 0, 0.85, 0)}
+				></imagelabel>
 			</frame>
 		);
 	}

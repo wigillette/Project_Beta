@@ -2,6 +2,7 @@ import Roact from "@rbxts/roact";
 import { Players, Workspace } from "@rbxts/services";
 import Grid from "client/Components/Material/Grid";
 import Textbox from "client/Components/Material/Textbox";
+import Slider from "client/Components/Material/Slider";
 // Run on client service startup
 export default function init() {
 	// Create the manager object
@@ -30,10 +31,20 @@ export default function init() {
 	});
     */
 
-	const textboxObject = Roact.createElement(Textbox, {
+	/*const textboxObject = Roact.createElement(Textbox, {
 		placeholderText: "Enter your input..",
 		Position: new UDim2(0.5, 0, 0.5, 0),
 		Size: new UDim2(0.5, 0, 0.1, 0),
+		AnchorPoint: new Vector2(0.5, 0.5),
+		onEnter: (text: string) => {
+			print(text);
+		},
+	});*/
+
+	const sliderObject = Roact.createElement(Slider, {
+		Title: "Slider Example",
+		Size: new UDim2(0.25, 0, 0.25, 0),
+		Position: new UDim2(0.5, 0, 0.5, 0),
 		AnchorPoint: new Vector2(0.5, 0.5),
 	});
 
@@ -41,5 +52,5 @@ export default function init() {
 	const pg = client.WaitForChild("PlayerGui");
 	const main = pg.WaitForChild("Main");
 
-	Roact.mount(textboxObject, main);
+	Roact.mount(sliderObject, main);
 }
