@@ -61,6 +61,7 @@
 > Material Components:
 - [x] Snackbar Component/Service/Controller
 - [x] Dynamic List Component
+- [ ] Grid Component
 - [ ] Slider Component
 - [ ] Progress Bar Component
 - [x] Card Component
