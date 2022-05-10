@@ -21,6 +21,18 @@ export const RectText: Partial<WritableInstanceProperties<TextLabel>> = {
 	BackgroundTransparency: 1,
 };
 
+export const SquareAspectRatio: Partial<WritableInstanceProperties<UIAspectRatioConstraint>> = {
+	AspectRatio: 1,
+	DominantAxis: Enum.DominantAxis.Width,
+	AspectType: Enum.AspectType.ScaleWithParentSize,
+};
+
+export const ButtonAspectRatio: Partial<WritableInstanceProperties<UIAspectRatioConstraint>> = {
+	AspectRatio: 4,
+	DominantAxis: Enum.DominantAxis.Width,
+	AspectType: Enum.AspectType.ScaleWithParentSize,
+};
+
 export const RectButtonText: Partial<WritableInstanceProperties<TextLabel>> = {
 	AnchorPoint: new Vector2(0.5, 0.5),
 	Position: new UDim2(0.5, 0, 0.5, 0),

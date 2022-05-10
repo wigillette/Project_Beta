@@ -2,7 +2,7 @@ import Roact from "@rbxts/roact";
 import { Players } from "@rbxts/services";
 import { RectShadow, RectBG, RippleFrame, RectButtonText } from "client/UIProperties/RectUI";
 import { rippleEffect, tweenColor } from "client/UIProperties/ButtonEffects";
-import { googleMaterial } from "client/UIProperties/ColorSchemes";
+import { googleMaterial, gradientProperties } from "client/UIProperties/ColorSchemes";
 
 interface UIProps {
 	ButtonText: string;
@@ -55,6 +55,7 @@ class RectButton extends Roact.Component<UIProps> {
 						},
 					}}
 				>
+					<uigradient {...gradientProperties}></uigradient>
 					<textlabel
 						Text={this.props.ButtonText}
 						ZIndex={2}

@@ -3,7 +3,7 @@ import { Players } from "@rbxts/services";
 import { RectShadow, RectBG, RectText, RectContainer, RippleFrame, RectButtonText } from "client/UIProperties/RectUI";
 import { rippleEffect, popText, tweenColor } from "client/UIProperties/ButtonEffects";
 import { tweenTransparency } from "client/UIProperties/FrameEffects";
-import { googleMaterial } from "client/UIProperties/ColorSchemes";
+import { googleMaterial, gradientProperties, whiteGradientProperties } from "client/UIProperties/ColorSchemes";
 
 interface UIProps {
 	Name: string;
@@ -99,9 +99,11 @@ class PersonTemplate extends Roact.Component<UIProps> {
 								TextStrokeTransparency={0.9}
 								{...RectButtonText}
 							></textlabel>
+							<uigradient {...gradientProperties}></uigradient>
 						</imagebutton>
 						<imagelabel ImageColor3={googleMaterial.buttonShadow} {...RectShadow}></imagelabel>
 					</frame>
+					<uigradient {...whiteGradientProperties}></uigradient>
 				</imagelabel>
 				<imagelabel ImageColor3={googleMaterial.outerShadow} {...RectShadow}></imagelabel>
 			</frame>

@@ -35,7 +35,7 @@
 - [x] Color Schemes
 - [x] Dynamic Scrolling
 - [ ] UI Property Layouts
-- [ ] Dynamic/Spinning Viewport Frame
+- [x] Dynamic/Spinning Viewport Frame
 - [ ] Spritesheets
 
 > Data Storage
@@ -49,18 +49,21 @@
 - [ ] Trading Service
 - [ ] Crafting Service
 - [ ] Interaction Service
+- [ ] Touch Service
 
-### Shared
+> Shared
 - [ ] Sword Data
 - [ ] Level Data
+- [ ] Map Descriptions
+- [ ] Mode Descriptions
 
 
-### Material Components:
+> Material Components:
 - [x] Snackbar Component/Service/Controller
 - [x] Dynamic List Component
 - [ ] Slider Component
 - [ ] Progress Bar Component
-- [ ] Card Component
+- [x] Card Component
 - [ ] Navigation Bar Component
 - [ ] Toggle Button Component
 - [ ] Text Box Component

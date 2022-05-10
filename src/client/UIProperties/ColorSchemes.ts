@@ -1,8 +1,8 @@
 export const googleMaterial = {
 	header: Color3.fromRGB(31, 140, 176),
 	outerBG: Color3.fromRGB(255, 255, 255),
-	innerBG: Color3.fromRGB(220, 220, 220),
-	outerShadow: Color3.fromRGB(240, 240, 240),
+	innerBG: Color3.fromRGB(210, 210, 210),
+	outerShadow: Color3.fromRGB(220, 220, 220),
 	headerFont: Color3.fromRGB(50, 50, 50),
 	buttonColor: Color3.fromRGB(99, 217, 255),
 	buttonShadow: Color3.fromRGB(64, 194, 237),
@@ -28,4 +28,14 @@ export const darkMaterial = {
 	cardShadow: Color3.fromRGB(44, 45, 46),
 	cardFont: Color3.fromRGB(176, 179, 184),
 	bgFont: Color3.fromRGB(255, 255, 255),
+};
+
+export const gradientProperties: Partial<WritableInstanceProperties<UIGradient>> = {
+	Rotation: 90,
+	Color: new ColorSequence(Color3.fromRGB(220, 220, 220), Color3.fromRGB(100, 100, 100)),
+};
+
+export const whiteGradientProperties: Partial<WritableInstanceProperties<UIGradient>> = {
+	Rotation: 90,
+	Color: new ColorSequence(Color3.fromRGB(255, 255, 255), Color3.fromRGB(240, 240, 240)),
 };

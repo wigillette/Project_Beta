@@ -21,6 +21,12 @@ export const CircText: Partial<WritableInstanceProperties<TextLabel>> = {
 	BackgroundTransparency: 1,
 };
 
+export const CircAspectRatio: Partial<WritableInstanceProperties<UIAspectRatioConstraint>> = {
+	AspectRatio: 5,
+	DominantAxis: Enum.DominantAxis.Width,
+	AspectType: Enum.AspectType.ScaleWithParentSize,
+};
+
 export const CircContainer: Partial<WritableInstanceProperties<Frame>> = {
 	BackgroundTransparency: 1,
 };

@@ -1,7 +1,7 @@
 import Roact from "@rbxts/roact";
-import { CircText, CircShadow, CircBG, CircContainer } from "client/UIProperties/CircularUI";
+import { CircText, CircShadow, CircBG, CircContainer, CircAspectRatio } from "client/UIProperties/CircularUI";
 import { tweenPos, tweenTransparency } from "client/UIProperties/FrameEffects";
-import { googleMaterial } from "client/UIProperties/ColorSchemes";
+import { googleMaterial, whiteGradientProperties } from "client/UIProperties/ColorSchemes";
 
 interface UIProps {
 	Alert: string;
@@ -23,11 +23,7 @@ class SnackbarItem extends Roact.Component<UIProps> {
 				Ref={this.containerRef}
 				{...CircContainer}
 			>
-				<uiaspectratioconstraint
-					AspectRatio={5}
-					DominantAxis={Enum.DominantAxis.Height}
-					AspectType={Enum.AspectType.ScaleWithParentSize}
-				></uiaspectratioconstraint>
+				<uiaspectratioconstraint {...CircAspectRatio}></uiaspectratioconstraint>
 				<imagelabel ImageColor3={googleMaterial.outerBG} {...CircBG}>
 					<textlabel
 						Text={this.props.Alert}
@@ -37,6 +33,7 @@ class SnackbarItem extends Roact.Component<UIProps> {
 						TextColor3={googleMaterial.bgFont}
 						{...CircText}
 					></textlabel>
+					<uigradient {...whiteGradientProperties}></uigradient>
 				</imagelabel>
 				<imagelabel ImageColor3={googleMaterial.outerShadow} {...CircShadow}></imagelabel>
 			</frame>
