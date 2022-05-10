@@ -1,5 +1,5 @@
 import Roact, { Ref } from "@rbxts/roact";
-import { registerDynamicScrollingFrame } from "../../UIProperties/DynamicScrolling";
+import { registerListDynamicScrolling } from "../../UIProperties/DynamicScrolling";
 
 interface UIProps {}
 
@@ -34,7 +34,7 @@ class PersonList extends Roact.Component<UIProps> {
 		const uiLayout = this.layoutRef.getValue();
 
 		if (scrollingFrame && uiLayout) {
-			const connection = registerDynamicScrollingFrame(scrollingFrame, uiLayout);
+			const connection = registerListDynamicScrolling(scrollingFrame, uiLayout);
 			this.connections.push(connection);
 		}
 	}

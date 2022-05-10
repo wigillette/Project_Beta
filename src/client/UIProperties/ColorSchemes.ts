@@ -3,7 +3,7 @@ export const googleMaterial = {
 	outerBG: Color3.fromRGB(255, 255, 255),
 	innerBG: Color3.fromRGB(210, 210, 210),
 	outerShadow: Color3.fromRGB(220, 220, 220),
-	headerFont: Color3.fromRGB(50, 50, 50),
+	headerFont: Color3.fromRGB(255, 255, 255),
 	buttonColor: Color3.fromRGB(99, 217, 255),
 	buttonShadow: Color3.fromRGB(64, 194, 237),
 	butttonFont: Color3.fromRGB(255, 255, 255),
