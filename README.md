@@ -62,7 +62,7 @@
 - [x] Snackbar Component/Service/Controller
 - [x] Dynamic List Component
 - [x] Grid Component
-- [ ] Slider Component
+- [x] Slider Component
 - [ ] Progress Bar Component
 - [x] Card Component
 - [ ] Navigation Bar Component
