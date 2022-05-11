@@ -5,6 +5,9 @@ import { rippleEffect, tweenColor } from "client/UIProperties/ButtonEffects";
 import { googleMaterial, gradientProperties } from "client/UIProperties/ColorSchemes";
 
 interface UIProps {
+	Position: UDim2;
+	AnchorPoint: Vector2;
+	Size: UDim2;
 	ButtonText: string;
 	Callback: () => void;
 }
@@ -21,14 +24,14 @@ class RectButton extends Roact.Component<UIProps> {
 	render() {
 		return (
 			<frame
-				Size={new UDim2(0.8, 0, 0.4, 0)}
-				AnchorPoint={new Vector2(0.5, 0.95)}
-				Position={new UDim2(0.5, 0, 0.95, 0)}
+				Size={this.props.Size}
+				AnchorPoint={this.props.AnchorPoint}
+				Position={this.props.Position}
 				Ref={this.frameRef}
 				{...RippleFrame}
 			>
 				<uiaspectratioconstraint
-					AspectRatio={5}
+					AspectRatio={3}
 					DominantAxis={Enum.DominantAxis.Width}
 					AspectType={Enum.AspectType.ScaleWithParentSize}
 				></uiaspectratioconstraint>

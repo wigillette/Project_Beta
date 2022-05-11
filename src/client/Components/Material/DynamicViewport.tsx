@@ -1,4 +1,5 @@
 import Roact from "@rbxts/roact";
+import { RunService } from "@rbxts/services";
 import { RectContainer, SquareAspectRatio } from "client/UIProperties/RectUI";
 import ViewportRotation from "../../UIProperties/ViewportRotation";
 
@@ -8,6 +9,7 @@ interface UIProps {
 	AnchorPoint: Vector2;
 	Size: UDim2;
 	ZIndex: number;
+	rotate: boolean;
 }
 
 class DynamicViewport extends Roact.Component<UIProps> {
@@ -36,6 +38,7 @@ class DynamicViewport extends Roact.Component<UIProps> {
 					Position={new UDim2(0.5, 0, 0.5, 0)}
 					BackgroundTransparency={1}
 					Size={new UDim2(1, 0, 1, 0)}
+					ZIndex={4}
 					ImageColor3={Color3.fromRGB(255, 255, 255)}
 				></viewportframe>
 			</frame>
@@ -55,7 +58,26 @@ class DynamicViewport extends Roact.Component<UIProps> {
 			const newModel = model.Clone();
 			newModel.Parent = viewportFrame;
 			// Initialize the rotation
-			ViewportRotation(viewportFrame, model, newCamera);
+			if (this.props.rotate) {
+				ViewportRotation(viewportFrame, model, newCamera);
+			} else {
+				// Just display the model
+				const hrp = newModel.FindFirstChild("HumanoidRootPart") as BasePart;
+				if (hrp) {
+					let time = 0; // Capture tha animation
+					const connection = RunService.RenderStepped.Connect((dt: number) => {
+						if (time < 5) {
+							newCamera.CFrame = new CFrame(
+								hrp.CFrame.ToWorldSpace(new CFrame(0, 0.5, -5)).Position,
+								hrp.CFrame.Position,
+							);
+						} else {
+							connection.Disconnect();
+						}
+						time += dt;
+					});
+				}
+			}
 		}
 	}
 }

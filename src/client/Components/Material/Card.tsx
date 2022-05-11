@@ -46,13 +46,20 @@ class Card extends Roact.Component<UIProps> {
 					></textlabel>
 
 					<DynamicViewport
+						rotate={true}
 						Model={this.props.Model}
 						Position={new UDim2(0.5, 0, 0.525, 0)}
 						Size={new UDim2(0.5, 0, 0.5, 0)}
 						AnchorPoint={new Vector2(0.5, 0.5)}
 						ZIndex={3}
 					/>
-					<RectButton ButtonText={this.props.ButtonText} Callback={this.props.Callback} />
+					<RectButton
+						Position={new UDim2(0.5, 0, 0.95, 0)}
+						AnchorPoint={new Vector2(0.5, 0.95)}
+						Size={new UDim2(0.25, 0, 0.25, 0)}
+						ButtonText={this.props.ButtonText}
+						Callback={this.props.Callback}
+					/>
 					<uigradient {...whiteGradientProperties}></uigradient>
 				</imagelabel>
 				<imagelabel ImageColor3={googleMaterial.outerShadow} {...RectShadow}></imagelabel>

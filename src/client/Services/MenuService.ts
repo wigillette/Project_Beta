@@ -6,6 +6,7 @@ import Slider from "client/Components/Material/Slider";
 import CircularProgress from "client/Components/Material/CircularProgress";
 import RectProgress from "client/Components/Material/RectProgress";
 import ToggleButton from "client/Components/Material/ToggleButton";
+import Interaction from "client/Components/Interaction";
 // Run on client service startup
 export default function init() {
 	// Create the manager object
@@ -75,9 +76,16 @@ export default function init() {
 		AnchorPoint: new Vector2(0.5, 0.5),
 		Title: "Toggle Example",
 	});
+
+	const interactionObject = Roact.createElement(Interaction, {
+		Header: "INTERACTION TEST",
+		Body: "We used to come here for school retreat. We would swim to that island every day. I love the water. We used to lie out on the sand and let the sun dry us and try to guess the names of the birds singing.",
+		Model: Workspace.WaitForChild("Dummy") as Model,
+	});
+
 	const client = Players.LocalPlayer;
 	const pg = client.WaitForChild("PlayerGui");
 	const main = pg.WaitForChild("Main");
 
-	Roact.mount(progressObject2, main);
+	Roact.mount(interactionObject, main);
 }
