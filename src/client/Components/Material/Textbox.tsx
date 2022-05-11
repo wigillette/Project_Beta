@@ -11,7 +11,7 @@ interface UIProps {
 	AnchorPoint: Vector2;
 }
 
-class RectButton extends Roact.Component<UIProps> {
+class Textbox extends Roact.Component<UIProps> {
 	shadowRef;
 	frameRef;
 	textboxRef;
@@ -122,4 +122,4 @@ class RectButton extends Roact.Component<UIProps> {
 	}
 }
 
-export default RectButton;
+export default Textbox;
