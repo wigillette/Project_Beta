@@ -64,7 +64,7 @@
 - [x] Grid Component
 - [x] Slider Component
 - [x] Circular Progress Bar Component
-- [ ] Rectangular Progress Bar Component
+- [x] Rectangular Progress Bar Component
 - [x] Card Component
 - [ ] Navigation Bar Component
 - [x] Toggle Button Component

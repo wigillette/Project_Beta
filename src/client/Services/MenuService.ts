@@ -4,6 +4,7 @@ import Grid from "client/Components/Material/Grid";
 import Textbox from "client/Components/Material/Textbox";
 import Slider from "client/Components/Material/Slider";
 import CircularProgress from "client/Components/Material/CircularProgress";
+import RectProgress from "client/Components/Material/RectProgress";
 import ToggleButton from "client/Components/Material/ToggleButton";
 // Run on client service startup
 export default function init() {
@@ -59,6 +60,15 @@ export default function init() {
 		Ratio: 0.75,
 	});
 
+	const progressObject2 = Roact.createElement(RectProgress, {
+		Position: new UDim2(0.5, 0, 0.5, 0),
+		Size: new UDim2(0.5, 0, 0.25, 0),
+		AnchorPoint: new Vector2(0.5, 0.5),
+		Title: "Progress Example",
+		cap: 100,
+		percentage: 50,
+	});
+
 	const toggleObject = Roact.createElement(ToggleButton, {
 		Size: new UDim2(0.08, 0, 0.1, 0),
 		Position: new UDim2(0.5, 0, 0.5, 0),
@@ -69,5 +79,5 @@ export default function init() {
 	const pg = client.WaitForChild("PlayerGui");
 	const main = pg.WaitForChild("Main");
 
-	Roact.mount(progressObject, main);
+	Roact.mount(progressObject2, main);
 }
