@@ -3,6 +3,7 @@ import { Players, Workspace } from "@rbxts/services";
 import Grid from "client/Components/Material/Grid";
 import Textbox from "client/Components/Material/Textbox";
 import Slider from "client/Components/Material/Slider";
+import CircularProgress from "client/Components/Material/CircularProgress";
 import ToggleButton from "client/Components/Material/ToggleButton";
 // Run on client service startup
 export default function init() {
@@ -50,6 +51,14 @@ export default function init() {
 	});
 	*/
 
+	const progressObject = Roact.createElement(CircularProgress, {
+		Position: new UDim2(0.5, 0, 0.5, 0),
+		Size: new UDim2(0.125, 0, 0.125, 0),
+		AnchorPoint: new Vector2(0.5, 0.5),
+		Text: "Progress Example",
+		Ratio: 0.75,
+	});
+
 	const toggleObject = Roact.createElement(ToggleButton, {
 		Size: new UDim2(0.08, 0, 0.1, 0),
 		Position: new UDim2(0.5, 0, 0.5, 0),
@@ -60,5 +69,5 @@ export default function init() {
 	const pg = client.WaitForChild("PlayerGui");
 	const main = pg.WaitForChild("Main");
 
-	Roact.mount(toggleObject, main);
+	Roact.mount(progressObject, main);
 }

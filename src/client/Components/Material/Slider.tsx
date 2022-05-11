@@ -13,23 +13,30 @@ interface UIProps {
 	AnchorPoint: Vector2;
 }
 
-class RectButton extends Roact.Component<UIProps> {
+interface UIState {
+	percentage: number;
+	value: number;
+	held: boolean;
+}
+
+class Slider extends Roact.Component<UIProps, UIState> {
 	shadowRef;
 	frameRef;
 	buttonRef;
-	held;
-	percentage: number;
-	value: number;
 	textRef;
+
+	state = {
+		held: false,
+		percentage: 0,
+		value: 5,
+	};
+
 	constructor(props: UIProps) {
 		super(props);
 		this.shadowRef = Roact.createRef<ImageLabel>();
 		this.frameRef = Roact.createRef<Frame>();
 		this.buttonRef = Roact.createRef<Frame>();
 		this.textRef = Roact.createRef<TextLabel>();
-		this.held = false;
-		this.percentage = 0;
-		this.value = 5;
 	}
 
 	render() {
@@ -61,7 +68,7 @@ class RectButton extends Roact.Component<UIProps> {
 					AnchorPoint={new Vector2(1, 0)}
 					Size={new UDim2(0.57, 0, 0.35, 1)}
 					Ref={this.textRef}
-					Text={tostring(this.value)}
+					Text={tostring(this.state.value)}
 				></textlabel>
 				<frame
 					Ref={this.frameRef}
@@ -106,12 +113,12 @@ class RectButton extends Roact.Component<UIProps> {
 								ZIndex={4}
 								Event={{
 									MouseButton1Down: (rbx: ImageButton) => {
-										this.held = true;
+										this.setState({ held: true });
 										// Update held; create connection for when the mouse is released
 										const inputConnection = UserInputService.InputEnded.Connect(
 											(input: InputObject) => {
 												if (input.UserInputType === Enum.UserInputType.MouseButton1) {
-													this.held = false;
+													this.setState({ held: false });
 													inputConnection.Disconnect();
 												}
 											},
@@ -120,37 +127,41 @@ class RectButton extends Roact.Component<UIProps> {
 										// Update the progress bar and button position
 										const sliderUpdateConnection = RunService.RenderStepped.Connect(
 											(dt: number) => {
-												if (this.held) {
+												if (this.state.held) {
 													const button = this.buttonRef.getValue();
 													const slider = this.frameRef.getValue();
 													const progress = this.shadowRef.getValue();
 													const textLabel = this.textRef.getValue();
 													if (button && slider && progress && textLabel) {
-														this.percentage = math.clamp(
-															snap(
-																(UserInputService.GetMouseLocation().X -
-																	slider.AbsolutePosition.X) /
-																	slider.AbsoluteSize.X,
-																0.05,
+														this.setState({
+															percentage: math.clamp(
+																snap(
+																	(UserInputService.GetMouseLocation().X -
+																		slider.AbsolutePosition.X) /
+																		slider.AbsoluteSize.X,
+																	0.05,
+																),
+																button.Size.X.Scale / 2,
+																1,
 															),
-															button.Size.X.Scale / 2,
-															1,
-														);
+														});
 														button.Position = new UDim2(
-															this.percentage - button.Size.X.Scale,
+															this.state.percentage - button.Size.X.Scale,
 															10,
 															button.Position.Y.Scale,
 															button.Position.Y.Offset,
 														);
 														progress.Size = new UDim2(
-															this.percentage,
+															this.state.percentage,
 															-10,
 															progress.Size.Y.Scale,
 															progress.Size.Y.Offset,
 														);
 
-														this.value = math.floor(this.percentage * 100);
-														textLabel.Text = tostring(this.value);
+														this.setState({
+															value: math.floor(this.state.percentage * 100),
+														});
+														textLabel.Text = tostring(this.state.value);
 													}
 												} else {
 													sliderUpdateConnection.Disconnect();
@@ -172,4 +183,4 @@ class RectButton extends Roact.Component<UIProps> {
 	}
 }
 
-export default RectButton;
+export default Slider;

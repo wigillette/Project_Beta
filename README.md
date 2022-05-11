@@ -36,7 +36,7 @@
 - [x] Dynamic Scrolling
 - [ ] UI Property Layouts
 - [x] Dynamic/Spinning Viewport Frame
-- [ ] Spritesheets
+- [x] Spritesheets
 
 > Data Storage
 - [ ] SQL Database vs. Datastore2
@@ -63,7 +63,8 @@
 - [x] Dynamic List Component
 - [x] Grid Component
 - [x] Slider Component
-- [ ] Progress Bar Component
+- [x] Circular Progress Bar Component
+- [ ] Rectangular Progress Bar Component
 - [x] Card Component
 - [ ] Navigation Bar Component
 - [x] Toggle Button Component
