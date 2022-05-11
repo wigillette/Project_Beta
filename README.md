@@ -66,7 +66,7 @@
 - [ ] Progress Bar Component
 - [x] Card Component
 - [ ] Navigation Bar Component
-- [ ] Toggle Button Component
+- [x] Toggle Button Component
 - [x] Text Box Component
 
 ### Other UI:
