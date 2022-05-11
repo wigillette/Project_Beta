@@ -43,7 +43,7 @@ export default function init() {
 
 	const sliderObject = Roact.createElement(Slider, {
 		Title: "Slider Example",
-		Size: new UDim2(0.25, 0, 0.25, 0),
+		Size: new UDim2(0.25, 0, 0.07, 0),
 		Position: new UDim2(0.5, 0, 0.5, 0),
 		AnchorPoint: new Vector2(0.5, 0.5),
 	});
