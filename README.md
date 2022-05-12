@@ -34,7 +34,7 @@
 - [x] Tween Animation Handler, Ripple Effect
 - [x] Color Schemes
 - [x] Dynamic Scrolling
-- [*] UI Property Layouts
+- [ ] UI Property Layouts
 - [x] Dynamic/Spinning Viewport Frame
 - [x] Spritesheets
 
@@ -58,7 +58,7 @@
 - [ ] Gamepass Service
 - [ ] Settings Service
 - [ ] Betting Service
-- [*] Shop Service
+- [ ] Shop Service
 
 > Shared
 - [ ] Sword Data
