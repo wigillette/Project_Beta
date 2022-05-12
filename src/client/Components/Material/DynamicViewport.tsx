@@ -1,5 +1,5 @@
 import Roact from "@rbxts/roact";
-import { RunService } from "@rbxts/services";
+import { RunService, Workspace } from "@rbxts/services";
 import { RectContainer, SquareAspectRatio } from "client/UIProperties/RectUI";
 import ViewportRotation from "../../UIProperties/ViewportRotation";
 
@@ -10,10 +10,12 @@ interface UIProps {
 	Size: UDim2;
 	ZIndex: number;
 	rotate: boolean;
+	Animation: string | undefined;
 }
 
 class DynamicViewport extends Roact.Component<UIProps> {
 	viewportRef;
+
 	constructor(props: UIProps) {
 		super(props);
 		this.viewportRef = Roact.createRef<ViewportFrame>();
@@ -45,6 +47,41 @@ class DynamicViewport extends Roact.Component<UIProps> {
 		);
 	}
 
+	playAnimation(newModel: Model | Tool, newCamera: Camera) {
+		const hrp = newModel.FindFirstChild("HumanoidRootPart") as BasePart;
+		const hum = newModel.FindFirstChildOfClass("Humanoid");
+		if (hrp && hum) {
+			let animationFinished = false;
+			// Display the animation on the view
+			coroutine.wrap(() => {
+				const connection = RunService.RenderStepped.Connect((dt: number) => {
+					newCamera.CFrame = new CFrame(
+						hrp.CFrame.ToWorldSpace(new CFrame(0, 0.5, -5)).Position,
+						hrp.CFrame.Position,
+					);
+					if (animationFinished) {
+						connection.Disconnect();
+					}
+				});
+			})();
+
+			// Play the animation
+			spawn(() => {
+				if (this.props.Animation !== undefined) {
+					const anim = newModel.FindFirstChildOfClass("Animation") || new Instance("Animation");
+					anim.Name = "Idle";
+					anim.AnimationId = this.props.Animation;
+					anim.Parent = newModel;
+
+					const animTrack = hum.LoadAnimation(anim);
+					animTrack.Play();
+					animTrack.Stopped.Wait();
+					animationFinished = true;
+				}
+			});
+		}
+	}
+
 	protected didMount(): void {
 		// Get that baby spinning
 		const viewportFrame = this.viewportRef.getValue();
@@ -59,24 +96,12 @@ class DynamicViewport extends Roact.Component<UIProps> {
 			newModel.Parent = viewportFrame;
 			// Initialize the rotation
 			if (this.props.rotate) {
-				ViewportRotation(viewportFrame, model, newCamera);
+				ViewportRotation(viewportFrame, newModel, newCamera);
 			} else {
-				// Just display the model
-				const hrp = newModel.FindFirstChild("HumanoidRootPart") as BasePart;
-				if (hrp) {
-					let time = 0; // Capture tha animation
-					const connection = RunService.RenderStepped.Connect((dt: number) => {
-						if (time < 5) {
-							newCamera.CFrame = new CFrame(
-								hrp.CFrame.ToWorldSpace(new CFrame(0, 0.5, -5)).Position,
-								hrp.CFrame.Position,
-							);
-						} else {
-							connection.Disconnect();
-						}
-						time += dt;
-					});
-				}
+				const worldModel = new Instance("WorldModel");
+				worldModel.Parent = viewportFrame;
+				newModel.Parent = worldModel;
+				this.playAnimation(newModel, newCamera);
 			}
 		}
 	}

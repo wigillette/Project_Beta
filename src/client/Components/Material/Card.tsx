@@ -52,6 +52,7 @@ class Card extends Roact.Component<UIProps> {
 						Size={new UDim2(0.5, 0, 0.5, 0)}
 						AnchorPoint={new Vector2(0.5, 0.5)}
 						ZIndex={3}
+						Animation={undefined}
 					/>
 					<RectButton
 						Position={new UDim2(0.5, 0, 0.95, 0)}

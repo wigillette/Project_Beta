@@ -1,6 +1,6 @@
 import Roact from "@rbxts/roact";
 import { RectShadow, RectBG, RectText, RectContainer, SquareAspectRatio } from "client/UIProperties/RectUI";
-import { darkMaterial, googleMaterial, whiteGradientProperties } from "client/UIProperties/ColorSchemes";
+import { darkMaterial, whiteGradientProperties, gradientProperties } from "client/UIProperties/ColorSchemes";
 import RectButton from "./Material/RectButton";
 import DynamicViewport from "./Material/DynamicViewport";
 import { tweenPos, tweenTransparency } from "client/UIProperties/FrameEffects";
@@ -9,19 +9,22 @@ interface UIProps {
 	Header: string;
 	Body: string;
 	Model: Model | Tool;
+	Animation: string | undefined;
 }
 
-class Card extends Roact.Component<UIProps> {
+class Interaction extends Roact.Component<UIProps> {
 	bodyRef;
 	buttonRef;
 	frameRef;
 	containerRef;
+	viewportRef;
 	constructor(props: UIProps) {
 		super(props);
 		this.bodyRef = Roact.createRef<TextLabel>();
 		this.buttonRef = Roact.createRef<ImageButton>();
 		this.frameRef = Roact.createRef<Frame>();
 		this.containerRef = Roact.createRef<Frame>();
+		this.viewportRef = Roact.createRef<Frame>();
 	}
 
 	render() {
@@ -29,7 +32,7 @@ class Card extends Roact.Component<UIProps> {
 			<frame
 				Size={new UDim2(0.25, 0, 0.25, 0)}
 				AnchorPoint={new Vector2(0.5, 0.5)}
-				Position={new UDim2(0.5, 0, 0.6, 0)}
+				Position={new UDim2(0.5, 0, 0.7, 0)}
 				Ref={this.containerRef}
 				{...RectContainer}
 			>
@@ -67,6 +70,8 @@ class Card extends Roact.Component<UIProps> {
 					>
 						<uiaspectratioconstraint {...SquareAspectRatio}></uiaspectratioconstraint>
 						<imagelabel ImageColor3={darkMaterial.cardBG} {...RectBG} ZIndex={2}>
+							<uigradient {...gradientProperties}></uigradient>
+
 							<DynamicViewport
 								rotate={false}
 								Model={this.props.Model}
@@ -74,10 +79,14 @@ class Card extends Roact.Component<UIProps> {
 								Size={new UDim2(0.95, 0, 0.95, 0)}
 								AnchorPoint={new Vector2(0.5, 0.5)}
 								ZIndex={2}
+								Animation={this.props.Animation}
 							/>
 						</imagelabel>
-						<imagelabel ImageColor3={darkMaterial.cardShadow} {...RectShadow} ZIndex={1}></imagelabel>
+						<imagelabel ImageColor3={darkMaterial.cardShadow} {...RectShadow} ZIndex={1}>
+							<uigradient {...gradientProperties}></uigradient>
+						</imagelabel>
 					</frame>
+					<uigradient {...gradientProperties}></uigradient>
 
 					<RectButton
 						ButtonText={"EXIT"}
@@ -105,6 +114,7 @@ class Card extends Roact.Component<UIProps> {
 	}
 
 	protected didMount(): void {
+		// Tween the interaction frame in and slowly type all the text in the message!
 		const container = this.containerRef.getValue();
 		const body = this.bodyRef.getValue();
 		if (container && body) {
@@ -114,7 +124,7 @@ class Card extends Roact.Component<UIProps> {
 				wait(0.4);
 				container.Visible = true;
 				tweenTransparency(container, true, true);
-				tweenPos(container, "Down", 0.15);
+				tweenPos(container, "Down", 0.05);
 
 				for (let i = 0; i < this.props.Body.size(); i++) {
 					body.Text += this.props.Body.sub(i, i);
@@ -123,6 +133,17 @@ class Card extends Roact.Component<UIProps> {
 			})();
 		}
 	}
+
+	protected willUnmount(): void {
+		// Tween the interaction frame away before unmounting
+		const container = this.containerRef.getValue();
+		const body = this.bodyRef.getValue();
+		if (container && body) {
+			tweenPos(container, "Up", 0.05);
+			tweenTransparency(container, true, false);
+			wait(0.5); // Pause to play the tween before unmounting
+		}
+	}
 }
 
-export default Card;
+export default Interaction;

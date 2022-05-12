@@ -77,15 +77,9 @@ export default function init() {
 		Title: "Toggle Example",
 	});
 
-	const interactionObject = Roact.createElement(Interaction, {
-		Header: "INTERACTION TEST",
-		Body: "We used to come here for school retreat. We would swim to that island every day. I love the water. We used to lie out on the sand and let the sun dry us and try to guess the names of the birds singing.",
-		Model: Workspace.WaitForChild("Dummy") as Model,
-	});
-
 	const client = Players.LocalPlayer;
 	const pg = client.WaitForChild("PlayerGui");
 	const main = pg.WaitForChild("Main");
 
-	Roact.mount(interactionObject, main);
+	//Roact.mount(interactionObject, main);
 }
