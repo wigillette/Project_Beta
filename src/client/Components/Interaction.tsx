@@ -4,12 +4,14 @@ import { darkMaterial, whiteGradientProperties, gradientProperties } from "clien
 import RectButton from "./Material/RectButton";
 import DynamicViewport from "./Material/DynamicViewport";
 import { tweenPos, tweenTransparency } from "client/UIProperties/FrameEffects";
+import InteractionManager from "../Controllers/InteractionManager";
 
 interface UIProps {
 	Header: string;
 	Body: string;
 	Model: Model | Tool;
 	Animation: string | undefined;
+	InteractionObject: InteractionManager;
 }
 
 class Interaction extends Roact.Component<UIProps> {
@@ -100,6 +102,7 @@ class Interaction extends Roact.Component<UIProps> {
 									wait(0.4);
 									container.Destroy();
 								})();
+								this.props.InteractionObject.endInputConnection();
 							}
 						}}
 						Position={new UDim2(0.95, 0, 0.05, 0)}
@@ -139,8 +142,8 @@ class Interaction extends Roact.Component<UIProps> {
 		const container = this.containerRef.getValue();
 		const body = this.bodyRef.getValue();
 		if (container && body) {
-			tweenPos(container, "Up", 0.05);
 			tweenTransparency(container, true, false);
+			tweenPos(container, "Up", 0.15);
 			wait(0.5); // Pause to play the tween before unmounting
 		}
 	}

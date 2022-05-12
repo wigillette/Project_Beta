@@ -34,6 +34,7 @@ class InteractionManager {
 								if (!this.holding && spriteSheet) {
 									this.holding = true;
 
+									// Animate the sprite sheet while the user is holding the key down
 									for (let i = this.counter; i < 64 && this.holding; i++) {
 										spriteSheet.ImageRectOffset = new Vector2(
 											math.clamp((i % 8) * 128, 0, 896),
@@ -46,12 +47,13 @@ class InteractionManager {
 								}
 
 								if (this.holdingSeconds >= 2 && main) {
-									// Need to add the holding seconds and billboard UI
+									// Display the interaction UI after two seconds of holding
 									const newInteraction = Roact.createElement(Interaction, {
 										Header: this.name,
 										Body: this.body,
 										Model: this.model,
 										Animation: this.animation,
+										InteractionObject: this,
 									});
 
 									InteractionManager.tree = Roact.mount(newInteraction, main);
@@ -62,7 +64,7 @@ class InteractionManager {
 				}
 			});
 
-			// Reset the UI when the user releases the key
+			// Stop animating the sprite sheet when the user releases the key
 			const endConnection = UserInputService.InputEnded.Connect((input) => {
 				if (input.UserInputType === Enum.UserInputType.Keyboard) {
 					const keyPressed = input.KeyCode;
@@ -76,7 +78,7 @@ class InteractionManager {
 		}
 	}
 
-	private resetSpriteSheet() {
+	public resetSpriteSheet() {
 		const head = this.model.WaitForChild("Head", 10);
 		this.holdingSeconds = 0;
 		this.counter = 0;
@@ -93,18 +95,20 @@ class InteractionManager {
 	}
 
 	public endInputConnection() {
-		this.connections.forEach((connection) => {
-			connection.Disconnect();
-		});
-		// Unmount the current tree when the user walks away
-		coroutine.wrap(() => {
-			if (InteractionManager.tree) {
-				Roact.unmount(InteractionManager.tree);
-				InteractionManager.tree = undefined;
-				this.resetSpriteSheet();
-			}
-		})();
-		this.connections = [];
+		if (this.connections.size() > 0) {
+			this.connections.forEach((connection) => {
+				connection.Disconnect();
+			});
+			// Unmount the current tree when the user walks away
+			coroutine.wrap(() => {
+				if (InteractionManager.tree) {
+					Roact.unmount(InteractionManager.tree);
+					InteractionManager.tree = undefined;
+					this.resetSpriteSheet();
+				}
+			})();
+			this.connections = [];
+		}
 	}
 
 	public isWithinRange() {
