@@ -34,12 +34,12 @@
 - [x] Tween Animation Handler, Ripple Effect
 - [x] Color Schemes
 - [x] Dynamic Scrolling
-- [ ] UI Property Layouts
+- [*] UI Property Layouts
 - [x] Dynamic/Spinning Viewport Frame
 - [x] Spritesheets
 
 > Reducers
-- [ ] Shop Reducer
+- [x] Shop Reducer
 - [ ] Menu Reducer
 
 > Data Storage
@@ -58,6 +58,7 @@
 - [ ] Gamepass Service
 - [ ] Settings Service
 - [ ] Betting Service
+- [*] Shop Service
 
 > Shared
 - [ ] Sword Data
@@ -81,7 +82,7 @@
 
 > Advanced Components:
 - [ ] Intro UI
-- [ ] Shop UI
+- [x] Shop UI
 - [ ] Crafting UI
 - [ ] Trading UI
 - [x] Interaction UI
