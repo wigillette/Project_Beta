@@ -4,25 +4,19 @@ import {
 	RectBG,
 	RectText,
 	RectContainer,
-	MenuAspectRatio,
 	Header,
 	Body,
 	CardGridLayout,
 	SquareAspectRatio,
 } from "client/UIProperties/RectUI";
 import { googleMaterial, gradientProperties, whiteGradientProperties } from "client/UIProperties/ColorSchemes";
+import ObjectUtils from "@rbxts/object-utils";
 import { registerGridDynamicScrolling } from "../../UIProperties/DynamicScrolling";
 import Card from "./Card";
 
-interface CardItem {
-	Name: string;
-	Model: Model;
-	Price: number;
-}
-
 interface UIProps {
 	Header: string;
-	CardInfo: CardItem[];
+	CardInfo: Map<string, { Price: number; Model: Model | Tool }>;
 }
 
 class Grid extends Roact.Component<UIProps> {
@@ -42,13 +36,12 @@ class Grid extends Roact.Component<UIProps> {
 	render() {
 		return (
 			<frame
-				Size={new UDim2(0.6, 0, 0.6, 0)}
+				Size={new UDim2(1, 0, 1, 0)}
 				AnchorPoint={new Vector2(0.5, 0.5)}
 				Position={new UDim2(0.5, 0, 0.5, 0)}
 				Ref={this.containerRef}
 				{...RectContainer}
 			>
-				<uiaspectratioconstraint {...MenuAspectRatio}></uiaspectratioconstraint>
 				<imagelabel ImageColor3={googleMaterial.outerBG} {...RectBG}>
 					<frame {...Header}>
 						<imagelabel ImageColor3={googleMaterial.header} {...RectBG}>
@@ -82,15 +75,17 @@ class Grid extends Roact.Component<UIProps> {
 								</uigridlayout>
 								{
 									// Display all the cards using the CardInfo prop
-									this.props.CardInfo.map((Item) => {
+
+									ObjectUtils.entries(this.props.CardInfo).map((Item) => {
 										return (
 											<Card
-												Text={Item.Name}
-												ButtonText={tostring(Item.Price)}
-												Model={Item.Model}
+												Text={Item[0]}
+												ButtonText={tostring(Item[1].Price)}
+												Model={Item[1].Model}
 												Callback={() => {
-													print(`Attempted to purchase ${Item.Name}!`);
+													print(`Attempted to purchase ${Item[0]}!`);
 												}}
+												ButtonSize={new UDim2(0.8, 0, 0.1, 0)}
 											></Card>
 										);
 									})

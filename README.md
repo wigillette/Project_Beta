@@ -38,6 +38,10 @@
 - [x] Dynamic/Spinning Viewport Frame
 - [x] Spritesheets
 
+> Reducers
+- [ ] Shop Reducer
+- [ ] Menu Reducer
+
 > Data Storage
 - [ ] SQL Database vs. Datastore2
 - [ ] User Data Module
@@ -60,7 +64,7 @@
 - [ ] Level Data
 - [ ] Map Descriptions
 - [ ] Mode Descriptions
-- [ ] Interaction Information
+- [x] Interaction Information
 
 
 > Material Components:

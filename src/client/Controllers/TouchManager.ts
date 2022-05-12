@@ -1,27 +1,30 @@
 import { Players } from "@rbxts/services";
 import { tweenTransparency } from "client/UIProperties/FrameEffects";
+import Store from "client/Rodux/Store";
 
 // Touch Manager Class
 class TouchManager {
-	ui: Frame;
+	action: string;
 	trigger: BasePart;
+	open: boolean;
 
 	public displayUI() {
 		// Display the UI when the player is in range
-		if (this.ui && !this.ui.Visible) {
-			this.ui.Visible = true;
-			tweenTransparency(this.ui, true, true);
+		if (!this.open) {
+			Store.dispatch({
+				type: this.action,
+			});
+			this.open = true;
 		}
 	}
 
 	public hideUI() {
 		// Hide the UI when the player is no longer in range
-		if (this.ui && this.ui.Visible) {
-			coroutine.wrap(() => {
-				tweenTransparency(this.ui, true, false);
-				wait(0.4);
-				this.ui.Visible = false;
-			})();
+		if (this.open) {
+			Store.dispatch({
+				type: this.action,
+			});
+			this.open = false;
 		}
 	}
 
@@ -54,11 +57,11 @@ class TouchManager {
 		return distance;
 	}
 
-	constructor(trigger: BasePart, ui: Frame) {
+	constructor(trigger: BasePart, action: string) {
 		// Linking a part to a UI; display the UI on close proximity to the part
-		this.ui = ui;
 		this.trigger = trigger;
-		this.ui.Visible = true;
+		this.action = action;
+		this.open = false;
 	}
 }
 

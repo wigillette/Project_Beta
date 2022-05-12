@@ -7,16 +7,16 @@ export default function init() {
 	const pg = client.WaitForChild("PlayerGui");
 	const main = pg.WaitForChild("Main");
 
-	// List of trigger parts and their corresponding UIs
-	const triggers = [[Workspace.WaitForChild("Location"), main.WaitForChild("PersonList")]];
+	// List of trigger parts and their corresponding Rodux action names
+	const triggers = [[Workspace.WaitForChild("Location"), "toggleShop"]];
 	const triggerHooks: TouchManager[] = [];
 
 	triggers.forEach((trigger) => {
 		// Initialize each trigger
 		const triggerPart = trigger[0] as BasePart;
-		const triggerUI = trigger[1] as Frame;
-		if (triggerPart && triggerUI) {
-			const triggerHook = new TouchManager(triggerPart, triggerUI);
+		const action = trigger[1] as string;
+		if (triggerPart && action) {
+			const triggerHook = new TouchManager(triggerPart, action);
 			triggerHooks.push(triggerHook);
 		}
 	});

@@ -9,13 +9,23 @@ interface UIProps {
 	ButtonText: string;
 	Callback: () => void;
 	Model: Model | Tool;
+	ButtonSize: UDim2;
 }
 
-class Card extends Roact.Component<UIProps> {
+interface UIState {
+	response: string;
+}
+
+class Card extends Roact.Component<UIProps, UIState> {
 	labelRef;
 	buttonRef;
 	frameRef;
 	containerRef;
+
+	state = {
+		response: "",
+	};
+
 	constructor(props: UIProps) {
 		super(props);
 		this.labelRef = Roact.createRef<TextLabel>();
@@ -57,7 +67,7 @@ class Card extends Roact.Component<UIProps> {
 					<RectButton
 						Position={new UDim2(0.5, 0, 0.95, 0)}
 						AnchorPoint={new Vector2(0.5, 0.95)}
-						Size={new UDim2(0.25, 0, 0.25, 0)}
+						Size={this.props.ButtonSize}
 						ButtonText={this.props.ButtonText}
 						Callback={this.props.Callback}
 					/>

@@ -7,6 +7,7 @@ import CircularProgress from "client/Components/Material/CircularProgress";
 import RectProgress from "client/Components/Material/RectProgress";
 import ToggleButton from "client/Components/Material/ToggleButton";
 import Interaction from "client/Components/Interaction";
+import Shop from "client/Components/Shop";
 // Run on client service startup
 export default function init() {
 	// Create the manager object
@@ -77,9 +78,5 @@ export default function init() {
 		Title: "Toggle Example",
 	});
 
-	const client = Players.LocalPlayer;
-	const pg = client.WaitForChild("PlayerGui");
-	const main = pg.WaitForChild("Main");
-
-	//Roact.mount(interactionObject, main);
+	const shopObject = Roact.createElement(Shop);
 }

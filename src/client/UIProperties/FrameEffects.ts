@@ -53,6 +53,8 @@ const tweenTransparencyRecurse = (children: Instance[], recurse: boolean, transp
 				new TweenInfo(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0),
 				{ TextTransparency: transparency },
 			).Play();
+		} else if (object.IsA("ViewportFrame")) {
+			object.Visible = transparency === 0;
 		}
 
 		if (recurse) {
@@ -92,4 +94,10 @@ export const tweenTransparencyAbsolute = (object: ImageLabel | ImageButton | Tex
 			TextTransparency: transparency,
 		}).Play();
 	}
+};
+
+export const movingFade = (frame: Frame, fadeIn: boolean, magnitude: number) => {
+	const direction = fadeIn ? "Down" : "Up";
+	tweenPos(frame, direction, magnitude);
+	tweenTransparency(frame, true, fadeIn);
 };
