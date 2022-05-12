@@ -31,11 +31,15 @@ export const tweenPos = (frame: Frame, direction: string, magnitude: number) => 
 	}
 
 	newPos = UDim2.fromScale(frame.Position.X.Scale + magnitudes[0], frame.Position.Y.Scale + magnitudes[1]);
-	frame.TweenPosition(newPos, Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.2, true, undefined);
+	pcall(() => {
+		frame.TweenPosition(newPos, Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.2, true, undefined);
+	});
 };
 
 export const tweenPosAbsolute = (frame: Frame, position: UDim2) => {
-	frame.TweenPosition(position, Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.2, true, undefined);
+	pcall(() => {
+		frame.TweenPosition(position, Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.2, true, undefined);
+	});
 };
 
 // Tween the transparency of each of the children of an object
@@ -53,7 +57,7 @@ const tweenTransparencyRecurse = (children: Instance[], recurse: boolean, transp
 				new TweenInfo(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0),
 				{ TextTransparency: transparency },
 			).Play();
-		} else if (object.IsA("ViewportFrame")) {
+		} else if (object.IsA("ViewportFrame") || object.IsA("ScrollingFrame")) {
 			object.Visible = transparency === 0;
 		}
 

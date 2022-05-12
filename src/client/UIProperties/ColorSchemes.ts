@@ -12,6 +12,9 @@ export const googleMaterial = {
 	cardShadow: Color3.fromRGB(200, 200, 200),
 	cardFont: Color3.fromRGB(100, 100, 100),
 	bgFont: Color3.fromRGB(80, 80, 80),
+	innerBG2: Color3.fromRGB(230, 230, 230),
+	darkCardBG: Color3.fromRGB(180, 180, 180),
+	darkCardShadow: Color3.fromRGB(150, 150, 150),
 };
 
 export const darkMaterial = {

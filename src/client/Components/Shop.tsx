@@ -4,6 +4,8 @@ import RoactRodux from "@rbxts/roact-rodux";
 import Grid from "./Material/Grid";
 import { MenuAspectRatio, RectContainer } from "../UIProperties/RectUI";
 import { movingFade } from "../UIProperties/FrameEffects";
+import { KnitClient as Knit } from "@rbxts/knit";
+const shopService = Knit.GetService("ShopService");
 
 interface UIProps {
 	items: Map<string, { Price: number; Model: Model | Tool }>;
@@ -50,7 +52,13 @@ export = RoactRodux.connect(function (state: storeState) {
 
 	if (state.fetchItems.items && state.fetchItems.items.size() > 0 && !gridTree) {
 		// Bit of a roundabout way to do this. Create the grid component after we fetch the items
-		const newGrid = Roact.createElement(Grid, { Header: "Pet Shop", CardInfo: state.fetchItems.items });
+		const newGrid = Roact.createElement(Grid, {
+			Header: "Sword Shop",
+			CardInfo: state.fetchItems.items,
+			serverCallback: (itemName: string) => {
+				return shopService.PurchaseItem(itemName);
+			},
+		});
 		gridTree = Roact.mount(newGrid, shopFrame);
 		print("Mounted the grid onto the shop!");
 	}

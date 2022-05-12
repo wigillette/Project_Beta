@@ -44,7 +44,7 @@ class Card extends Roact.Component<UIProps, UIState> {
 				{...RectContainer}
 			>
 				<uiaspectratioconstraint {...SquareAspectRatio}></uiaspectratioconstraint>
-				<imagelabel ImageColor3={googleMaterial.outerBG} {...RectBG}>
+				<imagelabel ImageColor3={googleMaterial.cardBG} {...RectBG}>
 					<textlabel
 						Text={this.props.Text}
 						AnchorPoint={new Vector2(0.5, 0.05)}
@@ -73,7 +73,7 @@ class Card extends Roact.Component<UIProps, UIState> {
 					/>
 					<uigradient {...whiteGradientProperties}></uigradient>
 				</imagelabel>
-				<imagelabel ImageColor3={googleMaterial.outerShadow} {...RectShadow}></imagelabel>
+				<imagelabel ImageColor3={googleMaterial.cardShadow} {...RectShadow}></imagelabel>
 			</frame>
 		);
 	}

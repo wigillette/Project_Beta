@@ -13,10 +13,17 @@ import { googleMaterial, gradientProperties, whiteGradientProperties } from "cli
 import ObjectUtils from "@rbxts/object-utils";
 import { registerGridDynamicScrolling } from "../../UIProperties/DynamicScrolling";
 import Card from "./Card";
+import { pushNotification } from "../../Services/SnackbarService";
+
+interface serviceInfo {
+	Name: string;
+	Remote: string;
+}
 
 interface UIProps {
 	Header: string;
 	CardInfo: Map<string, { Price: number; Model: Model | Tool }>;
+	serverCallback: (itemName: string) => string;
 }
 
 class Grid extends Roact.Component<UIProps> {
@@ -60,7 +67,7 @@ class Grid extends Roact.Component<UIProps> {
 					</frame>
 
 					<frame {...Body}>
-						<imagelabel ImageColor3={googleMaterial.innerBG} {...RectBG}>
+						<imagelabel ImageColor3={googleMaterial.innerBG2} {...RectBG}>
 							<scrollingframe
 								BackgroundTransparency={1}
 								Ref={this.scrollRef}
@@ -75,7 +82,6 @@ class Grid extends Roact.Component<UIProps> {
 								</uigridlayout>
 								{
 									// Display all the cards using the CardInfo prop
-
 									ObjectUtils.entries(this.props.CardInfo).map((Item) => {
 										return (
 											<Card
@@ -84,8 +90,10 @@ class Grid extends Roact.Component<UIProps> {
 												Model={Item[1].Model}
 												Callback={() => {
 													print(`Attempted to purchase ${Item[0]}!`);
+													const response = this.props.serverCallback(Item[0]);
+													pushNotification(response);
 												}}
-												ButtonSize={new UDim2(0.8, 0, 0.1, 0)}
+												ButtonSize={new UDim2(0.6, 0, 0.075, 0)}
 											></Card>
 										);
 									})

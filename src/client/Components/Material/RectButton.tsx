@@ -29,6 +29,7 @@ class RectButton extends Roact.Component<UIProps> {
 				Position={this.props.Position}
 				Ref={this.frameRef}
 				{...RippleFrame}
+				ZIndex={5}
 			>
 				<uiaspectratioconstraint
 					AspectRatio={3}

@@ -7,6 +7,11 @@ declare global {
 	}
 }
 
+interface item {
+	Name: string;
+	Price: number;
+}
+
 const ShopService = Knit.CreateService({
 	Name: "ShopService",
 
@@ -14,6 +19,9 @@ const ShopService = Knit.CreateService({
 		// Handles client-server communication; OnServerEvent
 		GetShopData() {
 			return this.Server.GetShopData();
+		},
+		PurchaseItem(Player: Player, itemName: string) {
+			return this.Server.PurchaseItem(Player, itemName);
 		},
 	},
 
@@ -26,6 +34,28 @@ const ShopService = Knit.CreateService({
 		}); // Create a map for the item Info
 
 		return shopMap;
+	},
+
+	itemExists(itemName: string) {
+		let exists: item | undefined = undefined;
+		ItemInfo.forEach((item) => {
+			if (item.Name === itemName && exists === undefined) {
+				exists = item;
+			}
+		});
+
+		return exists;
+	},
+
+	PurchaseItem(player: Player, itemName: string) {
+		let response = "Error";
+		const item = this.itemExists(itemName);
+		if (item) {
+			// TO-DO: Check if item exists in user's inventory, ccompare gold to price, etc.
+			response = "Purchase Successful!";
+		}
+
+		return response;
 	},
 
 	// Initialize on service startup

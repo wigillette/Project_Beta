@@ -34,7 +34,7 @@ export default (frame: ViewportFrame, model: Model | Tool, camera: Camera) => {
 	let modelCF = modelBox[0];
 	let modelSize = modelBox[1];
 
-	camera.FieldOfView = 30;
+	camera.FieldOfView = 5;
 
 	const rotInv = modelCF.sub(modelCF.Position).Inverse();
 	modelCF = modelCF.mul(rotInv);
