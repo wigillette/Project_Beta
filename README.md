@@ -75,7 +75,7 @@
 - [x] Toggle Button Component
 - [x] Text Box Component
 
-### Advanced Components:
+> Advanced Components:
 - [ ] Intro UI
 - [ ] Shop UI
 - [ ] Crafting UI
