@@ -50,12 +50,17 @@
 - [ ] Crafting Service
 - [x] Interaction Service
 - [x] Touch Service
+- [ ] Map/Mode Selection Service
+- [ ] Gamepass Service
+- [ ] Settings Service
+- [ ] Betting Service
 
 > Shared
 - [ ] Sword Data
 - [ ] Level Data
 - [ ] Map Descriptions
 - [ ] Mode Descriptions
+- [ ] Interaction Information
 
 
 > Material Components:
@@ -70,9 +75,13 @@
 - [x] Toggle Button Component
 - [x] Text Box Component
 
-### Other UI:
+### Advanced Components:
 - [ ] Intro UI
 - [ ] Shop UI
 - [ ] Crafting UI
 - [ ] Trading UI
 - [x] Interaction UI
+- [ ] Settings UI
+- [ ] Gamepass UI
+- [ ] Map/Mode Selection UI
+- [ ] Betting UI
