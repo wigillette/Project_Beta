@@ -48,7 +48,7 @@
 - [ ] Gold Service
 - [ ] Trading Service
 - [ ] Crafting Service
-- [ ] Interaction Service
+- [x] Interaction Service
 - [x] Touch Service
 
 > Shared
@@ -75,4 +75,4 @@
 - [ ] Shop UI
 - [ ] Crafting UI
 - [ ] Trading UI
-- [ ] Interaction UI
+- [x] Interaction UI
