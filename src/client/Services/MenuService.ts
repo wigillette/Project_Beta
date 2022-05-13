@@ -1,6 +1,5 @@
 import Roact from "@rbxts/roact";
 import { Players, Workspace } from "@rbxts/services";
-import Grid from "client/Components/Material/Grid";
 import Textbox from "client/Components/Material/Textbox";
 import Slider from "client/Components/Material/Slider";
 import CircularProgress from "client/Components/Material/CircularProgress";

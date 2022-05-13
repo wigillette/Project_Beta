@@ -105,3 +105,8 @@ export const movingFade = (frame: Frame, fadeIn: boolean, magnitude: number) => 
 	tweenPos(frame, direction, magnitude);
 	tweenTransparency(frame, true, fadeIn);
 };
+
+export const movingFadeAbsolute = (frame: Frame, fadeIn: boolean, position: UDim2) => {
+	tweenPosAbsolute(frame, position);
+	tweenTransparency(frame, true, fadeIn);
+};

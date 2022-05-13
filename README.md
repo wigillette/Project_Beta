@@ -40,11 +40,12 @@
 
 > Reducers
 - [x] Shop Reducer
+- [x] Inventory Reducer
 - [ ] Menu Reducer
 
 > Data Storage
-- [ ] SQL Database vs. Datastore2
-- [ ] User Data Module
+- [x] SQL Database vs. Datastore2
+- [x] User Data Module
 
 > Services
 - [ ] Map Service
@@ -58,14 +59,17 @@
 - [ ] Gamepass Service
 - [ ] Settings Service
 - [ ] Betting Service
-- [ ] Shop Service
+- [x] Shop Service
+- [x] Inventory Service
+- [ ] Twitter Service
 
 > Shared
-- [ ] Sword Data
+- [x] Sword Data
 - [ ] Level Data
 - [ ] Map Descriptions
 - [ ] Mode Descriptions
 - [x] Interaction Information
+- [x] Location Data
 
 
 > Material Components:
@@ -90,3 +94,5 @@
 - [ ] Gamepass UI
 - [ ] Map/Mode Selection UI
 - [ ] Betting UI
+- [x] Inventory UI
+- [ ] Twitter UI

@@ -1,19 +1,18 @@
-import { shopState, INITIAL_STATE } from "../Rodux/Reducers/ShopReducer";
-import RoactRodux from "@rbxts/roact-rodux";
 import Roact from "@rbxts/roact";
+import RoactRodux from "@rbxts/roact-rodux";
 import { movingFadeAbsolute } from "../UIProperties/FrameEffects";
 import { KnitClient as Knit } from "@rbxts/knit";
-const shopService = Knit.GetService("ShopService");
+import { inventoryState } from "../Rodux/Reducers/InventoryReducer";
 import {
 	RectShadow,
 	RectBG,
 	RectText,
-	RectContainer,
+	MenuAspectRatio,
 	Header,
+	RectContainer,
 	Body,
 	CardGridLayout,
 	SquareAspectRatio,
-	MenuAspectRatio,
 } from "client/UIProperties/RectUI";
 import { googleMaterial, gradientProperties, whiteGradientProperties } from "client/UIProperties/ColorSchemes";
 import ObjectUtils from "@rbxts/object-utils";
@@ -21,18 +20,14 @@ import { registerGridDynamicScrolling } from "../UIProperties/DynamicScrolling";
 import Card from "./Material/Card";
 import { pushNotification } from "../Services/SnackbarService";
 
-interface UIProps {
-	items: Map<string, { Price: number; Model: Model | Tool }>;
-	toggle: boolean;
-}
-
-const shopRef = Roact.createRef<Frame>();
-class Shop extends Roact.Component<UIProps> {
+class Inventory extends Roact.Component<inventoryState> {
+	static InventoryRef = Roact.createRef<Frame>();
 	containerRef;
 	gridRef;
 	scrollRef;
 	connections: RBXScriptConnection[];
-	constructor(props: UIProps) {
+
+	constructor(props: inventoryState) {
 		super(props);
 		this.containerRef = Roact.createRef<Frame>();
 		this.gridRef = Roact.createRef<UIGridLayout>();
@@ -47,7 +42,7 @@ class Shop extends Roact.Component<UIProps> {
 				Size={new UDim2(0.5, 0, 0.5, 0)}
 				AnchorPoint={new Vector2(0.5, 0.5)}
 				Position={new UDim2(0.5, 0, 0.4, 0)}
-				Ref={shopRef}
+				Ref={Inventory.InventoryRef}
 			>
 				<uiaspectratioconstraint {...MenuAspectRatio}></uiaspectratioconstraint>
 				<frame
@@ -61,7 +56,7 @@ class Shop extends Roact.Component<UIProps> {
 						<frame {...Header}>
 							<imagelabel ImageColor3={googleMaterial.header} {...RectBG}>
 								<textlabel
-									Text={"Sword Shop"}
+									Text={"Inventory"}
 									TextStrokeTransparency={0.8}
 									AnchorPoint={new Vector2(0.5, 0.5)}
 									Position={new UDim2(0.5, 0, 0.5, 0)}
@@ -89,15 +84,15 @@ class Shop extends Roact.Component<UIProps> {
 									</uigridlayout>
 									{
 										// Display all the cards using the CardInfo prop
-										ObjectUtils.entries(this.props.items).map((Item) => {
+										ObjectUtils.entries(this.props.inventory.Swords).map((Item) => {
 											return (
 												<Card
 													Text={Item[0]}
-													ButtonText={tostring(Item[1].Price)}
-													Model={Item[1].Model}
+													ButtonText={"Equip"}
+													Model={Item[1] as Model | Tool}
 													Callback={() => {
 														print(`Attempted to purchase ${Item[0]}!`);
-														const response = shopService.PurchaseItem(Item[0], "Swords");
+														const response = "Equip Callback";
 														pushNotification(response);
 													}}
 													ButtonSize={new UDim2(0.6, 0, 0.075, 0)}
@@ -138,21 +133,20 @@ class Shop extends Roact.Component<UIProps> {
 }
 
 interface storeState {
-	toggleShop: shopState;
-	fetchItems: shopState;
+	toggleInventory: inventoryState;
+	updateInventory: inventoryState;
 }
 
 export = RoactRodux.connect(function (state: storeState) {
-	const shopFrame = shopRef.getValue() as Frame;
-	if (shopFrame) {
-		// Update the frame's position when the toggle changes
-		state.toggleShop.toggle
-			? movingFadeAbsolute(shopFrame, true, new UDim2(0.5, 0, 0.4, 0))
-			: movingFadeAbsolute(shopFrame, false, new UDim2(0.5, 0, 0.1, 0));
+	const InventoryFrame = Inventory.InventoryRef.getValue() as Frame;
+	if (InventoryFrame) {
+		state.toggleInventory.toggle
+			? movingFadeAbsolute(InventoryFrame, true, new UDim2(0.5, 0, 0.4, 0))
+			: movingFadeAbsolute(InventoryFrame, false, new UDim2(0.5, 0, 0.1, 0));
 	}
 
 	return {
-		toggle: state.toggleShop.toggle,
-		items: state.fetchItems.items,
+		toggle: state.toggleInventory.toggle,
+		inventory: state.updateInventory.inventory,
 	};
-})(Shop);
+})(Inventory);

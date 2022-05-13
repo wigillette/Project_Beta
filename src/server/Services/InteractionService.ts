@@ -1,6 +1,5 @@
 import { KnitServer as Knit } from "@rbxts/knit";
 import { NPCInteractions } from "../../shared/InteractionData";
-import PersonData from "shared/PersonData";
 
 declare global {
 	interface KnitServices {

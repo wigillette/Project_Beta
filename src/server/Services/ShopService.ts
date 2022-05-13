@@ -1,5 +1,6 @@
 import { KnitServer as Knit } from "@rbxts/knit";
 import { ItemInfo } from "../../shared/ShopData";
+import { InventoryService } from "./InventoryService";
 
 declare global {
 	interface KnitServices {
@@ -20,12 +21,12 @@ const ShopService = Knit.CreateService({
 		GetShopData() {
 			return this.Server.GetShopData();
 		},
-		PurchaseItem(Player: Player, itemName: string) {
-			return this.Server.PurchaseItem(Player, itemName);
+		PurchaseItem(Player: Player, itemName: string, category: string) {
+			return this.Server.PurchaseItem(Player, itemName, category);
 		},
 	},
 
-	// Get People Function: returns InteractionData from the server
+	// Get Shop Function: returns ShopData from the server
 	GetShopData() {
 		const shopMap = new Map<string, number>();
 
@@ -36,6 +37,7 @@ const ShopService = Knit.CreateService({
 		return shopMap;
 	},
 
+	// Check if an item exists in the shop data
 	itemExists(itemName: string) {
 		let exists: item | undefined = undefined;
 		ItemInfo.forEach((item) => {
@@ -47,12 +49,20 @@ const ShopService = Knit.CreateService({
 		return exists;
 	},
 
-	PurchaseItem(player: Player, itemName: string) {
+	PurchaseItem(player: Player, itemName: string, category: string) {
 		let response = "Error";
-		const item = this.itemExists(itemName);
+		const item = this.itemExists(itemName) as item | undefined;
 		if (item) {
-			// TO-DO: Check if item exists in user's inventory, ccompare gold to price, etc.
-			response = "Purchase Successful!";
+			const gold = item.Price; // The item's price
+			if (!InventoryService.ContainsItem(player, itemName, category)) {
+				print(itemName, category);
+				// Check if the user already has the item
+				// TO-DO: Compare price to gold
+				InventoryService.AddToInventory(player, itemName, category);
+				response = "Purchase Successful!";
+			} else {
+				response = "Already purchased!";
+			}
 		}
 
 		return response;

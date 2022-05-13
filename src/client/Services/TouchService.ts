@@ -1,5 +1,6 @@
 import TouchManager from "client/Controllers/TouchManager";
-import { Workspace, Players, RunService } from "@rbxts/services";
+import { Players, RunService } from "@rbxts/services";
+import { locations } from "../../shared/LocationLinks";
 
 export default function init() {
 	// Client Objects
@@ -8,10 +9,9 @@ export default function init() {
 	const main = pg.WaitForChild("Main");
 
 	// List of trigger parts and their corresponding Rodux action names
-	const triggers = [[Workspace.WaitForChild("Location"), "toggleShop"]];
 	const triggerHooks: TouchManager[] = [];
 
-	triggers.forEach((trigger) => {
+	locations.forEach((trigger) => {
 		// Initialize each trigger
 		const triggerPart = trigger[0] as BasePart;
 		const action = trigger[1] as string;
