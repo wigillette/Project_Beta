@@ -2,6 +2,7 @@ import Roact from "@rbxts/roact";
 import PersonList from "./Person/PersonList";
 import Shop from "./Shop";
 import Inventory from "./Inventory";
+import Gold from "./Gold";
 
 const Main = () => {
 	return (
@@ -9,6 +10,7 @@ const Main = () => {
 			<PersonList />
 			<Shop />
 			<Inventory />
+			<Gold Gold={75} />
 		</screengui>
 	);
 };

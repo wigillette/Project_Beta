@@ -42,3 +42,8 @@ export const whiteGradientProperties: Partial<WritableInstanceProperties<UIGradi
 	Rotation: 90,
 	Color: new ColorSequence(Color3.fromRGB(255, 255, 255), Color3.fromRGB(240, 240, 240)),
 };
+
+export const mediumGradientProperties: Partial<WritableInstanceProperties<UIGradient>> = {
+	Rotation: 90,
+	Color: new ColorSequence(Color3.fromRGB(235, 235, 235), Color3.fromRGB(120, 120, 120)),
+};
