@@ -2,7 +2,7 @@ import { KnitServer as Knit } from "@rbxts/knit";
 import { Players } from "@rbxts/services";
 import Database from "@rbxts/datastore2";
 import { InventoryService } from "../Services/InventoryService";
-import { InventoryFormat, INITIAL_INVENTORY } from "../../shared/InventoryInfo";
+import { InventoryFormat, INITIAL_INVENTORY, INITIAL_EQUIPPED, EquippedFormat } from "../../shared/InventoryInfo";
 
 declare global {
 	interface KnitServices {
@@ -17,8 +17,10 @@ const DatabaseService = Knit.CreateService({
 		print(`Attempting to load ${Player.Name}'s data`);
 		const InventoryStore = Database("Inventory", Player);
 		const Inventory = InventoryStore.GetAsync(INITIAL_INVENTORY).then((inventory) => {
-			print(inventory);
-			InventoryService.InitData(Player, inventory as InventoryFormat);
+			const EquippedItemsStore = Database("Equipped", Player);
+			const EquippedItems = EquippedItemsStore.GetAsync(INITIAL_EQUIPPED).then((equippedItems) => {
+				InventoryService.InitData(Player, inventory as InventoryFormat, equippedItems as EquippedFormat);
+			});
 		});
 	},
 
@@ -35,7 +37,7 @@ const DatabaseService = Knit.CreateService({
 	},
 
 	KnitInit() {
-		Database.Combine("UserData", "Inventory");
+		Database.Combine("UserData", "Inventory", "Equipped");
 		Players.PlayerAdded.Connect((player) => {
 			this.LoadData(player);
 		});

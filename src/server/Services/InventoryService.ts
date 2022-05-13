@@ -1,7 +1,7 @@
 import { KnitServer as Knit, Signal, RemoteSignal } from "@rbxts/knit";
 import { Players } from "@rbxts/services";
 import Database from "@rbxts/datastore2";
-import { InventoryFormat, INITIAL_INVENTORY } from "../../shared/InventoryInfo";
+import { InventoryFormat, INITIAL_INVENTORY, EquippedFormat, INITIAL_EQUIPPED } from "../../shared/InventoryInfo";
 
 declare global {
 	interface KnitServices {
@@ -11,14 +11,22 @@ declare global {
 
 export const InventoryService = Knit.CreateService({
 	Name: "InventoryService",
-	PlayerInventories: new Map<Player, InventoryFormat>(), // Stores all the user's inventories
+	PlayerInventories: new Map<Player, InventoryFormat>(), // Stores all the users' inventories
+	PlayerEquipped: new Map<Player, EquippedFormat>(), // Stores all the users' equipped items
 
 	Client: {
 		InventoryChanged: new RemoteSignal<(Inventory: InventoryFormat) => void>(),
+		EquippedChanged: new RemoteSignal<(Equipped: EquippedFormat) => void>(),
 		// Update the user's inventory on the client side when it changes on the server
 		FetchInventory(Player: Player) {
 			// Remote Signal to return the user's inventory to the client
 			return this.Server.FetchInventory(Player);
+		},
+		FetchEquipped(Player: Player) {
+			return this.Server.FetchEquipped(Player);
+		},
+		EquipItem(Player: Player, ItemName: string, Category: string) {
+			return this.Server.EquipItem(Player, ItemName, Category);
 		},
 	},
 
@@ -45,6 +53,29 @@ export const InventoryService = Knit.CreateService({
 		return playerInventory;
 	},
 
+	// Retrieve the user's equipped item or the default equipped item
+	FetchEquipped(Player: Player) {
+		const equippedItem = (this.PlayerEquipped.get(Player) as EquippedFormat) || INITIAL_EQUIPPED;
+		return equippedItem;
+	},
+
+	// Equip an item
+	EquipItem(Player: Player, ItemName: string, Category: string) {
+		const equippedItems = this.FetchEquipped(Player) as EquippedFormat;
+		equippedItems[Category as keyof typeof equippedItems] = ItemName;
+		print(equippedItems);
+		this.PlayerEquipped.set(Player, equippedItems);
+		this.UpdateEquippedData(Player, equippedItems);
+		this.Client.EquippedChanged.Fire(Player, equippedItems);
+		return `Successfully equipped ${ItemName}`;
+	},
+
+	// Update the user's equipped items in the database
+	UpdateEquippedData(Player: Player, newEquippedItems: EquippedFormat) {
+		const EquippedItemsStore = Database("Equipped", Player);
+		EquippedItemsStore.Set(newEquippedItems);
+	},
+
 	// Update the user's inventory in the database
 	UpdateInventoryData(Player: Player, newInventory: InventoryFormat) {
 		const InventoryStore = Database("Inventory", Player);
@@ -53,11 +84,15 @@ export const InventoryService = Knit.CreateService({
 	},
 
 	// Initialize the inventory Map
-	InitData(Player: Player, Inventory: InventoryFormat) {
+	InitData(Player: Player, Inventory: InventoryFormat, Equipped: EquippedFormat) {
+		print(Equipped);
 		this.PlayerInventories.set(Player, Inventory);
+		this.PlayerEquipped.set(Player, Equipped);
 		this.Client.InventoryChanged.Fire(Player, Inventory);
+		this.Client.EquippedChanged.Fire(Player, Equipped);
 	},
 
+	// Initial function on service startup
 	KnitInit() {
 		print("Inventory Service Initialized | Server");
 		Players.PlayerRemoving.Connect((player) => {

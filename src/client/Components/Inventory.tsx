@@ -19,6 +19,7 @@ import ObjectUtils from "@rbxts/object-utils";
 import { registerGridDynamicScrolling } from "../UIProperties/DynamicScrolling";
 import Card from "./Material/Card";
 import { pushNotification } from "../Services/SnackbarService";
+const InventoryService = Knit.GetService("InventoryService");
 
 class Inventory extends Roact.Component<inventoryState> {
 	static InventoryRef = Roact.createRef<Frame>();
@@ -88,11 +89,15 @@ class Inventory extends Roact.Component<inventoryState> {
 											return (
 												<Card
 													Text={Item[0]}
-													ButtonText={"Equip"}
+													ButtonText={
+														this.props.equipped.Swords === Item[0] ? "EQUIPPED" : "EQUIP"
+													}
 													Model={Item[1] as Model | Tool}
 													Callback={() => {
-														print(`Attempted to purchase ${Item[0]}!`);
-														const response = "Equip Callback";
+														let response = "Already equipped!";
+														if (this.props.equipped.Swords !== Item[0]) {
+															response = InventoryService.EquipItem(Item[0], "Swords");
+														}
 														pushNotification(response);
 													}}
 													ButtonSize={new UDim2(0.6, 0, 0.075, 0)}
@@ -135,6 +140,7 @@ class Inventory extends Roact.Component<inventoryState> {
 interface storeState {
 	toggleInventory: inventoryState;
 	updateInventory: inventoryState;
+	equipItem: inventoryState;
 }
 
 export = RoactRodux.connect(function (state: storeState) {
@@ -144,9 +150,9 @@ export = RoactRodux.connect(function (state: storeState) {
 			? movingFadeAbsolute(InventoryFrame, true, new UDim2(0.5, 0, 0.4, 0))
 			: movingFadeAbsolute(InventoryFrame, false, new UDim2(0.5, 0, 0.1, 0));
 	}
-
 	return {
 		toggle: state.toggleInventory.toggle,
 		inventory: state.updateInventory.inventory,
+		equipped: state.equipItem.equipped,
 	};
 })(Inventory);

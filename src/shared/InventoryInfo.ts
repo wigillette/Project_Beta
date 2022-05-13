@@ -5,3 +5,11 @@ export interface InventoryFormat {
 export const INITIAL_INVENTORY = {
 	Swords: new Map<string, Model | Tool | "">(),
 };
+
+export interface EquippedFormat {
+	Swords: string;
+}
+
+export const INITIAL_EQUIPPED = {
+	Swords: "Default",
+};

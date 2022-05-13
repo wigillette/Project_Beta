@@ -1,4 +1,4 @@
-import Circle from "../Components/RippleCircle";
+import Circle from "../Components/Material/RippleCircle";
 import Roact from "@rbxts/roact";
 import { TweenService } from "@rbxts/services";
 

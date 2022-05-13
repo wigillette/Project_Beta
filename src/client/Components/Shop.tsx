@@ -96,7 +96,6 @@ class Shop extends Roact.Component<UIProps> {
 													ButtonText={tostring(Item[1].Price)}
 													Model={Item[1].Model}
 													Callback={() => {
-														print(`Attempted to purchase ${Item[0]}!`);
 														const response = shopService.PurchaseItem(Item[0], "Swords");
 														pushNotification(response);
 													}}

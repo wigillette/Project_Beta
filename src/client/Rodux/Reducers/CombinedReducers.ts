@@ -7,6 +7,7 @@ const reducer = Rodux.combineReducers({
 	fetchItems: shopReducer,
 	toggleInventory: inventoryReducer,
 	updateInventory: inventoryReducer,
+	equipItem: inventoryReducer,
 });
 
 export default reducer;

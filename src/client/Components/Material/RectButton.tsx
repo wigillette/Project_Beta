@@ -47,8 +47,9 @@ class RectButton extends Roact.Component<UIProps> {
 							const mouse = client.GetMouse();
 
 							if (frame) {
-								rippleEffect(frame, mouse);
+								//wait(0.5);
 								this.props.Callback();
+								rippleEffect(frame, mouse);
 							}
 						},
 						MouseEnter: (rbx) => {
