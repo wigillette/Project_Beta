@@ -53,23 +53,6 @@ export default function init() {
 	});
 	*/
 
-	const progressObject = Roact.createElement(CircularProgress, {
-		Position: new UDim2(0.5, 0, 0.5, 0),
-		Size: new UDim2(0.125, 0, 0.125, 0),
-		AnchorPoint: new Vector2(0.5, 0.5),
-		Text: "Progress Example",
-		Ratio: 0.75,
-	});
-
-	const progressObject2 = Roact.createElement(RectProgress, {
-		Position: new UDim2(0.5, 0, 0.5, 0),
-		Size: new UDim2(0.5, 0, 0.25, 0),
-		AnchorPoint: new Vector2(0.5, 0.5),
-		Title: "Progress Example",
-		cap: 100,
-		percentage: 50,
-	});
-
 	const toggleObject = Roact.createElement(ToggleButton, {
 		Size: new UDim2(0.08, 0, 0.1, 0),
 		Position: new UDim2(0.5, 0, 0.5, 0),

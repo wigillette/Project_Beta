@@ -9,6 +9,8 @@ interface UIProps {
 	AnchorPoint: Vector2;
 	percentage: number;
 	cap: number;
+	Color: Color3;
+	SeparatorColor: Color3;
 }
 
 class RectProgress extends Roact.Component<UIProps> {
@@ -45,7 +47,7 @@ class RectProgress extends Roact.Component<UIProps> {
 
 					<imagelabel
 						Ref={this.shadowRef}
-						ImageColor3={googleMaterial.buttonColor}
+						ImageColor3={this.props.Color}
 						{...CircBG}
 						Size={new UDim2(this.props.percentage / this.props.cap, 0, 1, 0)}
 						Position={new UDim2(0, 0, 0.5, 0)}
@@ -64,6 +66,7 @@ class RectProgress extends Roact.Component<UIProps> {
 						Text={this.props.Title}
 						TextStrokeTransparency={0.9}
 						TextXAlignment={Enum.TextXAlignment.Left}
+						TextColor3={Color3.fromRGB(255, 255, 255)}
 					></textlabel>
 					<textlabel
 						{...CircText}
@@ -77,24 +80,33 @@ class RectProgress extends Roact.Component<UIProps> {
 						)}`}
 						TextStrokeTransparency={0.9}
 						TextXAlignment={Enum.TextXAlignment.Right}
+						TextColor3={Color3.fromRGB(255, 255, 255)}
 					></textlabel>
 					<frame
 						{...SeparatorProperties}
+						Visible={this.props.percentage / this.props.cap >= 0.3}
+						BackgroundColor3={this.props.SeparatorColor}
 						AnchorPoint={new Vector2(0.2, 0.5)}
 						Position={new UDim2(0.2, 0, 0.5, 0)}
 					></frame>
 					<frame
 						{...SeparatorProperties}
+						Visible={this.props.percentage / this.props.cap >= 0.5}
+						BackgroundColor3={this.props.SeparatorColor}
 						AnchorPoint={new Vector2(0.4, 0.5)}
 						Position={new UDim2(0.4, 0, 0.5, 0)}
 					></frame>
 					<frame
 						{...SeparatorProperties}
+						Visible={this.props.percentage / this.props.cap >= 0.7}
+						BackgroundColor3={this.props.SeparatorColor}
 						AnchorPoint={new Vector2(0.6, 0.5)}
 						Position={new UDim2(0.6, 0, 0.5, 0)}
 					></frame>
 					<frame
 						{...SeparatorProperties}
+						Visible={this.props.percentage / this.props.cap >= 0.9}
+						BackgroundColor3={this.props.SeparatorColor}
 						AnchorPoint={new Vector2(0.8, 0.5)}
 						Position={new UDim2(0.8, 0, 0.5, 0)}
 					></frame>

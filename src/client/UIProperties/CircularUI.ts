@@ -32,7 +32,6 @@ export const CircContainer: Partial<WritableInstanceProperties<Frame>> = {
 };
 
 export const SeparatorProperties: Partial<WritableInstanceProperties<Frame>> = {
-	BackgroundColor3: Color3.fromRGB(90, 90, 90),
 	Size: new UDim2(0.005, 0, 1, 0),
 	BorderSizePixel: 0,
 	ZIndex: 2,

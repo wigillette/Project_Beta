@@ -51,7 +51,6 @@ const inventoryReducer = Rodux.createReducer(
 				newState.inventory.Swords = newMap;
 			}
 
-			print("Inventory Store Items Update Successful | Client");
 			return newState;
 		},
 		toggleInventory: (state: inventoryState, action: Action) => {
@@ -76,7 +75,6 @@ const inventoryReducer = Rodux.createReducer(
 				newState.equipped = action.equipped;
 			}
 
-			print("Inventory Store Equipped Update Successful | Client");
 			return newState;
 		},
 		switchTab: (state: inventoryState, action: Action) => {
@@ -91,7 +89,6 @@ const inventoryReducer = Rodux.createReducer(
 				newState.currentTab = action.currentTab;
 			}
 
-			print("Inventory Store Equipped Update Successful | Client");
 			return newState;
 		},
 	},
