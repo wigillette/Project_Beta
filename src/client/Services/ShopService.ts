@@ -4,7 +4,6 @@ const ShopService = Knit.GetService("ShopService");
 
 const ShopClient = {
 	FetchItems: (items: Map<string, number>) => {
-		print("Dispatching shop items to Store.. | Client");
 		Store.dispatch({
 			type: "fetchItems",
 			payload: { items: items },

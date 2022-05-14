@@ -1,19 +1,16 @@
 import Roact from "@rbxts/roact";
-import { googleMaterial, whiteGradientProperties, gradientProperties } from "client/UIProperties/ColorSchemes";
+import RoactRodux from "@rbxts/roact-rodux";
+import { googleMaterial, whiteGradientProperties } from "client/UIProperties/ColorSchemes";
 import CircButton from "./Material/CircButton";
-import { tweenPos, tweenTransparency } from "client/UIProperties/FrameEffects";
 import { CircContainer, CircShadow, CircBG, CircText } from "client/UIProperties/CircularUI";
+import { goldState } from "../Rodux/Reducers/GoldReducer";
 
-interface UIProps {
-	Gold: number;
-}
-
-class Interaction extends Roact.Component<UIProps> {
+class Gold extends Roact.Component<goldState> {
 	bodyRef;
 	buttonRef;
 	frameRef;
 	containerRef;
-	constructor(props: UIProps) {
+	constructor(props: goldState) {
 		super(props);
 		this.bodyRef = Roact.createRef<TextLabel>();
 		this.buttonRef = Roact.createRef<ImageButton>();
@@ -71,4 +68,12 @@ class Interaction extends Roact.Component<UIProps> {
 	}
 }
 
-export default Interaction;
+interface storeState {
+	updateGold: goldState;
+}
+
+export = RoactRodux.connect(function (state: storeState) {
+	return {
+		Gold: state.updateGold.Gold,
+	};
+})(Gold);

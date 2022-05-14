@@ -1,6 +1,6 @@
 import Roact from "@rbxts/roact";
 import { CircText, CircShadow, CircBG, CircContainer, CircAspectRatio } from "client/UIProperties/CircularUI";
-import { tweenPos, tweenTransparency } from "client/UIProperties/FrameEffects";
+import { movingFade, tweenPos, tweenTransparency } from "client/UIProperties/FrameEffects";
 import { googleMaterial, whiteGradientProperties } from "client/UIProperties/ColorSchemes";
 
 interface UIProps {
@@ -19,7 +19,7 @@ class SnackbarItem extends Roact.Component<UIProps> {
 			<frame
 				Size={new UDim2(1, 0, 1, 0)}
 				AnchorPoint={new Vector2(0.5, 0.5)}
-				Position={new UDim2(0.5, 0, 1.5, 0)}
+				Position={new UDim2(0.5, 0, 1, 0)}
 				Ref={this.containerRef}
 				{...CircContainer}
 			>
@@ -45,11 +45,7 @@ class SnackbarItem extends Roact.Component<UIProps> {
 		const container = this.containerRef.getValue();
 
 		if (container) {
-			tweenPos(container, "Up", 1.5);
-			tweenTransparency(container, true, false);
-			wait(0.4);
-			container.Visible = false;
-			container.Destroy();
+			movingFade(container, false, -0.5);
 		}
 	}
 
@@ -58,8 +54,7 @@ class SnackbarItem extends Roact.Component<UIProps> {
 		const container = this.containerRef.getValue();
 		if (container) {
 			container.Visible = true;
-			tweenTransparency(container, true, true);
-			tweenPos(container, "Up", 1);
+			movingFade(container, true, -0.5);
 		}
 	}
 
@@ -67,8 +62,8 @@ class SnackbarItem extends Roact.Component<UIProps> {
 		// Make the notification invisible to start
 		const container = this.containerRef.getValue();
 		if (container) {
-			tweenTransparency(container, true, false);
 			container.Visible = false;
+			tweenTransparency(container, true, false);
 		}
 	}
 
@@ -79,9 +74,9 @@ class SnackbarItem extends Roact.Component<UIProps> {
 		if (container) {
 			coroutine.wrap(() => {
 				this.setUpItem();
-				wait(0.6);
+				wait(0.4);
 				this.pushItem();
-				wait(0.75);
+				wait(1.25);
 				this.popItem();
 			})();
 		}
@@ -90,6 +85,7 @@ class SnackbarItem extends Roact.Component<UIProps> {
 	protected willUnmount(): void {
 		// Pop this notification if a new one is incoming
 		this.popItem();
+		wait(0.4);
 	}
 }
 

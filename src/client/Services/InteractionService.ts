@@ -13,6 +13,7 @@ interface Interaction {
 }
 
 export default function init() {
+	print("Interaction Service Initialized | Client");
 	// Client Objects
 	const client = Players.LocalPlayer;
 

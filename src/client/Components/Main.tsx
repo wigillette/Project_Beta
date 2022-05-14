@@ -10,7 +10,7 @@ const Main = () => {
 			<PersonList />
 			<Shop />
 			<Inventory />
-			<Gold Gold={75} />
+			<Gold />
 		</screengui>
 	);
 };

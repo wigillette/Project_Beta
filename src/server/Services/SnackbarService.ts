@@ -26,16 +26,7 @@ const SnackbarService = Knit.CreateService({
 
 	// Initialize on service startup
 	KnitInit() {
-		coroutine.wrap(() => {
-			wait(4);
-			this.PushAll("Ben Douglas ;)");
-			wait(2);
-			this.PushAll("Tom Boccuto :/");
-			wait(2);
-			this.PushAll("Jake Kosa ^_^");
-			wait(2);
-			this.PushAll("Will Gillette <_>");
-		})();
+		print("Snackbar Service Initialized | Server");
 	},
 });
 

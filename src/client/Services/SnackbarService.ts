@@ -8,6 +8,7 @@ let snackbarManagerObject: SnackbarManager | undefined = undefined;
 
 // Run on client service startup
 export default function init() {
+	print("Snackbar Service Initialized | Client");
 	snackbarManagerObject = new SnackbarManager();
 	// Handle the client-server notification; retrieve alert from server and create notification on client
 	snackbarService.PushNotification.Connect((alert: string) => {

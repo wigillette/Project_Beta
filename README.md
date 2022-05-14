@@ -34,7 +34,7 @@
 - [x] Tween Animation Handler, Ripple Effect
 - [x] Color Schemes
 - [x] Dynamic Scrolling
-- [ ] UI Property Layouts
+- [x] UI Property Layouts
 - [x] Dynamic/Spinning Viewport Frame
 - [x] Spritesheets
 
@@ -42,6 +42,7 @@
 - [x] Shop Reducer
 - [x] Inventory Reducer
 - [ ] Menu Reducer
+- [x] Gold Reducer
 
 > Data Storage
 - [x] SQL Database vs. Datastore2
@@ -50,7 +51,7 @@
 > Services
 - [ ] Map Service
 - [ ] Mode Service
-- [ ] Gold Service
+- [x] Gold Service
 - [ ] Trading Service
 - [ ] Crafting Service
 - [x] Interaction Service
@@ -96,3 +97,4 @@
 - [ ] Betting UI
 - [x] Inventory UI
 - [ ] Twitter UI
+- [x] Gold UI

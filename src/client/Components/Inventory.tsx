@@ -19,7 +19,9 @@ import ObjectUtils from "@rbxts/object-utils";
 import { registerGridDynamicScrolling } from "../UIProperties/DynamicScrolling";
 import Card from "./Material/Card";
 import { pushNotification } from "../Services/SnackbarService";
+import RectButton from "./Material/RectButton";
 const InventoryService = Knit.GetService("InventoryService");
+import InventoryClient from "client/Services/InventoryService";
 
 class Inventory extends Roact.Component<inventoryState> {
 	static InventoryRef = Roact.createRef<Frame>();
@@ -54,13 +56,13 @@ class Inventory extends Roact.Component<inventoryState> {
 					{...RectContainer}
 				>
 					<imagelabel ImageColor3={googleMaterial.outerBG} {...RectBG}>
-						<frame {...Header}>
+						<frame {...Header} Size={new UDim2(1, 0, 0.15, 0)}>
 							<imagelabel ImageColor3={googleMaterial.header} {...RectBG}>
 								<textlabel
 									Text={"Inventory"}
 									TextStrokeTransparency={0.8}
-									AnchorPoint={new Vector2(0.5, 0.5)}
-									Position={new UDim2(0.5, 0, 0.5, 0)}
+									AnchorPoint={new Vector2(0.5, 0.15)}
+									Position={new UDim2(0.5, 0, 0.15, 0)}
 									Size={new UDim2(0.95, 0, 0.95, 0)}
 									TextColor3={googleMaterial.headerFont}
 									{...RectText}
@@ -69,8 +71,48 @@ class Inventory extends Roact.Component<inventoryState> {
 								<uigradient {...gradientProperties}></uigradient>
 							</imagelabel>
 						</frame>
+						<frame
+							{...RectContainer}
+							Size={new UDim2(0.95, 0, 0.1, 0)}
+							Position={new UDim2(0.5, 0, 0.175, 0)}
+							AnchorPoint={new Vector2(0.5, 0.125)}
+						>
+							<uilistlayout
+								FillDirection={Enum.FillDirection.Horizontal}
+								Padding={new UDim(0.1, 0)}
+								HorizontalAlignment={Enum.HorizontalAlignment.Center}
+								VerticalAlignment={Enum.VerticalAlignment.Center}
+							></uilistlayout>
+							<RectButton
+								Position={new UDim2(0.35, 0, 0.5, 0)}
+								AnchorPoint={new Vector2(0.35, 0.5)}
+								Size={new UDim2(0.25, 0, 1, 0)}
+								Callback={() => {
+									InventoryClient.switchTab("Swords");
+								}}
+								ButtonText={"SWORDS"}
+							></RectButton>
+							<RectButton
+								Position={new UDim2(0.7, 0, 0.5, 0)}
+								AnchorPoint={new Vector2(0.7, 0.5)}
+								Size={new UDim2(0.25, 0, 1, 0)}
+								Callback={() => {
+									InventoryClient.switchTab("Elixirs");
+								}}
+								ButtonText={"ELIXIRS"}
+							></RectButton>
+							<RectButton
+								Position={new UDim2(0.7, 0, 0.5, 0)}
+								AnchorPoint={new Vector2(0.7, 0.5)}
+								Size={new UDim2(0.25, 0, 1, 0)}
+								Callback={() => {
+									InventoryClient.switchTab("Pets");
+								}}
+								ButtonText={"PETS"}
+							></RectButton>
+						</frame>
 
-						<frame {...Body}>
+						<frame {...Body} Size={new UDim2(0.95, 0, 0.7, 0)}>
 							<imagelabel ImageColor3={googleMaterial.innerBG2} {...RectBG}>
 								<scrollingframe
 									BackgroundTransparency={1}
@@ -85,18 +127,34 @@ class Inventory extends Roact.Component<inventoryState> {
 									</uigridlayout>
 									{
 										// Display all the cards using the CardInfo prop
-										ObjectUtils.entries(this.props.inventory.Swords).map((Item) => {
+										ObjectUtils.entries(
+											this.props.inventory[
+												this.props.currentTab as keyof typeof this.props.inventory
+											],
+										).map((Item) => {
 											return (
 												<Card
 													Text={Item[0]}
 													ButtonText={
-														this.props.equipped.Swords === Item[0] ? "EQUIPPED" : "EQUIP"
+														this.props.equipped[
+															this.props.currentTab as keyof typeof this.props.equipped
+														] === Item[0]
+															? "EQUIPPED"
+															: "EQUIP"
 													}
 													Model={Item[1] as Model | Tool}
 													Callback={() => {
 														let response = "Already equipped!";
-														if (this.props.equipped.Swords !== Item[0]) {
-															response = InventoryService.EquipItem(Item[0], "Swords");
+														if (
+															this.props.equipped[
+																this.props
+																	.currentTab as keyof typeof this.props.equipped
+															] !== Item[0]
+														) {
+															response = InventoryService.EquipItem(
+																Item[0],
+																this.props.currentTab,
+															);
 														}
 														pushNotification(response);
 													}}
@@ -141,6 +199,7 @@ interface storeState {
 	toggleInventory: inventoryState;
 	updateInventory: inventoryState;
 	equipItem: inventoryState;
+	switchTab: inventoryState;
 }
 
 export = RoactRodux.connect(function (state: storeState) {
@@ -154,5 +213,6 @@ export = RoactRodux.connect(function (state: storeState) {
 		toggle: state.toggleInventory.toggle,
 		inventory: state.updateInventory.inventory,
 		equipped: state.equipItem.equipped,
+		currentTab: state.switchTab.currentTab,
 	};
 })(Inventory);

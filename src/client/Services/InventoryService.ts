@@ -5,7 +5,6 @@ const InventoryService = Knit.GetService("InventoryService");
 
 const InventoryClient = {
 	FetchInventory: (Inventory: { Swords: Map<string, Model | Tool | ""> }) => {
-		print("Dispatching updated inventory to Store.. | Client");
 		// Update the rodux store with the new inventory
 		Store.dispatch({
 			type: "updateInventory",
@@ -13,14 +12,18 @@ const InventoryClient = {
 		});
 	},
 	EquipItem: (itemName: string, category: string) => {
-		print(`Attempting to equip ${itemName}!`);
 		InventoryService.EquipItem(itemName, category);
 	},
 	UpdateEquippedStore: (equippedItems: EquippedFormat) => {
-		print("Dispatching updated equipped item to Store.. | Client");
 		Store.dispatch({
 			type: "equipItem",
 			equipped: equippedItems,
+		});
+	},
+	switchTab: (tabName: string) => {
+		Store.dispatch({
+			type: "switchTab",
+			currentTab: tabName,
 		});
 	},
 	init: () => {

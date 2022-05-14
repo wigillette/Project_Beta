@@ -3,6 +3,7 @@ import { Players, RunService } from "@rbxts/services";
 import { locations } from "../../shared/LocationLinks";
 
 export default function init() {
+	print("Touch Service Initialized | Client");
 	// Client Objects
 	const client = Players.LocalPlayer;
 	const pg = client.WaitForChild("PlayerGui");

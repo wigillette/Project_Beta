@@ -1,6 +1,7 @@
 import { KnitServer as Knit } from "@rbxts/knit";
 import { ItemInfo } from "../../shared/ShopData";
 import { InventoryService } from "./InventoryService";
+import { GoldService } from "./GoldService";
 
 declare global {
 	interface KnitServices {
@@ -53,13 +54,18 @@ const ShopService = Knit.CreateService({
 		let response = "Error";
 		const item = this.itemExists(itemName) as item | undefined;
 		if (item) {
-			const gold = item.Price; // The item's price
+			const price = item.Price; // The item's price
 			if (!InventoryService.ContainsItem(player, itemName, category)) {
-				print(itemName, category);
 				// Check if the user already has the item
-				// TO-DO: Compare price to gold
-				InventoryService.AddToInventory(player, itemName, category);
-				response = "Purchase Successful!";
+				const userGold = GoldService.GetGold(player);
+				if (userGold >= price) {
+					// Check if the user can afford the item
+					GoldService.AddGold(player, -price);
+					InventoryService.AddToInventory(player, itemName, category);
+					response = "Purchase Successful!";
+				} else {
+					response = "Insufficient gold";
+				}
 			} else {
 				response = "Already purchased!";
 			}
@@ -70,7 +76,7 @@ const ShopService = Knit.CreateService({
 
 	// Initialize on service startup
 	KnitInit() {
-		print("Shop service has started up!");
+		print("Shop Service Initialized | Server");
 	},
 });
 

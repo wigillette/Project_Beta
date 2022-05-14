@@ -1,7 +1,8 @@
 import { KnitServer as Knit } from "@rbxts/knit";
 import { Players } from "@rbxts/services";
 import Database from "@rbxts/datastore2";
-import { InventoryService } from "../Services/InventoryService";
+import { InventoryService } from "./InventoryService";
+import { GoldService } from "./GoldService";
 import { InventoryFormat, INITIAL_INVENTORY, INITIAL_EQUIPPED, EquippedFormat } from "../../shared/InventoryInfo";
 
 declare global {
@@ -16,12 +17,34 @@ const DatabaseService = Knit.CreateService({
 	LoadData(Player: Player) {
 		print(`Attempting to load ${Player.Name}'s data`);
 		const InventoryStore = Database("Inventory", Player);
-		const Inventory = InventoryStore.GetAsync(INITIAL_INVENTORY).then((inventory) => {
-			const EquippedItemsStore = Database("Equipped", Player);
-			const EquippedItems = EquippedItemsStore.GetAsync(INITIAL_EQUIPPED).then((equippedItems) => {
-				InventoryService.InitData(Player, inventory as InventoryFormat, equippedItems as EquippedFormat);
+		const Inventory = InventoryStore.GetAsync(INITIAL_INVENTORY)
+			.then((inventory) => {
+				const EquippedItemsStore = Database("Equipped", Player);
+				const EquippedItems = EquippedItemsStore.GetAsync(INITIAL_EQUIPPED)
+					.then((equippedItems) => {
+						InventoryService.InitData(
+							Player,
+							inventory as InventoryFormat,
+							equippedItems as EquippedFormat,
+						);
+					})
+					.catch((err) => {
+						print(`Failed to load ${Player.Name}'s equipped items.`);
+					});
+			})
+			.catch((err) => {
+				print(`Failed to load ${Player.Name}'s inventory.`);
 			});
-		});
+
+		const GoldStore = Database("Gold", Player);
+		const Gold = GoldStore.GetAsync(500)
+			.then((gold) => {
+				GoldService.InitData(Player, gold as number);
+				print(`Successfully loaded ${Player.Name}'s Gold`);
+			})
+			.catch((err) => {
+				print(`Failed to load ${Player.Name}'s Gold`);
+			});
 	},
 
 	SaveData(Player: Player) {
@@ -37,7 +60,7 @@ const DatabaseService = Knit.CreateService({
 	},
 
 	KnitInit() {
-		Database.Combine("UserData", "Inventory", "Equipped");
+		Database.Combine("UserData", "Inventory", "Equipped", "Gold");
 		Players.PlayerAdded.Connect((player) => {
 			this.LoadData(player);
 		});

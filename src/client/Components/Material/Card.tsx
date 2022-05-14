@@ -3,6 +3,7 @@ import { RectShadow, RectBG, RectText, RectContainer, SquareAspectRatio } from "
 import { googleMaterial, whiteGradientProperties } from "client/UIProperties/ColorSchemes";
 import RectButton from "./RectButton";
 import DynamicViewport from "./DynamicViewport";
+import { tweenTransparency } from "client/UIProperties/FrameEffects";
 
 interface UIProps {
 	Text: string;
@@ -76,6 +77,20 @@ class Card extends Roact.Component<UIProps, UIState> {
 				<imagelabel ImageColor3={googleMaterial.cardShadow} {...RectShadow}></imagelabel>
 			</frame>
 		);
+	}
+
+	protected didMount(): void {
+		const container = this.containerRef.getValue();
+
+		if (container) {
+			coroutine.wrap(() => {
+				container.Visible = false;
+				tweenTransparency(container, true, false);
+				wait(0.35);
+				container.Visible = true;
+				tweenTransparency(container, true, true);
+			})();
+		}
 	}
 }
 

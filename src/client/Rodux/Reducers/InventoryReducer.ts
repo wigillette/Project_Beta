@@ -10,12 +10,14 @@ export interface inventoryState {
 	toggle: boolean;
 	inventory: InventoryFormat;
 	equipped: EquippedFormat;
+	currentTab: string;
 }
 
 interface Action {
 	type: string;
 	inventory?: InventoryFormat;
 	equipped?: EquippedFormat;
+	currentTab?: string;
 }
 
 const inventoryReducer = Rodux.createReducer(
@@ -23,6 +25,7 @@ const inventoryReducer = Rodux.createReducer(
 		toggle: false,
 		inventory: INITIAL_INVENTORY,
 		equipped: INITIAL_EQUIPPED,
+		currentTab: "Swords",
 	},
 	{
 		updateInventory: (state: inventoryState, action: Action) => {
@@ -30,6 +33,7 @@ const inventoryReducer = Rodux.createReducer(
 				toggle: state.toggle,
 				inventory: INITIAL_INVENTORY,
 				equipped: INITIAL_EQUIPPED,
+				currentTab: state.currentTab,
 			};
 
 			if (action.inventory && modelsFolder) {
@@ -55,6 +59,7 @@ const inventoryReducer = Rodux.createReducer(
 				toggle: !state.toggle,
 				inventory: state.inventory,
 				equipped: state.equipped,
+				currentTab: state.currentTab,
 			};
 
 			return newState;
@@ -64,10 +69,26 @@ const inventoryReducer = Rodux.createReducer(
 				toggle: state.toggle,
 				inventory: state.inventory,
 				equipped: state.equipped,
+				currentTab: state.currentTab,
 			};
 
 			if (action.equipped) {
 				newState.equipped = action.equipped;
+			}
+
+			print("Inventory Store Equipped Update Successful | Client");
+			return newState;
+		},
+		switchTab: (state: inventoryState, action: Action) => {
+			const newState: inventoryState = {
+				toggle: state.toggle,
+				inventory: state.inventory,
+				equipped: state.equipped,
+				currentTab: state.currentTab,
+			};
+
+			if (action.currentTab !== undefined) {
+				newState.currentTab = action.currentTab;
 			}
 
 			print("Inventory Store Equipped Update Successful | Client");
