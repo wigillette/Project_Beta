@@ -47,26 +47,23 @@ class DynamicViewport extends Roact.Component<UIProps> {
 		);
 	}
 
-	playAnimation(model: Model | Tool, newModel: Model | Tool, newCamera: Camera) {
-		const hrp = model.FindFirstChild("HumanoidRootPart") as BasePart;
-		const hum = model.FindFirstChildOfClass("Humanoid");
+	playAnimation(newModel: Model | Tool, newCamera: Camera) {
 		const cloneHRP = newModel.FindFirstChild("HumanoidRootPart") as BasePart;
 		const cloneHum = newModel.FindFirstChildOfClass("Humanoid");
-		if (hrp && hum && cloneHRP && cloneHum) {
+		if (cloneHRP && cloneHum) {
 			let animationFinished = false;
 			// Display the animation on the view
 			coroutine.wrap(() => {
 				const connection = RunService.RenderStepped.Connect((dt: number) => {
 					newCamera.CFrame = new CFrame(
-						hrp.CFrame.ToWorldSpace(new CFrame(0, 0.5, -5)).Position,
-						hrp.CFrame.Position,
+						cloneHRP.CFrame.ToWorldSpace(new CFrame(0, 0.5, -5)).Position,
+						cloneHRP.CFrame.Position,
 					);
 					if (animationFinished) {
 						connection.Disconnect();
 					}
 				});
 			})();
-
 			// Play the animation
 			spawn(() => {
 				if (this.props.Animation !== undefined) {
@@ -74,12 +71,8 @@ class DynamicViewport extends Roact.Component<UIProps> {
 					anim.Name = "Idle";
 					anim.AnimationId = this.props.Animation;
 					anim.Parent = newModel;
-					const realAnim = (model.FindFirstChild("Idle") as Animation) || anim.Clone();
-					realAnim.Parent = model;
 
-					const animTrack = hum.LoadAnimation(realAnim);
 					const cloneAnimTrack = cloneHum.LoadAnimation(anim);
-					animTrack.Play();
 					cloneAnimTrack.Play();
 					cloneAnimTrack.Stopped.Wait();
 					animationFinished = true;
@@ -107,7 +100,7 @@ class DynamicViewport extends Roact.Component<UIProps> {
 				const worldModel = new Instance("WorldModel");
 				worldModel.Parent = viewportFrame;
 				newModel.Parent = worldModel;
-				this.playAnimation(model, newModel, newCamera);
+				this.playAnimation(newModel, newCamera);
 			}
 		}
 	}

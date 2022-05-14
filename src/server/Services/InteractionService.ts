@@ -24,7 +24,7 @@ const InteractionService = Knit.CreateService({
 
 	// Initialize on service startup
 	KnitInit() {
-		print("Interaction service has started up!");
+		print("Interaction Service Initialized | Server");
 	},
 });
 

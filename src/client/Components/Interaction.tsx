@@ -3,15 +3,13 @@ import { RectShadow, RectBG, RectText, RectContainer, SquareAspectRatio } from "
 import { darkMaterial, whiteGradientProperties, gradientProperties } from "client/UIProperties/ColorSchemes";
 import RectButton from "./Material/RectButton";
 import DynamicViewport from "./Material/DynamicViewport";
-import { tweenPos, tweenTransparency } from "client/UIProperties/FrameEffects";
-import InteractionManager from "../Controllers/InteractionManager";
+import { movingFadeAbsolute, tweenPos, tweenTransparency } from "client/UIProperties/FrameEffects";
 
 interface UIProps {
 	Header: string;
 	Body: string;
 	Model: Model | Tool;
 	Animation: string | undefined;
-	InteractionObject: InteractionManager;
 }
 
 class Interaction extends Roact.Component<UIProps> {
@@ -34,7 +32,7 @@ class Interaction extends Roact.Component<UIProps> {
 			<frame
 				Size={new UDim2(0.25, 0, 0.25, 0)}
 				AnchorPoint={new Vector2(0.5, 0.5)}
-				Position={new UDim2(0.5, 0, 0.7, 0)}
+				Position={new UDim2(0.5, 0, 1, 0)}
 				Ref={this.containerRef}
 				{...RectContainer}
 			>
@@ -97,12 +95,10 @@ class Interaction extends Roact.Component<UIProps> {
 							const container = this.containerRef.getValue();
 							if (container) {
 								coroutine.wrap(() => {
-									tweenTransparency(container, true, false);
-									tweenPos(container, "Up", 0.15);
+									movingFadeAbsolute(container, false, new UDim2(0.5, 0, 1, 0));
 									wait(0.4);
 									container.Destroy();
 								})();
-								this.props.InteractionObject.endInputConnection();
 							}
 						}}
 						Position={new UDim2(0.95, 0, 0.05, 0)}
@@ -126,8 +122,7 @@ class Interaction extends Roact.Component<UIProps> {
 				container.Visible = false;
 				wait(0.4);
 				container.Visible = true;
-				tweenTransparency(container, true, true);
-				tweenPos(container, "Down", 0.05);
+				movingFadeAbsolute(container, true, new UDim2(0.5, 0, 0.85, 0));
 
 				for (let i = 0; i < this.props.Body.size(); i++) {
 					body.Text += this.props.Body.sub(i, i);
