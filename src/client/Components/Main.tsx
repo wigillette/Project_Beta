@@ -1,17 +1,18 @@
 import Roact from "@rbxts/roact";
-import PersonList from "./Person/PersonList";
 import Shop from "./Shop";
 import Inventory from "./Inventory";
 import Gold from "./Gold";
 import Profile from "./Profile";
+import Twitter from "./Twitter";
 
 const Main = () => {
 	return (
 		<screengui ResetOnSpawn={false}>
-			<Profile maxHealth={100} currentHealth={100} />
+			<Profile />
 			<Shop />
 			<Inventory />
 			<Gold />
+			<Twitter />
 		</screengui>
 	);
 };

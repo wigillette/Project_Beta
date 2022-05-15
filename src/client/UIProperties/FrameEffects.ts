@@ -45,24 +45,26 @@ export const tweenPosAbsolute = (frame: Frame, position: UDim2) => {
 // Tween the transparency of each of the children of an object
 const tweenTransparencyRecurse = (children: Instance[], recurse: boolean, transparency: number) => {
 	children.forEach((object: Instance) => {
-		if (object.IsA("ImageLabel") || object.IsA("ImageButton")) {
-			TweenService.Create(
-				object,
-				new TweenInfo(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0),
-				{ ImageTransparency: transparency },
-			).Play();
-		} else if (object.IsA("TextLabel")) {
-			TweenService.Create(
-				object,
-				new TweenInfo(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0),
-				{ TextTransparency: transparency },
-			).Play();
-		} else if (object.IsA("ViewportFrame") || object.IsA("ScrollingFrame")) {
-			object.Visible = transparency === 0;
-		}
+		if (object.Name !== "Shadow" || transparency !== 0) {
+			if (object.IsA("ImageLabel") || object.IsA("ImageButton")) {
+				TweenService.Create(
+					object,
+					new TweenInfo(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0),
+					{ ImageTransparency: transparency },
+				).Play();
+			} else if (object.IsA("TextLabel")) {
+				TweenService.Create(
+					object,
+					new TweenInfo(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0),
+					{ TextTransparency: transparency },
+				).Play();
+			} else if (object.IsA("ViewportFrame") || object.IsA("ScrollingFrame") || object.IsA("TextBox")) {
+				object.Visible = transparency === 0;
+			}
 
-		if (recurse) {
-			tweenTransparencyRecurse(object.GetChildren(), recurse, transparency);
+			if (recurse) {
+				tweenTransparencyRecurse(object.GetChildren(), recurse, transparency);
+			}
 		}
 	});
 };

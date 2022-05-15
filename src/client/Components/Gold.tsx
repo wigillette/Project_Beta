@@ -3,6 +3,7 @@ import RoactRodux from "@rbxts/roact-rodux";
 import { googleMaterial, whiteGradientProperties } from "client/UIProperties/ColorSchemes";
 import CircButton from "./Material/CircButton";
 import { CircContainer, CircShadow, CircBG, CircText } from "client/UIProperties/CircularUI";
+import { RectContainer, RectShadow, RectBG, RectText, SquareAspectRatio } from "client/UIProperties/RectUI";
 import { goldState } from "../Rodux/Reducers/GoldReducer";
 
 class Gold extends Roact.Component<goldState> {
@@ -34,20 +35,34 @@ class Gold extends Roact.Component<goldState> {
 				></uiaspectratioconstraint>
 				<imagelabel ImageColor3={googleMaterial.outerBG} {...CircBG}>
 					<uigradient {...whiteGradientProperties}></uigradient>
+					<frame
+						{...RectContainer}
+						Size={new UDim2(0.2, 0, 0.8, 0)}
+						Position={new UDim2(0.05, 0, 0.5, 0)}
+						AnchorPoint={new Vector2(0.05, 0.5)}
+					>
+						<uiaspectratioconstraint {...SquareAspectRatio}></uiaspectratioconstraint>
+						<imagelabel {...CircBG} ImageColor3={googleMaterial.cardBG}>
+							<uigradient {...whiteGradientProperties}></uigradient>
+							<imagelabel
+								{...RectContainer}
+								Size={new UDim2(0.75, 0, 0.75, 0)}
+								Position={new UDim2(0.5, 0, 0.5, 0)}
+								AnchorPoint={new Vector2(0.5, 0.5)}
+								Image={"rbxassetid://5350867529"}
+							>
+								<uiaspectratioconstraint {...SquareAspectRatio}></uiaspectratioconstraint>
+							</imagelabel>
+						</imagelabel>
+						<imagelabel {...CircShadow} ImageColor3={googleMaterial.cardShadow}></imagelabel>
+					</frame>
+
 					<textlabel
 						{...CircText}
-						Position={new UDim2(0.1, 0, 0.5, 0)}
-						AnchorPoint={new Vector2(0.1, 0.5)}
-						Size={new UDim2(0.35, 0, 0.9, 0)}
-						Font={"GothamBold"}
-						Text={"Gold:"}
-					></textlabel>
-					<textlabel
-						{...CircText}
-						Position={new UDim2(0.6, 0, 0.5, 0)}
+						Position={new UDim2(0.5, 0, 0.5, 0)}
 						AnchorPoint={new Vector2(0.5, 0.5)}
-						Size={new UDim2(0.3, 0, 0.8, 0)}
-						Font={"Gotham"}
+						Size={new UDim2(0.45, 0, 0.8, 0)}
+						Font={"GothamBold"}
 						TextXAlignment={Enum.TextXAlignment.Left}
 						TextYAlignment={Enum.TextYAlignment.Bottom}
 						TextColor3={Color3.fromRGB(65, 65, 65)}

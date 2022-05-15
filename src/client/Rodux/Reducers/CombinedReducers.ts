@@ -3,6 +3,7 @@ import { shopReducer } from "./ShopReducer";
 import inventoryReducer from "./InventoryReducer";
 import { goldReducer } from "./GoldReducer";
 import { profileReducer } from "./ProfileReducer";
+import { twitterReducer } from "./TwitterReducer";
 
 const reducer = Rodux.combineReducers({
 	toggleShop: shopReducer,
@@ -13,6 +14,7 @@ const reducer = Rodux.combineReducers({
 	switchTab: inventoryReducer,
 	updateGold: goldReducer,
 	fetchExp: profileReducer,
+	toggleTwitter: twitterReducer,
 });
 
 export default reducer;

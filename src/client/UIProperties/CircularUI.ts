@@ -32,7 +32,7 @@ export const CircContainer: Partial<WritableInstanceProperties<Frame>> = {
 };
 
 export const SeparatorProperties: Partial<WritableInstanceProperties<Frame>> = {
-	Size: new UDim2(0.005, 0, 1, 0),
+	Size: new UDim2(0, 2, 1, 0),
 	BorderSizePixel: 0,
 	ZIndex: 2,
 };

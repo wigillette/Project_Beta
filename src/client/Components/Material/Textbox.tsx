@@ -80,6 +80,7 @@ class Textbox extends Roact.Component<UIProps> {
 				<frame
 					ZIndex={2}
 					Ref={this.shadowRef}
+					Key={"Shadow"}
 					{...RectContainer}
 					Position={new UDim2(0.5, 0, 0.5, 0)}
 					AnchorPoint={new Vector2(0.5, 0.5)}

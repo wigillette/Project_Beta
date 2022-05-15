@@ -60,14 +60,14 @@
 - [ ] Gamepass Service
 - [ ] Settings Service
 - [ ] Betting Service
-- [ ] Level Service
+- [x] Profile Service
 - [x] Shop Service
 - [x] Inventory Service
 - [ ] Twitter Service
 
 > Shared
 - [x] Sword Data
-- [ ] Level Data
+- [x] Level Data
 - [ ] Map Descriptions
 - [ ] Mode Descriptions
 - [x] Interaction Information

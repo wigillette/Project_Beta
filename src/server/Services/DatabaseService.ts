@@ -4,6 +4,8 @@ import Database from "@rbxts/datastore2";
 import { InventoryService } from "./InventoryService";
 import { GoldService } from "./GoldService";
 import { InventoryFormat, INITIAL_INVENTORY, INITIAL_EQUIPPED, EquippedFormat } from "../../shared/InventoryInfo";
+import { INITIAL_STATS, CAP_FORMULA, PROFILE_FORMAT } from "../../shared/LevelInfo";
+import { ProfileService } from "./ProfileService";
 
 declare global {
 	interface KnitServices {
@@ -43,7 +45,17 @@ const DatabaseService = Knit.CreateService({
 				print(`Successfully loaded ${Player.Name}'s Gold`);
 			})
 			.catch((err) => {
-				print(`Failed to load ${Player.Name}'s Gold`);
+				print(`Failed to load ${Player.Name}'s Gold.`);
+			});
+
+		const ProfileStore = Database("Profile", Player);
+		const Profile = ProfileStore.GetAsync(INITIAL_STATS)
+			.then((profile) => {
+				ProfileService.InitData(Player, profile as PROFILE_FORMAT);
+				print(`Successfully loaded ${Player.Name}'s Profile.`);
+			})
+			.catch((err) => {
+				print(`Failed to load ${Player.Name}'s Profile.`);
 			});
 	},
 
@@ -60,7 +72,7 @@ const DatabaseService = Knit.CreateService({
 	},
 
 	KnitInit() {
-		Database.Combine("UserData", "Inventory", "Equipped", "Gold");
+		Database.Combine("UserData", "Inventory", "Equipped", "Gold", "Profile");
 		Players.PlayerAdded.Connect((player) => {
 			this.LoadData(player);
 		});
