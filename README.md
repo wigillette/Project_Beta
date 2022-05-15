@@ -44,6 +44,7 @@
 - [ ] Menu Reducer
 - [x] Gold Reducer
 - [x] Profile Reducer
+- [x] Twitter Reducer
 
 > Data Storage
 - [x] SQL Database vs. Datastore2
@@ -97,6 +98,6 @@
 - [ ] Map/Mode Selection UI
 - [ ] Betting UI
 - [x] Inventory UI
-- [ ] Twitter UI
+- [x] Twitter UI
 - [x] Gold UI
 - [x] Profile UI
