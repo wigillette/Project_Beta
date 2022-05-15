@@ -18,10 +18,13 @@ interface UIProps {
 	maxHealth: number;
 	currentExp: number;
 	maxExp: number;
-	character: Model;
 }
 
-class Profile extends Roact.Component<UIProps> {
+interface UIState {
+	character: Model | undefined;
+}
+
+class Profile extends Roact.Component<UIProps, UIState> {
 	constructor(props: UIProps) {
 		super(props);
 	}
@@ -31,13 +34,13 @@ class Profile extends Roact.Component<UIProps> {
 			<frame
 				{...RectContainer}
 				Position={new UDim2(0.03, 0, 0.85, 0)}
-				Size={new UDim2(0.25, 0, 0.25, 0)}
+				Size={new UDim2(0.175, 0, 0.25, 0)}
 				AnchorPoint={new Vector2(0.03, 0.85)}
 			>
-				<uiaspectratioconstraint {...MenuAspectRatio}></uiaspectratioconstraint>
+				<uiaspectratioconstraint {...SquareAspectRatio}></uiaspectratioconstraint>
 				<frame
 					{...RectContainer}
-					Size={new UDim2(0.4, 0, 1, 0)}
+					Size={new UDim2(0.475, 0, 1, 0)}
 					Position={new UDim2(0, 0, 1, 0)}
 					AnchorPoint={new Vector2(0, 1)}
 				>
@@ -45,7 +48,7 @@ class Profile extends Roact.Component<UIProps> {
 					<imagelabel {...RectBG} ImageColor3={googleMaterial.outerBG}>
 						<uigradient {...whiteGradientProperties}></uigradient>
 						<DynamicViewport
-							Model={this.props.character}
+							Model={undefined}
 							Position={new UDim2(0.5, 0, 0.5, 0)}
 							AnchorPoint={new Vector2(0.5, 0.5)}
 							Size={new UDim2(0.9, 0, 0.9, 0)}
@@ -58,7 +61,7 @@ class Profile extends Roact.Component<UIProps> {
 				</frame>
 				<frame
 					{...CircContainer}
-					Size={new UDim2(0.58, 0, 0.6, 0)}
+					Size={new UDim2(0.5, 0, 0.6, 0)}
 					Position={new UDim2(1, 0, 1, 0)}
 					AnchorPoint={new Vector2(1, 1)}
 				>

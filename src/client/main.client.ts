@@ -1,4 +1,3 @@
-import PersonService from "./Services/PersonService";
 import TouchService from "./Services/TouchService";
 import SnackbarService from "./Services/SnackbarService";
 import MenuService from "./Services/MenuService";
@@ -25,7 +24,6 @@ const app = Roact.createElement(
 );
 
 Roact.mount(app, playerGui, "Main");
-PersonService();
 TouchService();
 SnackbarService();
 MenuService();
