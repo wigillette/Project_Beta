@@ -15,6 +15,7 @@ const reducer = Rodux.combineReducers({
 	updateGold: goldReducer,
 	fetchExp: profileReducer,
 	toggleTwitter: twitterReducer,
+	setTwitterToggle: twitterReducer,
 });
 
 export default reducer;

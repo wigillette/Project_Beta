@@ -1,10 +1,11 @@
 import Roact from "@rbxts/roact";
 import RoactRodux from "@rbxts/roact-rodux";
 import { Body, Header, MenuAspectRatio, RectBG, RectContainer, RectShadow, RectText } from "client/UIProperties/RectUI";
-import { googleMaterial, mediumGradientProperties } from "client/UIProperties/ColorSchemes";
+import { mediumGradientProperties } from "client/UIProperties/ColorSchemes";
 import Textbox from "./Material/Textbox";
 import { movingFadeAbsolute } from "../UIProperties/FrameEffects";
 import { twitterState } from "client/Rodux/Reducers/TwitterReducer";
+import TwitterService from "../Services/TwitterService";
 
 interface UIProps {
 	toggle: boolean;
@@ -54,7 +55,7 @@ class Twitter extends Roact.Component<UIProps> {
 							Position={new UDim2(0.5, 0, 0.9, 0)}
 							AnchorPoint={new Vector2(0.5, 0.9)}
 							onEnter={(text: string) => {
-								print("DO SERVER CALL HERE");
+								TwitterService.RedeemCode(text);
 							}}
 						></Textbox>
 					</frame>
