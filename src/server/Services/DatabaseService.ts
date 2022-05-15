@@ -5,8 +5,10 @@ import { InventoryService } from "./InventoryService";
 import { GoldService } from "./GoldService";
 import { InventoryFormat, INITIAL_INVENTORY, INITIAL_EQUIPPED, EquippedFormat } from "../../shared/InventoryInfo";
 import { INITIAL_STATS, PROFILE_FORMAT } from "../../shared/LevelInfo";
+import { INITIAL_SETTINGS, SETTINGS_FORMAT } from "../../shared/SettingsInfo";
 import { ProfileService } from "./ProfileService";
 import { TwitterService } from "./TwitterService";
+import { SettingsService } from "./SettingsService";
 
 declare global {
 	interface KnitServices {
@@ -68,6 +70,15 @@ const DatabaseService = Knit.CreateService({
 			.catch((err) => {
 				print(`Failed to load ${Player.Name}'s Redeemed Codes.`);
 			});
+
+		const SettingsStore = Database("Settings", Player);
+		const Settings = SettingsStore.GetAsync(INITIAL_SETTINGS)
+			.then((savedSettings) => {
+				SettingsService.InitData(Player, savedSettings as SETTINGS_FORMAT);
+			})
+			.catch((err) => {
+				print(`Failed to load ${Player.Name}'s Settings.`);
+			});
 	},
 
 	SaveData(Player: Player) {
@@ -83,7 +94,7 @@ const DatabaseService = Knit.CreateService({
 	},
 
 	KnitInit() {
-		Database.Combine("UserData", "Inventory", "Equipped", "Gold", "Profile", "RedeemedCodes");
+		Database.Combine("UserData", "Inventory", "Equipped", "Gold", "Profile", "RedeemedCodes", "Settings");
 		Players.PlayerAdded.Connect((player) => {
 			this.LoadData(player);
 		});

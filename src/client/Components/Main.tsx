@@ -4,6 +4,7 @@ import Inventory from "./Inventory";
 import Gold from "./Gold";
 import Profile from "./Profile";
 import Twitter from "./Twitter";
+import Settings from "./Settings";
 
 const Main = () => {
 	return (
@@ -13,6 +14,7 @@ const Main = () => {
 			<Inventory />
 			<Gold />
 			<Twitter />
+			<Settings />
 		</screengui>
 	);
 };

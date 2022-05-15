@@ -45,6 +45,7 @@
 - [x] Gold Reducer
 - [x] Profile Reducer
 - [x] Twitter Reducer
+- [x] Settings Reducer
 
 > Data Storage
 - [x] SQL Database vs. Datastore2
@@ -59,12 +60,13 @@
 - [x] Interaction Service
 - [x] Touch Service
 - [ ] Gamepass Service
-- [ ] Settings Service
+- [x] Settings Service
 - [ ] Betting Service
 - [x] Profile Service
 - [x] Shop Service
 - [x] Inventory Service
-- [ ] Twitter Service
+- [x] Twitter Service
+- [ ] Daily Reward Service
 
 > Shared
 - [x] Sword Data
@@ -73,6 +75,7 @@
 - [ ] Mode Descriptions
 - [x] Interaction Information
 - [x] Location Data
+- [x] Settings Info
 
 
 > Material Components:
@@ -93,7 +96,7 @@
 - [ ] Crafting UI
 - [ ] Trading UI
 - [x] Interaction UI
-- [ ] Settings UI
+- [x] Settings UI
 - [ ] Gamepass UI
 - [ ] Map/Mode Selection UI
 - [ ] Betting UI
@@ -101,3 +104,4 @@
 - [x] Twitter UI
 - [x] Gold UI
 - [x] Profile UI
+- [ ] Daily Reward UI

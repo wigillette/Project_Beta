@@ -11,6 +11,8 @@ interface UIProps {
 	Size: UDim2;
 	Position: UDim2;
 	AnchorPoint: Vector2;
+	onClick: (state: boolean) => void;
+	initialToggle: boolean;
 }
 
 interface UIState {
@@ -31,6 +33,7 @@ class ToggleButton extends Roact.Component<UIProps, UIState> {
 		this.buttonFrameRef = Roact.createRef<Frame>();
 		this.frameRef = Roact.createRef<Frame>();
 		this.shadowRef = Roact.createRef<ImageLabel>();
+		this.state.toggle = !this.props.initialToggle;
 	}
 
 	render() {
@@ -45,16 +48,18 @@ class ToggleButton extends Roact.Component<UIProps, UIState> {
 				<textlabel
 					{...CircText}
 					Font={"GothamBold"}
-					TextColor3={googleMaterial.bgFont}
+					TextColor3={googleMaterial.buttonColor}
 					Position={new UDim2(0.5, 0, 0, 0)}
 					AnchorPoint={new Vector2(0.5, 0)}
 					Size={new UDim2(1, 0, 0.4, 0)}
 					Text={this.props.Title}
 					ZIndex={5}
-				></textlabel>
+				>
+					<uitextsizeconstraint MinTextSize={30} MaxTextSize={40}></uitextsizeconstraint>
+				</textlabel>
 				<frame
 					{...CircContainer}
-					Size={new UDim2(1, 0, 0.2, 0)}
+					Size={new UDim2(0.75, 0, 0.2, 0)}
 					Position={new UDim2(0.5, 0, 1, 0)}
 					AnchorPoint={new Vector2(0.5, 1)}
 				>
@@ -103,6 +108,7 @@ class ToggleButton extends Roact.Component<UIProps, UIState> {
 											tweenTransparencyAbsolute(shadow, this.state.toggle);
 										}
 										this.setState({ toggle: !this.state.toggle });
+										this.props.onClick(!this.state.toggle);
 									},
 								}}
 							>
@@ -117,6 +123,7 @@ class ToggleButton extends Roact.Component<UIProps, UIState> {
 							Size={new UDim2(0.9, 0, 0.9, 0)}
 							ImageTransparency={1}
 							Ref={this.shadowRef}
+							Key={"Shadow"}
 						>
 							<uigradient {...gradientProperties}></uigradient>
 						</imagelabel>

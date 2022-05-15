@@ -53,12 +53,5 @@ export default function init() {
 	});
 	*/
 
-	const toggleObject = Roact.createElement(ToggleButton, {
-		Size: new UDim2(0.08, 0, 0.1, 0),
-		Position: new UDim2(0.5, 0, 0.5, 0),
-		AnchorPoint: new Vector2(0.5, 0.5),
-		Title: "Toggle Example",
-	});
-
 	const shopObject = Roact.createElement(Shop);
 }
