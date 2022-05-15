@@ -43,6 +43,7 @@
 - [x] Inventory Reducer
 - [ ] Menu Reducer
 - [x] Gold Reducer
+- [x] Profile Reducer
 
 > Data Storage
 - [x] SQL Database vs. Datastore2
@@ -56,10 +57,10 @@
 - [ ] Crafting Service
 - [x] Interaction Service
 - [x] Touch Service
-- [ ] Map/Mode Selection Service
 - [ ] Gamepass Service
 - [ ] Settings Service
 - [ ] Betting Service
+- [ ] Level Service
 - [x] Shop Service
 - [x] Inventory Service
 - [ ] Twitter Service
@@ -98,3 +99,4 @@
 - [x] Inventory UI
 - [ ] Twitter UI
 - [x] Gold UI
+- [x] Profile UI
