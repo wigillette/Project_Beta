@@ -104,4 +104,4 @@
 - [x] Gold UI
 - [x] Profile UI
 - [x] Daily Reward UI
-- [ ] Menu Buttons UI
+- [x] Menu Buttons UI
