@@ -17,6 +17,7 @@ import {
 import { CircContainer, CircBG, CircShadow, CircText } from "client/UIProperties/CircularUI";
 import RectProgress from "./Material/RectProgress";
 import DynamicViewport from "./Material/DynamicViewport";
+import MenuButtons from "./MenuButtons";
 import { PROFILE_FORMAT } from "shared/LevelInfo";
 import { Players } from "@rbxts/services";
 
@@ -103,6 +104,7 @@ class Profile extends Roact.Component<UIProps, UIState> {
 					</imagelabel>
 					<imagelabel {...RectShadow} ImageColor3={googleMaterial.outerShadow}></imagelabel>
 				</frame>
+				<MenuButtons />
 				<frame
 					{...CircContainer}
 					Size={new UDim2(0.5, 0, 0.6, 0)}

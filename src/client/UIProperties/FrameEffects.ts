@@ -90,7 +90,7 @@ export const tweenTransparency = (frame: Frame, recurse: boolean, fadeIn: boolea
 	const children = frame.GetChildren();
 	tweenTransparencyRecurse(children, recurse, transparency);
 	coroutine.wrap(() => {
-		if (transparency === 1) {
+		if (transparency === 1 && frame.Name !== "Card") {
 			wait(0.4);
 			frame.Visible = false;
 		}

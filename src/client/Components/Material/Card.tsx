@@ -42,6 +42,7 @@ class Card extends Roact.Component<UIProps, UIState> {
 				AnchorPoint={new Vector2(0.5, 0.5)}
 				Position={new UDim2(0.5, 0, 0.5, 0)}
 				Ref={this.containerRef}
+				Key={"Card"}
 				{...RectContainer}
 			>
 				<uiaspectratioconstraint {...SquareAspectRatio}></uiaspectratioconstraint>
@@ -89,6 +90,7 @@ class Card extends Roact.Component<UIProps, UIState> {
 				wait(0.35);
 				container.Visible = true;
 				tweenTransparency(container, true, true);
+				container.Visible = true;
 			})();
 		}
 	}
