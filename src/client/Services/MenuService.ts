@@ -1,57 +1,36 @@
 import Roact from "@rbxts/roact";
 import { Players, Workspace } from "@rbxts/services";
-import Textbox from "client/Components/Material/Textbox";
-import Slider from "client/Components/Material/Slider";
-import CircularProgress from "client/Components/Material/CircularProgress";
-import RectProgress from "client/Components/Material/RectProgress";
-import ToggleButton from "client/Components/Material/ToggleButton";
-import Interaction from "client/Components/Interaction";
-import Shop from "client/Components/Shop";
+import Store from "client/Rodux/Store";
+
 // Run on client service startup
-export default function init() {
-	// Create the manager object
+const MenuClient = {
+	switchMenu: (menu: string) => {
+		const twitterToggle = menu === "Twitter";
+		const inventoryToggle = menu === "Inventory";
+		const settingsToggle = menu === "Settings";
 
-	//const cardModel = Workspace.WaitForChild("PetExample") as Model;
-	/*
-	const cardObject = Roact.createElement(Grid, {
-		Header: "Pet Shop",
-		CardInfo: [
-			{ Name: "Pet 1", Price: 50, Model: cardModel },
-			{ Name: "Pet 2", Price: 100, Model: cardModel },
-			{ Name: "Pet 3", Price: 150, Model: cardModel },
-			{ Name: "Pet 4", Price: 200, Model: cardModel },
-			{ Name: "Pet 5", Price: 250, Model: cardModel },
-			{ Name: "Pet 6", Price: 50, Model: cardModel },
-			{ Name: "Pet 7", Price: 100, Model: cardModel },
-			{ Name: "Pet 8", Price: 150, Model: cardModel },
-			{ Name: "Pet 9", Price: 200, Model: cardModel },
-			{ Name: "Pet 10", Price: 250, Model: cardModel },
-			{ Name: "Pet 11", Price: 50, Model: cardModel },
-			{ Name: "Pet 12", Price: 100, Model: cardModel },
-			{ Name: "Pet 13", Price: 150, Model: cardModel },
-			{ Name: "Pet 14", Price: 200, Model: cardModel },
-			{ Name: "Pet 15", Price: 250, Model: cardModel },
-		],
-	});
-    */
+		Store.dispatch({
+			type: "setTwitterToggle",
+			payload: { toggle: twitterToggle },
+		});
+		Store.dispatch({
+			type: "setInventoryToggle",
+			toggle: inventoryToggle,
+		});
+		Store.dispatch({
+			type: "setSettingsToggle",
+			payload: { toggle: settingsToggle },
+		});
+	},
+	toggleMenu(menu: string) {
+		const action = "toggle" + menu;
+		Store.dispatch({
+			type: action,
+		});
+	},
+	init: () => {
+		print("Menu Service Initialized | Client");
+	},
+};
 
-	/*const textboxObject = Roact.createElement(Textbox, {
-		placeholderText: "Enter your input..",
-		Position: new UDim2(0.5, 0, 0.5, 0),
-		Size: new UDim2(0.5, 0, 0.1, 0),
-		AnchorPoint: new Vector2(0.5, 0.5),
-		onEnter: (text: string) => {
-			print(text);
-		},
-	});*/
-	/*
-	const sliderObject = Roact.createElement(Slider, {
-		Title: "Slider Example",
-		Size: new UDim2(0.25, 0, 0.07, 0),
-		Position: new UDim2(0.5, 0, 0.5, 0),
-		AnchorPoint: new Vector2(0.5, 0.5),
-	});
-	*/
-
-	const shopObject = Roact.createElement(Shop);
-}
+export default MenuClient;

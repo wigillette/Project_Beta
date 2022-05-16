@@ -2,7 +2,7 @@ import Roact from "@rbxts/roact";
 import { Players } from "@rbxts/services";
 import { RippleFrame } from "client/UIProperties/RectUI";
 import { CircShadow, CircBG, CircContainer, CircText } from "client/UIProperties/CircularUI";
-import { rippleEffect, tweenColor } from "client/UIProperties/ButtonEffects";
+import { rippleEffect, tweenColor, playSound } from "client/UIProperties/ButtonEffects";
 import { googleMaterial, gradientProperties, mediumGradientProperties } from "client/UIProperties/ColorSchemes";
 
 interface UIProps {
@@ -12,7 +12,11 @@ interface UIProps {
 	Callback: () => void;
 }
 
-class CircButton extends Roact.Component<UIProps> {
+interface UIState {
+	debounce: boolean;
+}
+
+class CircButton extends Roact.Component<UIProps, UIState> {
 	buttonRef;
 	frameRef;
 	constructor(props: UIProps) {
@@ -20,6 +24,10 @@ class CircButton extends Roact.Component<UIProps> {
 		this.buttonRef = Roact.createRef<ImageButton>();
 		this.frameRef = Roact.createRef<Frame>();
 	}
+
+	state = {
+		debounce: false,
+	};
 
 	render() {
 		return (
@@ -42,17 +50,23 @@ class CircButton extends Roact.Component<UIProps> {
 					Ref={this.buttonRef}
 					Event={{
 						MouseButton1Click: () => {
-							const frame = this.frameRef.getValue();
-							const client = Players.LocalPlayer;
-							const mouse = client.GetMouse();
+							if (!this.state.debounce) {
+								this.setState({ debounce: true });
+								const frame = this.frameRef.getValue();
+								const client = Players.LocalPlayer;
+								const mouse = client.GetMouse();
 
-							if (frame) {
-								//wait(0.5);
-								this.props.Callback();
-								rippleEffect(frame, mouse);
+								if (frame) {
+									playSound("Click");
+									//wait(0.5);
+									this.props.Callback();
+									rippleEffect(frame, mouse);
+								}
+								this.setState({ debounce: false });
 							}
 						},
 						MouseEnter: (rbx) => {
+							playSound("Hover");
 							tweenColor(rbx, googleMaterial.buttonHover);
 						},
 						MouseLeave: (rbx) => {

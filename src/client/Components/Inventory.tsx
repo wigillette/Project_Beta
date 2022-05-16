@@ -23,6 +23,7 @@ import RectButton from "./Material/RectButton";
 const InventoryService = Knit.GetService("InventoryService");
 import InventoryClient from "client/Services/InventoryService";
 
+let oldFadeIn = true;
 class Inventory extends Roact.Component<inventoryState> {
 	static InventoryRef = Roact.createRef<Frame>();
 	containerRef;
@@ -200,14 +201,16 @@ interface storeState {
 	updateInventory: inventoryState;
 	equipItem: inventoryState;
 	switchTab: inventoryState;
+	setInventoryToggle: inventoryState;
 }
 
 export = RoactRodux.connect(function (state: storeState) {
 	const InventoryFrame = Inventory.InventoryRef.getValue() as Frame;
-	if (InventoryFrame) {
+	if (InventoryFrame && state.toggleInventory.toggle !== oldFadeIn) {
+		oldFadeIn = state.setInventoryToggle.toggle;
 		state.toggleInventory.toggle
-			? movingFadeAbsolute(InventoryFrame, true, new UDim2(0.5, 0, 0.4, 0))
-			: movingFadeAbsolute(InventoryFrame, false, new UDim2(0.5, 0, 0.1, 0));
+			? movingFadeAbsolute(InventoryFrame, true, new UDim2(0.5, 0, 0.4, 0), true)
+			: movingFadeAbsolute(InventoryFrame, false, new UDim2(0.5, 0, 0.1, 0), true);
 	}
 	return {
 		toggle: state.toggleInventory.toggle,

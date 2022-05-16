@@ -1,5 +1,7 @@
 import Roact from "@rbxts/roact";
-import { TweenService } from "@rbxts/services";
+import { TweenService, Workspace } from "@rbxts/services";
+
+let debounce = false;
 
 export const tweenSize = (frame: Frame, size: UDim2) => {
 	const popSize: UDim2 = new UDim2(size.X.Scale, size.X.Offset + 10, size.Y.Scale, size.Y.Offset + 10);
@@ -32,13 +34,13 @@ export const tweenPos = (frame: Frame, direction: string, magnitude: number) => 
 
 	newPos = UDim2.fromScale(frame.Position.X.Scale + magnitudes[0], frame.Position.Y.Scale + magnitudes[1]);
 	pcall(() => {
-		frame.TweenPosition(newPos, Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.2, true, undefined);
+		frame.TweenPosition(newPos, Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.15, true, undefined);
 	});
 };
 
 export const tweenPosAbsolute = (frame: Frame, position: UDim2) => {
 	pcall(() => {
-		frame.TweenPosition(position, Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.2, true, undefined);
+		frame.TweenPosition(position, Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.15, true, undefined);
 	});
 };
 
@@ -50,20 +52,20 @@ const tweenTransparencyRecurse = (children: Instance[], recurse: boolean, transp
 				if (object.Name !== "Lock") {
 					TweenService.Create(
 						object,
-						new TweenInfo(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0),
+						new TweenInfo(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0),
 						{ ImageTransparency: transparency },
 					).Play();
 				} else {
 					TweenService.Create(
 						object,
-						new TweenInfo(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0),
+						new TweenInfo(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0),
 						{ ImageTransparency: (transparency === 0 && 0.6) || 1 },
 					).Play();
 				}
 			} else if (object.IsA("TextLabel")) {
 				TweenService.Create(
 					object,
-					new TweenInfo(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0),
+					new TweenInfo(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0),
 					{ TextTransparency: transparency },
 				).Play();
 			} else if (object.IsA("ViewportFrame") || object.IsA("ScrollingFrame") || object.IsA("TextBox")) {
@@ -91,7 +93,7 @@ export const tweenTransparency = (frame: Frame, recurse: boolean, fadeIn: boolea
 	tweenTransparencyRecurse(children, recurse, transparency);
 	coroutine.wrap(() => {
 		if (transparency === 1 && frame.Name !== "Card") {
-			wait(0.4);
+			wait(0.15);
 			frame.Visible = false;
 		}
 	})();
@@ -107,23 +109,57 @@ export const tweenTransparencyAbsolute = (object: ImageLabel | ImageButton | Tex
 	}
 
 	if (object.IsA("ImageLabel") || object.IsA("ImageButton")) {
-		TweenService.Create(object, new TweenInfo(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0), {
+		TweenService.Create(object, new TweenInfo(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0), {
 			ImageTransparency: transparency,
 		}).Play();
 	} else if (object.IsA("TextLabel")) {
-		TweenService.Create(object, new TweenInfo(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0), {
+		TweenService.Create(object, new TweenInfo(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0), {
 			TextTransparency: transparency,
 		}).Play();
 	}
 };
 
-export const movingFade = (frame: Frame, fadeIn: boolean, magnitude: number) => {
+const updateBlurEffect = (fadeIn: boolean) => {
+	const camera = Workspace.CurrentCamera;
+	if (camera) {
+		const blur = new Instance("BlurEffect", camera);
+		if (fadeIn) {
+			blur.Size = 0;
+			blur.Enabled = true;
+		}
+		TweenService.Create(blur, new TweenInfo(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0), {
+			Size: (fadeIn && 30) || 0,
+		}).Play();
+		if (!fadeIn) {
+			coroutine.wrap(() => {
+				wait(0.3);
+				blur.Enabled = false;
+				blur.Destroy();
+			})();
+		}
+	}
+};
+
+export const movingFade = (frame: Frame, fadeIn: boolean, magnitude: number, blurEffect: boolean) => {
 	const direction = fadeIn ? "Down" : "Up";
+	// Add the blur effect
+	if (blurEffect) {
+		updateBlurEffect(fadeIn);
+	}
+	// Tween the frame
 	tweenPos(frame, direction, magnitude);
+	// Tween the transparency
 	tweenTransparency(frame, true, fadeIn);
 };
 
-export const movingFadeAbsolute = (frame: Frame, fadeIn: boolean, position: UDim2) => {
+export const movingFadeAbsolute = (frame: Frame, fadeIn: boolean, position: UDim2, blurEffect: boolean) => {
+	// Add the blur effect
+	if (blurEffect) {
+		updateBlurEffect(fadeIn);
+	}
+	// Tween the frame
 	tweenPosAbsolute(frame, position);
+	// Tween the transparency
 	tweenTransparency(frame, true, fadeIn);
+	debounce = false;
 };

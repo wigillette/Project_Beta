@@ -26,6 +26,7 @@ interface UIProps {
 	toggle: boolean;
 }
 
+let oldFadeIn = true;
 const shopRef = Roact.createRef<Frame>();
 class Shop extends Roact.Component<UIProps> {
 	containerRef;
@@ -143,11 +144,12 @@ interface storeState {
 
 export = RoactRodux.connect(function (state: storeState) {
 	const shopFrame = shopRef.getValue() as Frame;
-	if (shopFrame) {
+	if (shopFrame && state.toggleShop.toggle !== oldFadeIn) {
+		oldFadeIn = state.toggleShop.toggle;
 		// Update the frame's position when the toggle changes
 		state.toggleShop.toggle
-			? movingFadeAbsolute(shopFrame, true, new UDim2(0.5, 0, 0.4, 0))
-			: movingFadeAbsolute(shopFrame, false, new UDim2(0.5, 0, 0.1, 0));
+			? movingFadeAbsolute(shopFrame, true, new UDim2(0.5, 0, 0.4, 0), true)
+			: movingFadeAbsolute(shopFrame, false, new UDim2(0.5, 0, 0.1, 0), true);
 	}
 
 	return {

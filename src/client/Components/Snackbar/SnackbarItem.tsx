@@ -45,7 +45,7 @@ class SnackbarItem extends Roact.Component<UIProps> {
 		const container = this.containerRef.getValue();
 
 		if (container) {
-			movingFade(container, false, -0.5);
+			movingFade(container, false, -0.5, false);
 		}
 	}
 
@@ -54,7 +54,7 @@ class SnackbarItem extends Roact.Component<UIProps> {
 		const container = this.containerRef.getValue();
 		if (container) {
 			container.Visible = true;
-			movingFade(container, true, -0.5);
+			movingFade(container, true, -0.5, false);
 		}
 	}
 

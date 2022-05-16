@@ -24,6 +24,7 @@ interface UIProps {
 }
 
 const settingsRef = Roact.createRef<Frame>();
+let oldFadeIn = true;
 class Settings extends Roact.Component<UIProps> {
 	constructor(props: UIProps) {
 		super(props);
@@ -94,11 +95,12 @@ interface storeState {
 
 export = RoactRodux.connect(function (state: storeState) {
 	const settingsFrame = settingsRef.getValue() as Frame;
-	if (settingsFrame) {
+	if (settingsFrame && state.toggleSettings.toggle !== oldFadeIn) {
+		oldFadeIn = state.toggleSettings.toggle;
 		// Update the frame's position when the toggle changes
 		state.toggleSettings.toggle
-			? movingFadeAbsolute(settingsFrame, true, new UDim2(0.5, 0, 0.4, 0))
-			: movingFadeAbsolute(settingsFrame, false, new UDim2(0.5, 0, 0.1, 0));
+			? movingFadeAbsolute(settingsFrame, true, new UDim2(0.5, 0, 0.4, 0), true)
+			: movingFadeAbsolute(settingsFrame, false, new UDim2(0.5, 0, 0.1, 0), true);
 	}
 
 	return {

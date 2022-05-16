@@ -21,7 +21,7 @@ interface UIState {
 	TimeRemaining: string;
 	TimeAmount: number;
 }
-
+let oldFadeIn = true;
 const dailyRewardRef = Roact.createRef<Frame>();
 class DailyReward extends Roact.Component<UIProps, UIState> {
 	timeLeftRef;
@@ -189,10 +189,11 @@ interface storeState {
 export = RoactRodux.connect((state: storeState) => {
 	const dailyRewardFrame = dailyRewardRef.getValue();
 
-	if (dailyRewardFrame) {
+	if (dailyRewardFrame && state.toggleDailyReward.toggle !== oldFadeIn) {
+		oldFadeIn = state.toggleDailyReward.toggle;
 		state.toggleDailyReward.toggle
-			? movingFadeAbsolute(dailyRewardFrame, true, new UDim2(0.5, 0, 0.4, 0))
-			: movingFadeAbsolute(dailyRewardFrame, false, new UDim2(0.5, 0, 0.1, 0));
+			? movingFadeAbsolute(dailyRewardFrame, true, new UDim2(0.5, 0, 0.4, 0), true)
+			: movingFadeAbsolute(dailyRewardFrame, false, new UDim2(0.5, 0, 0.1, 0), true);
 	}
 
 	return {

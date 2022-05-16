@@ -28,7 +28,6 @@ const app = Roact.createElement(
 Roact.mount(app, playerGui, "Main");
 TouchService();
 SnackbarService();
-MenuService();
 InteractionService();
 ShopService.init();
 InventoryService.init();

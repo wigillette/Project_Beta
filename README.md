@@ -67,6 +67,7 @@
 - [x] Inventory Service
 - [x] Twitter Service
 - [x] Daily Reward Service
+- [x] Menu Service
 
 > Shared
 - [x] Sword Data

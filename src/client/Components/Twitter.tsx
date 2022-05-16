@@ -11,6 +11,7 @@ interface UIProps {
 	toggle: boolean;
 }
 
+let oldFadeIn = true;
 const twitterRef = Roact.createRef<Frame>();
 class Twitter extends Roact.Component<UIProps> {
 	constructor(props: UIProps) {
@@ -73,11 +74,12 @@ interface storeState {
 
 export = RoactRodux.connect(function (state: storeState) {
 	const twitterFrame = twitterRef.getValue() as Frame;
-	if (twitterFrame) {
+	if (twitterFrame && state.toggleTwitter.toggle !== oldFadeIn) {
+		oldFadeIn = state.toggleTwitter.toggle;
 		// Update the frame's position when the toggle changes
 		state.toggleTwitter.toggle
-			? movingFadeAbsolute(twitterFrame, true, new UDim2(0.5, 0, 0.4, 0))
-			: movingFadeAbsolute(twitterFrame, false, new UDim2(0.5, 0, 0.1, 0));
+			? movingFadeAbsolute(twitterFrame, true, new UDim2(0.5, 0, 0.4, 0), true)
+			: movingFadeAbsolute(twitterFrame, false, new UDim2(0.5, 0, 0.1, 0), true);
 	}
 
 	return {

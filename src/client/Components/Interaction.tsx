@@ -95,7 +95,7 @@ class Interaction extends Roact.Component<UIProps> {
 							const container = this.containerRef.getValue();
 							if (container) {
 								coroutine.wrap(() => {
-									movingFadeAbsolute(container, false, new UDim2(0.5, 0, 1, 0));
+									movingFadeAbsolute(container, false, new UDim2(0.5, 0, 1, 0), false);
 									wait(0.4);
 									container.Destroy();
 								})();
@@ -122,7 +122,7 @@ class Interaction extends Roact.Component<UIProps> {
 				container.Visible = false;
 				wait(0.4);
 				container.Visible = true;
-				movingFadeAbsolute(container, true, new UDim2(0.5, 0, 0.85, 0));
+				movingFadeAbsolute(container, true, new UDim2(0.5, 0, 0.85, 0), false);
 
 				for (let i = 0; i < this.props.Body.size(); i++) {
 					body.Text += this.props.Body.sub(i, i);

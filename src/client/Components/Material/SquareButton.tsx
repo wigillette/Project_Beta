@@ -1,7 +1,7 @@
 import Roact from "@rbxts/roact";
 import { Players } from "@rbxts/services";
 import { RectShadow, RectBG, RippleFrame, RectContainer, SquareAspectRatio } from "client/UIProperties/RectUI";
-import { rippleEffect, tweenColor } from "client/UIProperties/ButtonEffects";
+import { rippleEffect, tweenColor, tweenRotation, playSound } from "client/UIProperties/ButtonEffects";
 import { googleMaterial, gradientProperties } from "client/UIProperties/ColorSchemes";
 
 interface UIProps {
@@ -15,8 +15,10 @@ interface UIProps {
 	ShadowColor: Color3;
 	Callback: () => void;
 }
-
-class SquareButton extends Roact.Component<UIProps> {
+interface UIState {
+	debounce: boolean;
+}
+class SquareButton extends Roact.Component<UIProps, UIState> {
 	buttonRef;
 	frameRef;
 	constructor(props: UIProps) {
@@ -24,6 +26,10 @@ class SquareButton extends Roact.Component<UIProps> {
 		this.buttonRef = Roact.createRef<ImageButton>();
 		this.frameRef = Roact.createRef<Frame>();
 	}
+
+	state = {
+		debounce: false,
+	};
 
 	render() {
 		return (
@@ -43,24 +49,36 @@ class SquareButton extends Roact.Component<UIProps> {
 					Ref={this.buttonRef}
 					Event={{
 						MouseButton1Click: () => {
-							const frame = this.frameRef.getValue();
-							const client = Players.LocalPlayer;
-							const mouse = client.GetMouse();
+							if (!this.state.debounce) {
+								this.setState({ debounce: true });
+								const frame = this.frameRef.getValue();
+								const client = Players.LocalPlayer;
+								const mouse = client.GetMouse();
 
-							if (frame) {
-								//wait(0.5);
-								rippleEffect(frame, mouse);
-								wait(0.5);
-								this.props.Callback();
+								if (frame) {
+									//wait(0.5);
+									playSound("Click");
+									rippleEffect(frame, mouse);
+									wait(0.5);
+									this.props.Callback();
+								}
+								this.setState({ debounce: false });
 							}
 						},
 						MouseEnter: (rbx) => {
+							playSound("Hover");
 							tweenColor(rbx, this.props.HoverColor);
-							// ADD TWEEN ROTATION
+							const frame = this.frameRef.getValue();
+							if (frame) {
+								tweenRotation(frame, true);
+							}
 						},
 						MouseLeave: (rbx) => {
 							tweenColor(rbx, this.props.ButtonColor);
-							// ADD TWEEN ROTATION
+							const frame = this.frameRef.getValue();
+							if (frame) {
+								tweenRotation(frame, false);
+							}
 						},
 					}}
 				>

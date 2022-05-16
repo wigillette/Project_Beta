@@ -18,6 +18,7 @@ interface Action {
 	inventory?: InventoryFormat;
 	equipped?: EquippedFormat;
 	currentTab?: string;
+	toggle?: boolean;
 }
 
 const inventoryReducer = Rodux.createReducer(
@@ -60,6 +61,14 @@ const inventoryReducer = Rodux.createReducer(
 				equipped: state.equipped,
 				currentTab: state.currentTab,
 			};
+
+			return newState;
+		},
+		setInventoryToggle: (state: inventoryState, action: Action) => {
+			const newState = state;
+			if (action.toggle !== undefined) {
+				newState.toggle = action.toggle;
+			}
 
 			return newState;
 		},
