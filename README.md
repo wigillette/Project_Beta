@@ -60,7 +60,7 @@
 - [ ] Crafting Service
 - [x] Interaction Service
 - [x] Touch Service
-- [ ] Gamepass Service
+- [x] Gamepass Service
 - [x] Settings Service
 - [ ] Betting Service
 - [x] Profile Service
@@ -98,7 +98,7 @@
 - [ ] Trading UI
 - [x] Interaction UI
 - [x] Settings UI
-- [ ] Gamepass UI
+- [x] Gamepass UI
 - [ ] Map/Mode Selection UI
 - [ ] Betting UI
 - [x] Inventory UI
