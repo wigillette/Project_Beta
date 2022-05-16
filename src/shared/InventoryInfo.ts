@@ -18,6 +18,6 @@ export interface EquippedFormat {
 
 export const INITIAL_EQUIPPED = {
 	Swords: "Default",
-	Elixirs: "Health",
-	Pets: "Dog",
+	Elixirs: "",
+	Pets: "",
 };

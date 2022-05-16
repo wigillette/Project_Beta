@@ -5,6 +5,7 @@ import Gold from "./Gold";
 import Profile from "./Profile";
 import Twitter from "./Twitter";
 import Settings from "./Settings";
+import DailyReward from "./DailyReward";
 
 const Main = () => {
 	return (
@@ -15,6 +16,7 @@ const Main = () => {
 			<Gold />
 			<Twitter />
 			<Settings />
+			<DailyReward />
 		</screengui>
 	);
 };

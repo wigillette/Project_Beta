@@ -23,8 +23,8 @@ interface UIProps {
 	settings: SETTINGS_FORMAT;
 }
 
-const twitterRef = Roact.createRef<Frame>();
-class Twitter extends Roact.Component<UIProps> {
+const settingsRef = Roact.createRef<Frame>();
+class Settings extends Roact.Component<UIProps> {
 	constructor(props: UIProps) {
 		super(props);
 	}
@@ -36,7 +36,7 @@ class Twitter extends Roact.Component<UIProps> {
 				Position={new UDim2(0.5, 0, 0.5, 0)}
 				AnchorPoint={new Vector2(0.5, 0.5)}
 				Size={new UDim2(0.5, 0, 0.6, 0)}
-				Ref={twitterRef}
+				Ref={settingsRef}
 			>
 				<uiaspectratioconstraint
 					DominantAxis={Enum.DominantAxis.Height}
@@ -93,16 +93,16 @@ interface storeState {
 }
 
 export = RoactRodux.connect(function (state: storeState) {
-	const twitterFrame = twitterRef.getValue() as Frame;
-	if (twitterFrame) {
+	const settingsFrame = settingsRef.getValue() as Frame;
+	if (settingsFrame) {
 		// Update the frame's position when the toggle changes
 		state.toggleSettings.toggle
-			? movingFadeAbsolute(twitterFrame, true, new UDim2(0.5, 0, 0.4, 0))
-			: movingFadeAbsolute(twitterFrame, false, new UDim2(0.5, 0, 0.1, 0));
+			? movingFadeAbsolute(settingsFrame, true, new UDim2(0.5, 0, 0.4, 0))
+			: movingFadeAbsolute(settingsFrame, false, new UDim2(0.5, 0, 0.1, 0));
 	}
 
 	return {
 		toggle: state.toggleSettings.toggle,
 		settings: state.updateSettings.settings,
 	};
-})(Twitter);
+})(Settings);

@@ -47,11 +47,19 @@ const tweenTransparencyRecurse = (children: Instance[], recurse: boolean, transp
 	children.forEach((object: Instance) => {
 		if (object.Name !== "Shadow" || transparency !== 0) {
 			if (object.IsA("ImageLabel") || object.IsA("ImageButton")) {
-				TweenService.Create(
-					object,
-					new TweenInfo(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0),
-					{ ImageTransparency: transparency },
-				).Play();
+				if (object.Name !== "Lock") {
+					TweenService.Create(
+						object,
+						new TweenInfo(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0),
+						{ ImageTransparency: transparency },
+					).Play();
+				} else {
+					TweenService.Create(
+						object,
+						new TweenInfo(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0),
+						{ ImageTransparency: (transparency === 0 && 0.6) || 1 },
+					).Play();
+				}
 			} else if (object.IsA("TextLabel")) {
 				TweenService.Create(
 					object,
@@ -70,9 +78,10 @@ const tweenTransparencyRecurse = (children: Instance[], recurse: boolean, transp
 };
 
 export const tweenTransparency = (frame: Frame, recurse: boolean, fadeIn: boolean) => {
-	let transparency;
+	let transparency = 0;
 
 	if (fadeIn) {
+		frame.Visible = true;
 		transparency = 0;
 	} else {
 		transparency = 1;
@@ -80,6 +89,12 @@ export const tweenTransparency = (frame: Frame, recurse: boolean, fadeIn: boolea
 
 	const children = frame.GetChildren();
 	tweenTransparencyRecurse(children, recurse, transparency);
+	coroutine.wrap(() => {
+		if (transparency === 1) {
+			wait(0.4);
+			frame.Visible = false;
+		}
+	})();
 };
 
 export const tweenTransparencyAbsolute = (object: ImageLabel | ImageButton | TextLabel, fadeIn: boolean) => {

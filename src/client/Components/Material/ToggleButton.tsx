@@ -55,7 +55,7 @@ class ToggleButton extends Roact.Component<UIProps, UIState> {
 					Text={this.props.Title}
 					ZIndex={5}
 				>
-					<uitextsizeconstraint MinTextSize={30} MaxTextSize={40}></uitextsizeconstraint>
+					<uitextsizeconstraint MinTextSize={20} MaxTextSize={40}></uitextsizeconstraint>
 				</textlabel>
 				<frame
 					{...CircContainer}

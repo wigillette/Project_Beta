@@ -41,11 +41,11 @@
 > Reducers
 - [x] Shop Reducer
 - [x] Inventory Reducer
-- [ ] Menu Reducer
 - [x] Gold Reducer
 - [x] Profile Reducer
 - [x] Twitter Reducer
 - [x] Settings Reducer
+- [x] Daily Reward Reducer
 
 > Data Storage
 - [x] SQL Database vs. Datastore2
@@ -66,7 +66,7 @@
 - [x] Shop Service
 - [x] Inventory Service
 - [x] Twitter Service
-- [ ] Daily Reward Service
+- [x] Daily Reward Service
 
 > Shared
 - [x] Sword Data
@@ -76,7 +76,7 @@
 - [x] Interaction Information
 - [x] Location Data
 - [x] Settings Info
-
+- [x] Daily Reward Values
 
 > Material Components:
 - [x] Snackbar Component/Service/Controller
@@ -86,7 +86,6 @@
 - [x] Circular Progress Bar Component
 - [x] Rectangular Progress Bar Component
 - [x] Card Component
-- [ ] Navigation Bar Component
 - [x] Toggle Button Component
 - [x] Text Box Component
 
@@ -104,4 +103,5 @@
 - [x] Twitter UI
 - [x] Gold UI
 - [x] Profile UI
-- [ ] Daily Reward UI
+- [x] Daily Reward UI
+- [ ] Menu Buttons UI

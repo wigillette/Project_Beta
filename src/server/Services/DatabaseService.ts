@@ -9,6 +9,8 @@ import { INITIAL_SETTINGS, SETTINGS_FORMAT } from "../../shared/SettingsInfo";
 import { ProfileService } from "./ProfileService";
 import { TwitterService } from "./TwitterService";
 import { SettingsService } from "./SettingsService";
+import { DailyRewardService } from "./DailyRewardService";
+import { INITIAL_DR, DR_FORMAT } from "../../shared/DailyRewardInfo";
 
 declare global {
 	interface KnitServices {
@@ -79,6 +81,16 @@ const DatabaseService = Knit.CreateService({
 			.catch((err) => {
 				print(`Failed to load ${Player.Name}'s Settings.`);
 			});
+
+		const DRStore = Database("DailyReward", Player);
+		const DR = DRStore.GetAsync(INITIAL_DR)
+			.then((drInfo) => {
+				DailyRewardService.InitData(Player, drInfo as DR_FORMAT);
+			})
+			.catch((err) => {
+				print(err);
+				print(`Failed to load ${Player.Name}'s Daily Reward Info.`);
+			});
 	},
 
 	SaveData(Player: Player) {
@@ -94,7 +106,16 @@ const DatabaseService = Knit.CreateService({
 	},
 
 	KnitInit() {
-		Database.Combine("UserData", "Inventory", "Equipped", "Gold", "Profile", "RedeemedCodes", "Settings");
+		Database.Combine(
+			"UserData",
+			"Inventory",
+			"Equipped",
+			"Gold",
+			"Profile",
+			"RedeemedCodes",
+			"Settings",
+			"DailyReward",
+		);
 		Players.PlayerAdded.Connect((player) => {
 			this.LoadData(player);
 		});
