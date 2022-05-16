@@ -1,23 +1,6 @@
 import Roact from "@rbxts/roact";
-import RoactRodux from "@rbxts/roact-rodux";
-import {
-	Body,
-	CardGridLayout,
-	Header,
-	MenuAspectRatio,
-	RectBG,
-	RectContainer,
-	RectShadow,
-	RectText,
-	SquareAspectRatio,
-} from "client/UIProperties/RectUI";
-import {
-	darkMaterial,
-	googleMaterial,
-	mediumGradientProperties,
-	whiteGradientProperties,
-} from "client/UIProperties/ColorSchemes";
-import { movingFadeAbsolute } from "../UIProperties/FrameEffects";
+import { RectBG, RectContainer, RectShadow, RectText, SquareAspectRatio } from "client/UIProperties/RectUI";
+import { darkMaterial, googleMaterial, whiteGradientProperties } from "client/UIProperties/ColorSchemes";
 
 interface UIProps {
 	day: number;

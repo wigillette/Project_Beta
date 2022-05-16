@@ -173,6 +173,7 @@ class DailyReward extends Roact.Component<UIProps, UIState> {
 					this.setState({ TimeRemaining: this.changeToHMS(this.state.TimeAmount) });
 					this.setState({ TimeAmount: this.state.TimeAmount - 1 });
 				} else {
+					this.setState({ TimeAmount: this.props.timeAmount });
 					this.state.TimeAmount = this.props.timeAmount;
 				}
 				wait(1);

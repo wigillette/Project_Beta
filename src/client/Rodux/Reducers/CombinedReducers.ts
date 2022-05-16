@@ -6,6 +6,7 @@ import { profileReducer } from "./ProfileReducer";
 import { twitterReducer } from "./TwitterReducer";
 import { settingsReducer } from "./SettingsReducer";
 import { dailyRewardReducer } from "./DailyRewardReducer";
+import { matchReducer } from "./MatchReducer";
 
 const reducer = Rodux.combineReducers({
 	toggleShop: shopReducer,
@@ -24,6 +25,7 @@ const reducer = Rodux.combineReducers({
 	setSettingsToggle: settingsReducer,
 	toggleDailyReward: dailyRewardReducer,
 	updateStreak: dailyRewardReducer,
+	updateMatchInfo: matchReducer,
 });
 
 export default reducer;

@@ -6,6 +6,7 @@ import Profile from "./Profile";
 import Twitter from "./Twitter";
 import Settings from "./Settings";
 import DailyReward from "./DailyReward";
+import MatchPanel from "./MatchPanel";
 
 const Main = () => {
 	return (
@@ -17,6 +18,7 @@ const Main = () => {
 			<Twitter />
 			<Settings />
 			<DailyReward />
+			<MatchPanel />
 		</screengui>
 	);
 };

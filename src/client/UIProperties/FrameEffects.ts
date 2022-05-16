@@ -119,10 +119,15 @@ export const tweenTransparencyAbsolute = (object: ImageLabel | ImageButton | Tex
 	}
 };
 
-const updateBlurEffect = (fadeIn: boolean) => {
+const updateBlurEffect = (fadeIn: boolean, key: string) => {
 	const camera = Workspace.CurrentCamera;
 	if (camera) {
-		const blur = new Instance("BlurEffect", camera);
+		let blur = camera.FindFirstChild(key) as BlurEffect;
+		if (!blur) {
+			blur = new Instance("BlurEffect", camera);
+			blur.Name = key;
+			blur.Parent = camera;
+		}
 		if (fadeIn) {
 			blur.Size = 0;
 			blur.Enabled = true;
@@ -144,7 +149,7 @@ export const movingFade = (frame: Frame, fadeIn: boolean, magnitude: number, blu
 	const direction = fadeIn ? "Down" : "Up";
 	// Add the blur effect
 	if (blurEffect) {
-		updateBlurEffect(fadeIn);
+		updateBlurEffect(fadeIn, frame.Name);
 	}
 	// Tween the frame
 	tweenPos(frame, direction, magnitude);
@@ -155,7 +160,7 @@ export const movingFade = (frame: Frame, fadeIn: boolean, magnitude: number, blu
 export const movingFadeAbsolute = (frame: Frame, fadeIn: boolean, position: UDim2, blurEffect: boolean) => {
 	// Add the blur effect
 	if (blurEffect) {
-		updateBlurEffect(fadeIn);
+		updateBlurEffect(fadeIn, frame.Name);
 	}
 	// Tween the frame
 	tweenPosAbsolute(frame, position);
