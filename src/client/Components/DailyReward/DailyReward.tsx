@@ -2,13 +2,13 @@ import Roact from "@rbxts/roact";
 import RoactRodux from "@rbxts/roact-rodux";
 import { Body, Header, MenuAspectRatio, RectBG, RectContainer, RectShadow, RectText } from "client/UIProperties/RectUI";
 import { googleMaterial, whiteGradientProperties } from "client/UIProperties/ColorSchemes";
-import { movingFadeAbsolute } from "../UIProperties/FrameEffects";
+import { movingFadeAbsolute } from "../../UIProperties/FrameEffects";
 import DailyRewardItem from "./DailyRewardItem";
-import RectButton from "./Material/RectButton";
+import RectButton from "../Material/RectButton";
 import { Players } from "@rbxts/services";
-import { dailyRewardState } from "../Rodux/Reducers/DailyRewardReducer";
-import DailyRewardService from "../Services/DailyRewardService";
-import { REWARD_VALUES } from "../../shared/DailyRewardInfo";
+import { dailyRewardState } from "../../Rodux/Reducers/DailyRewardReducer";
+import DailyRewardService from "../../Services/DailyRewardService";
+import { REWARD_VALUES } from "../../../shared/DailyRewardInfo";
 import ObjectUtils from "@rbxts/object-utils";
 
 interface UIProps {
@@ -174,7 +174,6 @@ class DailyReward extends Roact.Component<UIProps, UIState> {
 					this.setState({ TimeAmount: this.state.TimeAmount - 1 });
 				} else {
 					this.setState({ TimeAmount: this.props.timeAmount });
-					this.state.TimeAmount = this.props.timeAmount;
 				}
 				wait(1);
 			}

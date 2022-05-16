@@ -1,5 +1,5 @@
 import { KnitServer as Knit, Signal, RemoteSignal } from "@rbxts/knit";
-import { Players } from "@rbxts/services";
+import { MarketplaceService, Players } from "@rbxts/services";
 import Database from "@rbxts/datastore2";
 
 declare global {
@@ -19,6 +19,9 @@ export const GoldService = Knit.CreateService({
 		GetGold(Player: Player) {
 			return this.Server.GetGold(Player);
 		},
+		GetProducts(Player: Player) {
+			return this.Server.GetProducts();
+		},
 	},
 
 	AddGold(Player: Player, Amount: number) {
@@ -31,6 +34,10 @@ export const GoldService = Knit.CreateService({
 			this.Client.GoldChanged.Fire(Player, newGold);
 			this.UpdateGoldData(Player, newGold);
 		}
+	},
+
+	GetProducts() {
+		return MarketplaceService.GetDeveloperProductsAsync();
 	},
 
 	GetGold(Player: Player) {

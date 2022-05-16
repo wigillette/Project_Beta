@@ -17,6 +17,8 @@ const reducer = Rodux.combineReducers({
 	switchTab: inventoryReducer,
 	setInventoryToggle: inventoryReducer,
 	updateGold: goldReducer,
+	toggleProducts: goldReducer,
+	fetchProducts: goldReducer,
 	fetchExp: profileReducer,
 	toggleTwitter: twitterReducer,
 	setTwitterToggle: twitterReducer,

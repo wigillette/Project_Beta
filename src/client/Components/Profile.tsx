@@ -1,19 +1,7 @@
 import Roact from "@rbxts/roact";
 import RoactRodux from "@rbxts/roact-rodux";
-import {
-	googleMaterial,
-	gradientProperties,
-	mediumGradientProperties,
-	whiteGradientProperties,
-} from "client/UIProperties/ColorSchemes";
-import {
-	MenuAspectRatio,
-	RectBG,
-	RectContainer,
-	RectShadow,
-	RectText,
-	SquareAspectRatio,
-} from "client/UIProperties/RectUI";
+import { googleMaterial, whiteGradientProperties } from "client/UIProperties/ColorSchemes";
+import { RectBG, RectContainer, RectShadow, RectText, SquareAspectRatio } from "client/UIProperties/RectUI";
 import { CircContainer, CircBG, CircShadow, CircText } from "client/UIProperties/CircularUI";
 import RectProgress from "./Material/RectProgress";
 import DynamicViewport from "./Material/DynamicViewport";

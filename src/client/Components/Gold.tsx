@@ -6,12 +6,17 @@ import { CircContainer, CircShadow, CircBG, CircText } from "client/UIProperties
 import { RectContainer, RectShadow, RectBG, RectText, SquareAspectRatio } from "client/UIProperties/RectUI";
 import { goldState } from "../Rodux/Reducers/GoldReducer";
 
-class Gold extends Roact.Component<goldState> {
+interface UIProps {
+	Gold: number;
+	onToggle: () => void;
+}
+
+class Gold extends Roact.Component<UIProps> {
 	bodyRef;
 	buttonRef;
 	frameRef;
 	containerRef;
-	constructor(props: goldState) {
+	constructor(props: UIProps) {
 		super(props);
 		this.bodyRef = Roact.createRef<TextLabel>();
 		this.buttonRef = Roact.createRef<ImageButton>();
@@ -73,7 +78,7 @@ class Gold extends Roact.Component<goldState> {
 						AnchorPoint={new Vector2(0.9, 0.5)}
 						Size={new UDim2(0.15, 0, 0.15, 0)}
 						Callback={() => {
-							print("Display Gold Shop");
+							this.props.onToggle();
 						}}
 					></CircButton>
 				</imagelabel>
@@ -87,8 +92,19 @@ interface storeState {
 	updateGold: goldState;
 }
 
-export = RoactRodux.connect(function (state: storeState) {
-	return {
-		Gold: state.updateGold.Gold,
-	};
-})(Gold);
+export = RoactRodux.connect(
+	function (state: storeState) {
+		return {
+			Gold: state.updateGold.Gold,
+		};
+	},
+	(dispatch) => {
+		return {
+			onToggle: () => {
+				dispatch({
+					type: "toggleProducts",
+				});
+			},
+		};
+	},
+)(Gold);
