@@ -46,6 +46,7 @@
 - [x] Twitter Reducer
 - [x] Settings Reducer
 - [x] Daily Reward Reducer
+- [x] Match Reducer
 
 > Data Storage
 - [x] SQL Database vs. Datastore2
@@ -106,3 +107,4 @@
 - [x] Profile UI
 - [x] Daily Reward UI
 - [x] Menu Buttons UI
+- [x] Match Panel UI
