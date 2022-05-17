@@ -69,6 +69,7 @@
 - [x] Twitter Service
 - [x] Daily Reward Service
 - [x] Menu Service
+- [ ] Match Service
 
 > Shared
 - [x] Sword Data
@@ -108,3 +109,4 @@
 - [x] Daily Reward UI
 - [x] Menu Buttons UI
 - [x] Match Panel UI
+- [ ] Match Results UI
