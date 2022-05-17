@@ -80,7 +80,7 @@
 - [x] Settings Info
 - [x] Daily Reward Values
 
-> Material Components:
+> Material Components
 - [x] Snackbar Component/Service/Controller
 - [x] Dynamic List Component
 - [x] Grid Component
@@ -91,7 +91,7 @@
 - [x] Toggle Button Component
 - [x] Text Box Component
 
-> Advanced Components:
+> Advanced Components
 - [ ] Intro UI
 - [x] Shop UI
 - [ ] Crafting UI

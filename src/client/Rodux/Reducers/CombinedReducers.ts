@@ -7,6 +7,7 @@ import { twitterReducer } from "./TwitterReducer";
 import { settingsReducer } from "./SettingsReducer";
 import { dailyRewardReducer } from "./DailyRewardReducer";
 import { matchReducer } from "./MatchReducer";
+import { bettingReducer } from "./BettingReducer";
 
 const reducer = Rodux.combineReducers({
 	toggleShop: shopReducer,
@@ -28,6 +29,11 @@ const reducer = Rodux.combineReducers({
 	toggleDailyReward: dailyRewardReducer,
 	updateStreak: dailyRewardReducer,
 	updateMatchInfo: matchReducer,
+	updateBettingInfo: bettingReducer,
+	updateBetAmount: bettingReducer,
+	setBettingToggle: bettingReducer,
+	toggleBetting: bettingReducer,
+	selectItem: bettingReducer,
 });
 
 export default reducer;

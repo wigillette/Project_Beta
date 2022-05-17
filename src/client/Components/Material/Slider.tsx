@@ -11,6 +11,8 @@ interface UIProps {
 	Size: UDim2;
 	Position: UDim2;
 	AnchorPoint: Vector2;
+	UpperBound: number;
+	Callback: (amount: number) => void;
 }
 
 interface UIState {
@@ -28,7 +30,7 @@ class Slider extends Roact.Component<UIProps, UIState> {
 	state = {
 		held: false,
 		percentage: 0,
-		value: 5,
+		value: 0,
 	};
 
 	constructor(props: UIProps) {
@@ -53,7 +55,7 @@ class Slider extends Roact.Component<UIProps, UIState> {
 					TextStrokeTransparency={0.8}
 					Font={Enum.Font.GothamBold}
 					TextXAlignment={Enum.TextXAlignment.Left}
-					Position={new UDim2(0.05, 0, 0, 0)}
+					Position={new UDim2(0, 0, 0, 0)}
 					AnchorPoint={new Vector2(0, 0)}
 					Size={new UDim2(0.4, 0, 0.35, 1)}
 					Text={this.props.Title + ":"}
@@ -120,6 +122,7 @@ class Slider extends Roact.Component<UIProps, UIState> {
 												if (input.UserInputType === Enum.UserInputType.MouseButton1) {
 													this.setState({ held: false });
 													inputConnection.Disconnect();
+													this.props.Callback(this.state.value);
 												}
 											},
 										);
@@ -139,27 +142,29 @@ class Slider extends Roact.Component<UIProps, UIState> {
 																	(UserInputService.GetMouseLocation().X -
 																		slider.AbsolutePosition.X) /
 																		slider.AbsoluteSize.X,
-																	0.05,
+																	0,
 																),
 																button.Size.X.Scale / 2,
 																1,
 															),
 														});
 														button.Position = new UDim2(
-															this.state.percentage - button.Size.X.Scale,
-															10,
+															this.state.percentage - button.Size.X.Scale + 0.03,
+															0,
 															button.Position.Y.Scale,
 															button.Position.Y.Offset,
 														);
 														progress.Size = new UDim2(
-															this.state.percentage,
-															-10,
+															this.state.percentage - 0.03,
+															0,
 															progress.Size.Y.Scale,
 															progress.Size.Y.Offset,
 														);
 
 														this.setState({
-															value: math.floor(this.state.percentage * 100),
+															value: math.floor(
+																this.state.percentage * this.props.UpperBound,
+															),
 														});
 														textLabel.Text = tostring(this.state.value);
 													}
