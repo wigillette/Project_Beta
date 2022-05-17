@@ -1,10 +1,10 @@
 import Roact from "@rbxts/roact";
 import RoactRodux from "@rbxts/roact-rodux";
 import { googleMaterial, whiteGradientProperties } from "client/UIProperties/ColorSchemes";
-import CircButton from "./Material/CircButton";
+import CircButton from "../Material/CircButton";
 import { CircContainer, CircShadow, CircBG, CircText } from "client/UIProperties/CircularUI";
 import { RectContainer, RectShadow, RectBG, RectText, SquareAspectRatio } from "client/UIProperties/RectUI";
-import { goldState } from "../Rodux/Reducers/GoldReducer";
+import { goldState } from "../../Rodux/Reducers/GoldReducer";
 
 interface UIProps {
 	Gold: number;

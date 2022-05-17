@@ -1,6 +1,6 @@
 import Roact from "@rbxts/roact";
 import { RectBG, RectContainer, RectShadow, RectText, SquareAspectRatio } from "client/UIProperties/RectUI";
-import { darkMaterial, googleMaterial, whiteGradientProperties } from "client/UIProperties/ColorSchemes";
+import { googleMaterial, whiteGradientProperties } from "client/UIProperties/ColorSchemes";
 
 interface UIProps {
 	icon: string;

@@ -1,7 +1,7 @@
-import { shopState } from "../Rodux/Reducers/ShopReducer";
+import { shopState } from "../../Rodux/Reducers/ShopReducer";
 import RoactRodux from "@rbxts/roact-rodux";
 import Roact from "@rbxts/roact";
-import { movingFadeAbsolute } from "../UIProperties/FrameEffects";
+import { movingFadeAbsolute } from "../../UIProperties/FrameEffects";
 import { KnitClient as Knit } from "@rbxts/knit";
 const shopService = Knit.GetService("ShopService");
 import {
@@ -17,11 +17,11 @@ import {
 } from "client/UIProperties/RectUI";
 import { googleMaterial, gradientProperties, whiteGradientProperties } from "client/UIProperties/ColorSchemes";
 import ObjectUtils from "@rbxts/object-utils";
-import { registerGridDynamicScrolling } from "../UIProperties/DynamicScrolling";
+import { registerGridDynamicScrolling } from "../../UIProperties/DynamicScrolling";
 import SwordShopItem from "./SwordShopItem";
 import { RARITIES, PACK_PRICES, PACK_INFO } from "shared/ShopData";
 import { ReplicatedStorage } from "@rbxts/services";
-import RectButton from "./Material/RectButton";
+import RectButton from "../Material/RectButton";
 
 interface UIProps {
 	currentPack: string;

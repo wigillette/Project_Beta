@@ -6,8 +6,8 @@ import { MarketplaceService } from "@rbxts/services";
 import ProductItem from "./ProductItem";
 import { movingFadeAbsolute } from "client/UIProperties/FrameEffects";
 import ObjectUtils from "@rbxts/object-utils";
-import { productFormat, goldState } from "../Rodux/Reducers/GoldReducer";
-import { registerGridDynamicScrolling } from "../UIProperties/DynamicScrolling";
+import { productFormat, goldState } from "../../Rodux/Reducers/GoldReducer";
+import { registerGridDynamicScrolling } from "../../UIProperties/DynamicScrolling";
 
 interface UIProps {
 	toggle: boolean;

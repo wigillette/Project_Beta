@@ -1,9 +1,9 @@
 import Roact from "@rbxts/roact";
 import { RectShadow, RectBG, RectText, RectContainer, SquareAspectRatio } from "client/UIProperties/RectUI";
 import { googleMaterial, mediumGradientProperties, whiteGradientProperties } from "client/UIProperties/ColorSchemes";
-import DynamicViewport from "./Material/DynamicViewport";
+import DynamicViewport from "../Material/DynamicViewport";
 import { tweenTransparency } from "client/UIProperties/FrameEffects";
-import { RARITY_COLORS } from "../../shared/ShopData";
+import { RARITY_COLORS } from "../../../shared/ShopData";
 
 interface UIProps {
 	Text: string;
