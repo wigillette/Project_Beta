@@ -10,7 +10,7 @@ import { matchReducer } from "./MatchReducer";
 
 const reducer = Rodux.combineReducers({
 	toggleShop: shopReducer,
-	fetchItems: shopReducer,
+	switchPack: shopReducer,
 	toggleInventory: inventoryReducer,
 	updateInventory: inventoryReducer,
 	equipItem: inventoryReducer,

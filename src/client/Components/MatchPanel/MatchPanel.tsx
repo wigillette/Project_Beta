@@ -41,6 +41,7 @@ class MatchPanel extends Roact.Component<UIProps, UIState> {
 				<imagelabel {...RectBG} ZIndex={-3} ImageColor3={googleMaterial.outerBG}>
 					<frame {...Header} ZIndex={-2}>
 						<textlabel
+							ZIndex={-2}
 							{...RectText}
 							Font={Enum.Font.GothamBold}
 							Position={new UDim2(0.5, 0, 0.5, 0)}

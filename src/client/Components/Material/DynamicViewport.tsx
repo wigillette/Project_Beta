@@ -193,6 +193,7 @@ class DynamicViewport extends Roact.Component<UIProps> {
 		const viewportFrame = this.viewportRef.getValue();
 		const model = this.props.Model;
 		if (viewportFrame) {
+			viewportFrame.ClearAllChildren();
 			// Create the viewport camera
 			const newCamera = new Instance("Camera");
 			newCamera.Parent = viewportFrame;
@@ -260,6 +261,13 @@ class DynamicViewport extends Roact.Component<UIProps> {
 					}
 				});
 			}
+		}
+	}
+
+	protected willUnmount(): void {
+		const viewportFrame = this.viewportRef.getValue();
+		if (viewportFrame) {
+			viewportFrame.ClearAllChildren();
 		}
 	}
 }
