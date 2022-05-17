@@ -1,5 +1,5 @@
 import Roact from "@rbxts/roact";
-import Shop from "./Shop";
+import Shop from "./Shop/Shop";
 import Inventory from "./Inventory";
 import Gold from "./Gold/Gold";
 import Profile from "./Profile";

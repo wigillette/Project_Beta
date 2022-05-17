@@ -21,7 +21,7 @@ const GoldClient = {
 		GoldService.GoldChanged.Connect(GoldClient.GoldChanged);
 		GoldService.GetProductsPromise()
 			.then((products) => {
-				const page = (products && (products.GetCurrentPage() as productFormat[])) || ([] as productFormat[]);
+				const page = (products && (products as productFormat[])) || ([] as productFormat[]);
 				GoldClient.FetchProducts(page);
 			})
 			.catch((err) => {

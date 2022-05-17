@@ -64,7 +64,7 @@ class GoldContainer extends Roact.Component<UIProps> {
 								CellPadding={new UDim2(0.05, 0, 0.05, 0)}
 								SortOrder={Enum.SortOrder.Name}
 								HorizontalAlignment={Enum.HorizontalAlignment.Center}
-								VerticalAlignment={Enum.VerticalAlignment.Center}
+								VerticalAlignment={Enum.VerticalAlignment.Top}
 								FillDirection={Enum.FillDirection.Horizontal}
 								FillDirectionMaxCells={2}
 							></uigridlayout>
@@ -72,7 +72,7 @@ class GoldContainer extends Roact.Component<UIProps> {
 								return (
 									<ProductItem
 										title={product.Name}
-										icon={`rbxassetid://${product.IconImageAssetId}`}
+										icon={`rbxassetid://${product.IconImageAssetId || "5350867529"}`}
 										description={product.Description}
 									></ProductItem>
 								);

@@ -94,29 +94,26 @@ class Shop extends Roact.Component<UIProps> {
 							AnchorPoint={new Vector2(0.5, 0.2)}
 							Position={new UDim2(0.5, 0, 0.2, 0)}
 						>
-							<imagelabel {...RectBG} ImageColor3={googleMaterial.cardBG}>
-								<uilistlayout
-									FillDirection={Enum.FillDirection.Horizontal}
-									HorizontalAlignment={Enum.HorizontalAlignment.Center}
-									VerticalAlignment={Enum.VerticalAlignment.Center}
-									Padding={new UDim(0.075, 0)}
-									SortOrder={Enum.SortOrder.Name}
-								></uilistlayout>
-								{ObjectUtils.keys(PACK_INFO).map((packName) => {
-									return (
-										<RectButton
-											Position={new UDim2(0, 0, 0, 0)}
-											AnchorPoint={new Vector2(0, 0)}
-											Size={new UDim2(0.275, 0, 0.95, 0)}
-											ButtonText={packName}
-											Callback={() => {
-												this.props.switchPack(packName);
-											}}
-										></RectButton>
-									);
-								})}
-							</imagelabel>
-							<imagelabel {...RectShadow} ImageColor3={googleMaterial.cardShadow}></imagelabel>
+							<uilistlayout
+								FillDirection={Enum.FillDirection.Horizontal}
+								HorizontalAlignment={Enum.HorizontalAlignment.Center}
+								VerticalAlignment={Enum.VerticalAlignment.Center}
+								Padding={new UDim(0.075, 0)}
+								SortOrder={Enum.SortOrder.Name}
+							></uilistlayout>
+							{ObjectUtils.keys(PACK_INFO).map((packName) => {
+								return (
+									<RectButton
+										Position={new UDim2(0, 0, 0, 0)}
+										AnchorPoint={new Vector2(0, 0)}
+										Size={new UDim2(0.275, 0, 0.95, 0)}
+										ButtonText={packName.upper()}
+										Callback={() => {
+											this.props.switchPack(packName);
+										}}
+									></RectButton>
+								);
+							})}
 						</frame>
 						<frame
 							{...Body}

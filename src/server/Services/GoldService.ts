@@ -37,7 +37,7 @@ export const GoldService = Knit.CreateService({
 	},
 
 	GetProducts() {
-		return MarketplaceService.GetDeveloperProductsAsync();
+		return MarketplaceService.GetDeveloperProductsAsync().GetCurrentPage();
 	},
 
 	GetGold(Player: Player) {

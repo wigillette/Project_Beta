@@ -188,34 +188,49 @@ class DynamicViewport extends Roact.Component<UIProps> {
 		return viewModel;
 	}
 
+	setUpViewport(viewportFrame: ViewportFrame, model: Model | Tool) {
+		viewportFrame.ClearAllChildren();
+		// Create the viewport camera
+		const newCamera = new Instance("Camera");
+		newCamera.Parent = viewportFrame;
+		viewportFrame.CurrentCamera = newCamera;
+		// Place a copy of the model inside the viewport
+		const newModel = model.Clone();
+		newModel.Parent = viewportFrame;
+		// Initialize the rotation
+		if (this.props.rotate) {
+			ViewportRotation(viewportFrame, newModel, newCamera);
+		} else {
+			// Handle NPCs
+			const worldModel = new Instance("WorldModel");
+			worldModel.Parent = viewportFrame;
+
+			if (this.props.Animation !== undefined) {
+				newModel.Parent = worldModel;
+				this.playAnimation(newModel, newCamera);
+			}
+		}
+	}
+
+	protected didUpdate(previousProps: UIProps, previousState: {}): void {
+		const viewportFrame = this.viewportRef.getValue();
+
+		if (this.props.Model !== previousProps.Model && this.props.Model !== undefined && viewportFrame) {
+			this.setUpViewport(viewportFrame, this.props.Model);
+		}
+	}
+
 	protected didMount(): void {
 		// Get that baby spinning
 		const viewportFrame = this.viewportRef.getValue();
 		const model = this.props.Model;
 		if (viewportFrame) {
-			viewportFrame.ClearAllChildren();
-			// Create the viewport camera
-			const newCamera = new Instance("Camera");
-			newCamera.Parent = viewportFrame;
-			viewportFrame.CurrentCamera = newCamera;
 			if (model) {
-				// Place a copy of the model inside the viewport
-				const newModel = model.Clone();
-				newModel.Parent = viewportFrame;
-				// Initialize the rotation
-				if (this.props.rotate) {
-					ViewportRotation(viewportFrame, newModel, newCamera);
-				} else {
-					// Handle NPCs
-					const worldModel = new Instance("WorldModel");
-					worldModel.Parent = viewportFrame;
-
-					if (this.props.Animation !== undefined) {
-						newModel.Parent = worldModel;
-						this.playAnimation(newModel, newCamera);
-					}
-				}
+				this.setUpViewport(viewportFrame, model);
 			} else {
+				const newCamera = new Instance("Camera");
+				newCamera.Parent = viewportFrame;
+				viewportFrame.CurrentCamera = newCamera;
 				// Render the client's character
 				const worldModel = new Instance("WorldModel");
 				worldModel.Parent = viewportFrame;
