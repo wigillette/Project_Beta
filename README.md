@@ -62,7 +62,7 @@
 - [x] Touch Service
 - [x] Gamepass Service
 - [x] Settings Service
-- [ ] Betting Service
+- [x] Betting Service
 - [x] Profile Service
 - [x] Shop Service
 - [x] Inventory Service
@@ -100,7 +100,7 @@
 - [x] Settings UI
 - [x] Gamepass UI
 - [ ] Map/Mode Selection UI
-- [ ] Betting UI
+- [x] Betting UI
 - [x] Inventory UI
 - [x] Twitter UI
 - [x] Gold UI
