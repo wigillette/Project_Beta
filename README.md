@@ -93,7 +93,7 @@
 - [x] Text Box Component
 
 > Advanced Components
-- [ ] Intro UI
+- [x] Intro UI
 - [x] Shop UI
 - [ ] Crafting UI
 - [ ] Trading UI
