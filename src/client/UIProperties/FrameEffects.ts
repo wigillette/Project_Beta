@@ -52,20 +52,20 @@ const tweenTransparencyRecurse = (children: Instance[], recurse: boolean, transp
 				if (object.Name !== "Lock") {
 					TweenService.Create(
 						object,
-						new TweenInfo(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0),
+						new TweenInfo(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0),
 						{ ImageTransparency: transparency },
 					).Play();
 				} else {
 					TweenService.Create(
 						object,
-						new TweenInfo(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0),
+						new TweenInfo(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0),
 						{ ImageTransparency: (transparency === 0 && 0.6) || 1 },
 					).Play();
 				}
 			} else if (object.IsA("TextLabel")) {
 				TweenService.Create(
 					object,
-					new TweenInfo(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0),
+					new TweenInfo(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0),
 					{ TextTransparency: transparency },
 				).Play();
 			} else if (object.IsA("ViewportFrame") || object.IsA("ScrollingFrame") || object.IsA("TextBox")) {
@@ -90,7 +90,22 @@ export const tweenTransparency = (frame: Frame, recurse: boolean, fadeIn: boolea
 	}
 
 	const children = frame.GetChildren();
-	tweenTransparencyRecurse(children, recurse, transparency);
+	if (recurse === true) {
+		if (!fadeIn) {
+			TweenService.Create(
+				frame,
+				new TweenInfo(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0),
+				{
+					BackgroundTransparency: transparency,
+				},
+			).Play();
+		}
+		tweenTransparencyRecurse(children, recurse, transparency);
+	} else if (fadeIn) {
+		TweenService.Create(frame, new TweenInfo(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0), {
+			BackgroundTransparency: transparency,
+		}).Play();
+	}
 	coroutine.wrap(() => {
 		if (transparency === 1 && frame.Name !== "Card") {
 			wait(0.15);
@@ -109,11 +124,11 @@ export const tweenTransparencyAbsolute = (object: ImageLabel | ImageButton | Tex
 	}
 
 	if (object.IsA("ImageLabel") || object.IsA("ImageButton")) {
-		TweenService.Create(object, new TweenInfo(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0), {
+		TweenService.Create(object, new TweenInfo(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0), {
 			ImageTransparency: transparency,
 		}).Play();
 	} else if (object.IsA("TextLabel")) {
-		TweenService.Create(object, new TweenInfo(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0), {
+		TweenService.Create(object, new TweenInfo(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0), {
 			TextTransparency: transparency,
 		}).Play();
 	}
@@ -132,7 +147,7 @@ const updateBlurEffect = (fadeIn: boolean, key: string) => {
 			blur.Size = 0;
 			blur.Enabled = true;
 		}
-		TweenService.Create(blur, new TweenInfo(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0), {
+		TweenService.Create(blur, new TweenInfo(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0), {
 			Size: (fadeIn && 30) || 0,
 		}).Play();
 		if (!fadeIn) {
@@ -167,4 +182,10 @@ export const movingFadeAbsolute = (frame: Frame, fadeIn: boolean, position: UDim
 	// Tween the transparency
 	tweenTransparency(frame, true, fadeIn);
 	debounce = false;
+};
+
+export const tweenRotation = (frame: Frame, rotation: number) => {
+	TweenService.Create(frame, new TweenInfo(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0), {
+		Rotation: rotation,
+	}).Play();
 };

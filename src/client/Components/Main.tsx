@@ -9,6 +9,7 @@ import DailyReward from "./DailyReward/DailyReward";
 import MatchPanel from "./MatchPanel/MatchPanel";
 import GoldContainer from "./Gold/GoldContainer";
 import BettingContainer from "./Betting/BettingContainer";
+import IntroScreen from "./IntroScreen";
 
 const Main = () => {
 	return (
@@ -23,6 +24,7 @@ const Main = () => {
 			<DailyReward />
 			<MatchPanel />
 			<BettingContainer />
+			<IntroScreen />
 		</screengui>
 	);
 };

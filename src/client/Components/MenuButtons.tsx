@@ -8,19 +8,6 @@ interface UIState {
 	currentMenu: string;
 }
 
-/*
-
-<uigridlayout
-    FillDirectionMaxCells={2}
-    FillDirection={Enum.FillDirection.Horizontal}
-    HorizontalAlignment={Enum.HorizontalAlignment.Left}
-    VerticalAlignment={Enum.VerticalAlignment.Bottom}
-    CellPadding={new UDim2(0.05, 0, 0.05, 0)}
-    CellSize={new UDim2(0.45, 0, 0.45, 0)}
-    StartCorner={Enum.StartCorner.BottomLeft}
-></uigridlayout>
-				
-*/
 
 class MenuButtons extends Roact.Component<UIProps, UIState> {
 	state = {
