@@ -47,6 +47,8 @@
 - [x] Settings Reducer
 - [x] Daily Reward Reducer
 - [x] Match Reducer
+- [x] Betting Reducer
+- [x] Results Reducer
 
 > Data Storage
 - [x] SQL Database vs. Datastore2
@@ -109,4 +111,4 @@
 - [x] Daily Reward UI
 - [x] Menu Buttons UI
 - [x] Match Panel UI
-- [ ] Match Results UI
+- [x] Match Results UI
