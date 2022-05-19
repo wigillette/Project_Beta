@@ -95,17 +95,21 @@ class MenuButtons extends Roact.Component<UIProps, UIState> {
 		const word = this.wordRef.getValue();
 		const credits = this.creditRef.getValue();
 		coroutine.wrap(() => {
+			wait(0.3);
 			if (container && word && credits) {
 				tweenTransparency(container, false, true);
 				let counter = 0;
 				tweenTransparency(word, true, true);
 				word.GetChildren().forEach((wordLabel) => {
-					tweenPosAbsolute(wordLabel as Frame, new UDim2(0.111 * counter, 0, 0.5, 0));
+					tweenPosAbsolute(
+						wordLabel as Frame,
+						new UDim2((wordLabel as Frame).Position.X.Scale, 0, (wordLabel as Frame).Position.Y.Scale, 0),
+					);
 					tweenRotation(wordLabel as Frame, 0);
 					counter += 1;
 				});
 				tweenTransparencyAbsolute(credits, true);
-				wait(1.5);
+				wait(2);
 				tweenTransparency(container, true, false);
 			}
 		})();

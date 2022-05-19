@@ -167,7 +167,7 @@ class Betting extends Roact.Component<UIProps> {
 								Position={new UDim2(0.5, 0, 0.5, 0)}
 								AnchorPoint={new Vector2(0.5, 0.5)}
 								Size={new UDim2(0.45, 0, 0.95, 0)}
-								ButtonText={"Do not bet"}
+								ButtonText={"No Bet"}
 								Callback={() => {
 									this.props.closeBetting();
 								}}

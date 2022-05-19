@@ -26,10 +26,12 @@ class Card extends Roact.Component<UIProps> {
 				Size={this.props.Size}
 				AnchorPoint={this.props.AnchorPoint}
 				Position={this.props.Position}
+				ZIndex={16}
 				{...RectContainer}
 			>
 				<uiaspectratioconstraint {...SquareAspectRatio}></uiaspectratioconstraint>
 				<imagelabel
+					ZIndex={18}
 					ImageColor3={googleMaterial.buttonColor}
 					{...SSProperties}
 					Size={new UDim2(0.95, 0, 0.95, 0)}
@@ -37,6 +39,7 @@ class Card extends Roact.Component<UIProps> {
 				>
 					<uigradient {...whiteGradientProperties}></uigradient>
 					<textlabel
+						ZIndex={19}
 						{...RectText}
 						TextColor3={googleMaterial.cardFont}
 						Position={new UDim2(0.5, 0, 0.5, 0)}
@@ -51,7 +54,7 @@ class Card extends Roact.Component<UIProps> {
 						></uiaspectratioconstraint>
 					</textlabel>
 				</imagelabel>
-				<imagelabel {...CircleBG} ImageColor3={googleMaterial.innerBG}>
+				<imagelabel {...CircleBG} ImageColor3={googleMaterial.innerBG} ZIndex={17}>
 					<uigradient {...gradientProperties}></uigradient>
 				</imagelabel>
 			</frame>

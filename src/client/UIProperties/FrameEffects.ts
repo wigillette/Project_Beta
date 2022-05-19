@@ -40,7 +40,7 @@ export const tweenPos = (frame: Frame, direction: string, magnitude: number) => 
 
 export const tweenPosAbsolute = (frame: Frame, position: UDim2) => {
 	pcall(() => {
-		frame.TweenPosition(position, Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.15, true, undefined);
+		frame.TweenPosition(position, Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.15, false, undefined);
 	});
 };
 

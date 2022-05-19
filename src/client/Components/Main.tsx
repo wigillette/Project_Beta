@@ -10,6 +10,7 @@ import MatchPanel from "./MatchPanel/MatchPanel";
 import GoldContainer from "./Gold/GoldContainer";
 import BettingContainer from "./Betting/BettingContainer";
 import IntroScreen from "./IntroScreen";
+import MatchResults from "./Results/MatchResults";
 
 const Main = () => {
 	return (
@@ -25,6 +26,7 @@ const Main = () => {
 			<MatchPanel />
 			<BettingContainer />
 			<IntroScreen />
+			<MatchResults />
 		</screengui>
 	);
 };
