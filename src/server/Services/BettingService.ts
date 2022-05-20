@@ -28,7 +28,7 @@ export const BettingService = Knit.CreateService({
 
 	PlaceBet(player: Player, BetAmt: number, Choice: Player | string) {
 		let success = false;
-		if (BetAmt !== 0) {
+		if (BetAmt > 0) {
 			if (Choice !== "") {
 				const gold = GoldService.GetGold(player);
 				if (gold >= BetAmt) {
