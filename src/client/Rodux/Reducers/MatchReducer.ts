@@ -2,7 +2,6 @@ import Rodux from "@rbxts/rodux";
 
 // Handles the state of the match UI; toggle
 export interface matchState {
-	initialTime: number;
 	modeName: string;
 	mapName: string;
 	aliveCounter: number;
@@ -10,10 +9,10 @@ export interface matchState {
 
 interface Action {
 	type: string;
-	payload?: { initialTime: number; modeName: string; mapName: string; aliveCounter: number };
+	payload?: { modeName: string; mapName: string; aliveCounter: number };
 }
 
-export const INITIAL_STATE = { initialTime: 0, modeName: "None", mapName: "None", aliveCounter: 0 };
+export const INITIAL_STATE = { modeName: "None", mapName: "None", aliveCounter: 0 };
 
 export const matchReducer = Rodux.createReducer(INITIAL_STATE, {
 	updateMatchInfo: (state: matchState, action: Action) => {

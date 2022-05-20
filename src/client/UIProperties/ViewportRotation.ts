@@ -66,7 +66,13 @@ export default (frame: ViewportFrame, model: Model | Tool, camera: Camera, minDi
 				currentAngle += 1 * dt * 60;
 				camera.CFrame = modelCF
 					.mul(CFrame.fromEulerAnglesYXZ(0, math.rad(currentAngle), 0))
-					.mul(new CFrame(0, 2, (minDistOffset !== undefined && minDist / 3) || minDist));
+					.mul(
+						new CFrame(
+							0,
+							(minDistOffset !== undefined && 2) || 0.5,
+							(minDistOffset !== undefined && minDist / 3) || minDist,
+						),
+					);
 			}
 		});
 	})();

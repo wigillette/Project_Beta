@@ -10,11 +10,10 @@ const ResultsClient = {
 			payload: { goldEarned: goldEarned, playerResults: playerResults, toggle: true },
 		});
 	},
-	InitializeMatchPanel: (initialTime: number, modeName: string, mapName: string, aliveCounter: number) => {
+	InitializeMatchPanel: (modeName: string, mapName: string, aliveCounter: number) => {
 		Store.dispatch({
 			type: "updateMatchInfo",
 			payload: {
-				initialTime: initialTime,
 				modeName: modeName,
 				mapName: mapName,
 				aliveCounter: aliveCounter,
@@ -28,11 +27,9 @@ const ResultsClient = {
 		});
 	},
 	init: () => {
-		MatchService.InitialMatchPanel.Connect(
-			(initialTime: number, modeName: string, mapName: string, aliveCounter: number) => {
-				ResultsClient.InitializeMatchPanel(initialTime, modeName, mapName, aliveCounter);
-			},
-		);
+		MatchService.InitialMatchPanel.Connect((modeName: string, mapName: string, aliveCounter: number) => {
+			ResultsClient.InitializeMatchPanel(modeName, mapName, aliveCounter);
+		});
 		MatchService.UpdateMatchResults.Connect((goldEarned: number, playerResults: playerResult[]) => {
 			ResultsClient.UpdateMatchResults(goldEarned, playerResults);
 		});

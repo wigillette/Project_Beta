@@ -23,6 +23,9 @@ declare global {
 
 const mapsFolder = ReplicatedStorage.WaitForChild("Maps", 10);
 const mapHolder = Workspace.WaitForChild("Holder", 10);
+const objectValues = ReplicatedStorage.WaitForChild("ObjectValues");
+const timer = objectValues.WaitForChild("Timer") as IntValue;
+const status = objectValues.WaitForChild("Status") as StringValue;
 
 const MatchService = Knit.CreateService({
 	Name: "MatchService",
@@ -31,15 +34,13 @@ const MatchService = Knit.CreateService({
 	ModeLibraries: {
 		FFA: FFA,
 	},
-	IntermissionTime: 5,
-	VotingTime: 30,
-	BettingTime: 30,
+	IntermissionTime: 45,
+	VotingTime: 20,
+	BettingTime: 20,
 
 	Client: {
 		// Handles client-server communication; OnServerEvent
-		InitialMatchPanel: new RemoteSignal<
-			(initialTime: number, modeName: string, mapName: string, aliveCounter: number) => void
-		>(),
+		InitialMatchPanel: new RemoteSignal<(modeName: string, mapName: string, aliveCounter: number) => void>(),
 		UpdateAliveCounter: new RemoteSignal<(aliveCounter: number) => void>(),
 		UpdateMatchResults: new RemoteSignal<(goldEarned: number, playerResults: playerResult[]) => void>(),
 	},
@@ -94,7 +95,7 @@ const MatchService = Knit.CreateService({
 			mapHolder.ClearAllChildren();
 		}
 		// Restart the lobby stuff
-		this.Client.InitialMatchPanel.FireAll(this.IntermissionTime, this.CurrentMode, this.CurrentMap, 0);
+		this.Client.InitialMatchPanel.FireAll(this.CurrentMode, this.CurrentMap, 0);
 	},
 
 	DisplayResults(winner: Player | string, playingList: Player[]) {
@@ -162,11 +163,14 @@ const MatchService = Knit.CreateService({
 		playingList: Player[],
 		callback: (aliveCounter: number) => Player | undefined,
 	) {
-		let timeRemaining = timeLimit;
+		timer.Value = timeLimit;
 		let playersAlive = true;
 		let formerAliveCounter = 0;
 		let aliveCounter = 0;
-		while (timeRemaining > 0 && (playersAlive || aliveCounter > 1)) {
+		coroutine.wrap(() => {
+			this.DecrementTimer();
+		})();
+		while (timer.Value > 0 && (playersAlive || aliveCounter > 1)) {
 			aliveCounter = 0;
 			teams.forEach((team: Team) => {
 				if (playersAlive && team) {
@@ -179,8 +183,7 @@ const MatchService = Knit.CreateService({
 				formerAliveCounter = aliveCounter;
 				this.Client.UpdateAliveCounter.FireAll(aliveCounter);
 			}
-			wait(1);
-			timeRemaining -= 1;
+			wait(0.05);
 		}
 		const winner = callback(aliveCounter);
 
@@ -194,7 +197,6 @@ const MatchService = Knit.CreateService({
 		const teams: Team[] = [];
 		teamsList.forEach((color: BrickColor) => {
 			const team = new Instance("Team");
-			team.Name = "FFA";
 			team.TeamColor = color;
 			team.Parent = Teams;
 			teams.push(team);
@@ -214,12 +216,7 @@ const MatchService = Knit.CreateService({
 					const library = modeLibraries[this.CurrentMode as keyof typeof modeLibraries];
 					const teams = this.CreateTeams(library.TEAMS); // Create the teams
 					const playingList = library.teamPlayers();
-					this.Client.InitialMatchPanel.FireAll(
-						library.TIME_LIMIT,
-						this.CurrentMode,
-						this.CurrentMap,
-						playingList.size(),
-					);
+					this.Client.InitialMatchPanel.FireAll(this.CurrentMode, this.CurrentMap, playingList.size());
 					library.init(teams, playingList); // execute the init function of the mode
 				} else {
 					SnackbarService.PushAll("Unable to locate mode module..");
@@ -245,6 +242,15 @@ const MatchService = Knit.CreateService({
 	ChooseMode() {
 		const randomMode = modes[math.floor(math.random() * modes.size())];
 		return randomMode;
+	},
+
+	DecrementTimer() {
+		if (timer) {
+			while (timer.Value > 0) {
+				timer.Value -= 1;
+				wait(1);
+			}
+		}
 	},
 
 	// Initialize on service startup
@@ -302,15 +308,17 @@ const MatchService = Knit.CreateService({
 			while (Players.GetPlayers().size() === 0) {
 				wait(0.05);
 			}
-			this.Client.InitialMatchPanel.FireAll(this.IntermissionTime, this.CurrentMode, this.CurrentMap, 0);
 			while (Players.GetPlayers().size() > 0) {
 				//	if (Players.GetPlayers().size() >= 2) {
 				// Do the voting here
-				wait(this.IntermissionTime);
+				status.Value = "Intermission..";
+				timer.Value = this.IntermissionTime;
+				this.DecrementTimer();
 				VotingService.SelectChosen();
 				// Display the voting page for all clients
-				this.Client.InitialMatchPanel.FireAll(this.VotingTime, this.CurrentMode, this.CurrentMap, 0);
-				wait(this.VotingTime);
+				status.Value = "Map/Mode Voting..";
+				timer.Value = this.VotingTime;
+				this.DecrementTimer();
 				// Close the voting page for all clients
 				VotingService.Client.CloseVoting.FireAll();
 				wait(1);
@@ -319,7 +327,6 @@ const MatchService = Knit.CreateService({
 				const matchSelection = VotingService.TotalVotes();
 				this.CurrentMap = matchSelection[0] || this.ChooseMap();
 				this.CurrentMode = matchSelection[1] || this.ChooseMode();
-				SnackbarService.PushAll(`Mode: ${this.CurrentMode} | Map: ${this.CurrentMap}`);
 
 				const lobbyTeam = Teams.FindFirstChild("Lobby") as Team;
 				if (lobbyTeam) {
@@ -327,12 +334,14 @@ const MatchService = Knit.CreateService({
 					// Display the betting UI
 					BettingService.FetchBettingInfo(lobbyTeam.GetPlayers(), this.CurrentMode);
 					// Update the panel for the betting time
-					this.Client.InitialMatchPanel.FireAll(this.BettingTime, this.CurrentMode, this.CurrentMap, 0);
-					wait(this.BettingTime);
+					status.Value = "Winner Predictions..";
+					timer.Value = this.BettingTime;
+					this.DecrementTimer();
 					BettingService.Client.CloseBetting.FireAll();
 					wait(1);
 				}
 				// Begin setting up the match
+				status.Value = `Mode: ${this.CurrentMode} | Map: ${this.CurrentMap}`;
 				this.LoadMatch();
 				//	} else {
 				//	}

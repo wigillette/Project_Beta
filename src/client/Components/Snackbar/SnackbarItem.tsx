@@ -29,7 +29,7 @@ class SnackbarItem extends Roact.Component<UIProps> {
 						Text={this.props.Alert}
 						AnchorPoint={new Vector2(0.5, 0.5)}
 						Position={new UDim2(0.5, 0, 0.5, 0)}
-						Size={new UDim2(0.95, 0, 0.95, 0)}
+						Size={new UDim2(0.9, 0, 0.9, 0)}
 						TextColor3={googleMaterial.bgFont}
 						{...CircText}
 					></textlabel>

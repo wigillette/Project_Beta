@@ -3,29 +3,31 @@ import RoactRodux from "@rbxts/roact-rodux";
 import { Body, Header, MenuAspectRatio, RectBG, RectContainer, RectShadow, RectText } from "client/UIProperties/RectUI";
 import { googleMaterial, whiteGradientProperties } from "client/UIProperties/ColorSchemes";
 import MatchItem from "./MatchItem";
-import { Players } from "@rbxts/services";
+import { Players, ReplicatedStorage } from "@rbxts/services";
 import { matchState } from "client/Rodux/Reducers/MatchReducer";
 
 interface UIProps {
-	initialTime: number;
 	modeName: string;
 	mapName: string;
 	aliveCounter: number;
 }
 
 interface UIState {
-	remainingTime: number;
 	timeString: string;
+	status: string;
 }
 
+const objectValues = ReplicatedStorage.WaitForChild("ObjectValues");
+const timer = objectValues.WaitForChild("Timer") as IntValue;
+const status = objectValues.WaitForChild("Status") as StringValue;
 class MatchPanel extends Roact.Component<UIProps, UIState> {
 	constructor(props: UIProps) {
 		super(props);
 	}
 
 	state = {
-		remainingTime: 0,
 		timeString: "00:00",
+		status: "Match Information",
 	};
 
 	render() {
@@ -46,8 +48,8 @@ class MatchPanel extends Roact.Component<UIProps, UIState> {
 							Font={Enum.Font.GothamBold}
 							Position={new UDim2(0.5, 0, 0.5, 0)}
 							AnchorPoint={new Vector2(0.5, 0.5)}
-							Size={new UDim2(0.6, 0, 1, 0)}
-							Text={"Round Information"}
+							Size={new UDim2(0.9, 0, 1, 0)}
+							Text={this.state.status}
 							TextColor3={googleMaterial.bgFont}
 						></textlabel>
 					</frame>
@@ -86,17 +88,12 @@ class MatchPanel extends Roact.Component<UIProps, UIState> {
 	}
 
 	protected didMount(): void {
-		coroutine.wrap(() => {
-			while (Players.LocalPlayer) {
-				if (this.state.remainingTime > 0) {
-					this.setState({ timeString: this.changeToMS(this.state.remainingTime) });
-					this.setState({ remainingTime: this.state.remainingTime - 1 });
-				} else {
-					this.setState({ remainingTime: this.props.initialTime });
-				}
-				wait(1);
-			}
-		})();
+		timer.GetPropertyChangedSignal("Value").Connect(() => {
+			this.setState({ timeString: this.changeToMS(timer.Value) });
+		});
+		status.GetPropertyChangedSignal("Value").Connect(() => {
+			this.setState({ status: status.Value });
+		});
 	}
 }
 
@@ -107,7 +104,6 @@ interface storeState {
 
 export = RoactRodux.connect(function (state: storeState) {
 	return {
-		initialTime: state.updateMatchInfo.initialTime,
 		modeName: state.updateMatchInfo.modeName,
 		mapName: state.updateMatchInfo.mapName,
 		aliveCounter: state.updateAliveCounter.aliveCounter,
