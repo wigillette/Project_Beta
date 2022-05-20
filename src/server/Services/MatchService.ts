@@ -59,6 +59,20 @@ const MatchService = Knit.CreateService({
 		});
 	},
 
+	RemoveWeapon(player: Player) {
+		const character = player.Character;
+		if (player && character) {
+			const sword = character.FindFirstChildOfClass("Tool");
+			const starterGear = player.WaitForChild("StarterGear");
+			if (sword) {
+				sword.Destroy();
+			}
+			if (starterGear) {
+				starterGear.ClearAllChildren();
+			}
+		}
+	},
+
 	ResetMatch() {
 		this.isRunning = false;
 		this.UpdateMatchSettings("None", "None");
@@ -67,6 +81,7 @@ const MatchService = Knit.CreateService({
 		Players.GetPlayers().forEach((player) => {
 			if (!RESERVED_TEAMS.includes(player.TeamColor)) {
 				pcall(() => {
+					this.RemoveWeapon(player);
 					player.TeamColor = new BrickColor("White");
 					player.LoadCharacter();
 				});
