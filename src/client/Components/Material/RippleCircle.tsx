@@ -23,7 +23,7 @@ class Circle extends Roact.Component<UIProps> {
 				BackgroundTransparency={1}
 				ImageTransparency={0.6}
 				ScaleType={"Stretch"}
-				ZIndex={10}
+				ZIndex={30}
 				ImageColor3={Color3.fromRGB(200, 200, 200)}
 				Ref={this.circleRef}
 				Image={"rbxassetid://266543268"}

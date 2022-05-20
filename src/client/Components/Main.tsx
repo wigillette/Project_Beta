@@ -11,6 +11,7 @@ import GoldContainer from "./Gold/GoldContainer";
 import BettingContainer from "./Betting/BettingContainer";
 import IntroScreen from "./IntroScreen";
 import MatchResults from "./Results/MatchResults";
+import VotingContainer from "./Voting/VotingContainer";
 
 const Main = () => {
 	return (
@@ -27,6 +28,7 @@ const Main = () => {
 			<BettingContainer />
 			<IntroScreen />
 			<MatchResults />
+			<VotingContainer />
 		</screengui>
 	);
 };

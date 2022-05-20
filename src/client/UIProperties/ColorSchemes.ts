@@ -15,6 +15,9 @@ export const googleMaterial = {
 	innerBG2: Color3.fromRGB(230, 230, 230),
 	darkCardBG: Color3.fromRGB(180, 180, 180),
 	darkCardShadow: Color3.fromRGB(150, 150, 150),
+	closeButtonColor: Color3.fromRGB(242, 69, 69),
+	closeButtonHover: Color3.fromRGB(255, 128, 128),
+	closeButtonShadow: Color3.fromRGB(194, 46, 46),
 };
 
 export const darkMaterial = {

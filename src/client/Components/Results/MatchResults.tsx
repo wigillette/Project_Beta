@@ -8,18 +8,16 @@ import {
 	RectContainer,
 	Header,
 	Body,
-	CardGridLayout,
 	SquareAspectRatio,
 	MenuAspectRatio,
 } from "client/UIProperties/RectUI";
 import { googleMaterial, gradientProperties, whiteGradientProperties } from "client/UIProperties/ColorSchemes";
 import ObjectUtils from "@rbxts/object-utils";
 import CircularProgress from "../Material/CircularProgress";
-import RectButton from "../Material/RectButton";
-import { registerGridDynamicScrolling, registerListDynamicScrolling } from "../../UIProperties/DynamicScrolling";
+import CloseButton from "../Material/CloseButton";
+import { registerListDynamicScrolling } from "../../UIProperties/DynamicScrolling";
 import ResultsItem from "./ResultsItem";
 import { playerResult, ResultsState } from "../../Rodux/Reducers/ResultsReducer";
-import { goldState } from "client/Rodux/Reducers/GoldReducer";
 import { PROFILE_FORMAT } from "shared/LevelInfo";
 
 interface UIProps {
@@ -28,6 +26,7 @@ interface UIProps {
 	expCap: number;
 	playerResults: playerResult[];
 	goldEarned: number;
+	closeResults: () => void;
 }
 
 let oldFade = true;
@@ -76,8 +75,15 @@ class Results extends Roact.Component<UIProps> {
 									TextColor3={googleMaterial.headerFont}
 									{...RectText}
 									Font={"GothamBold"}
+									TextXAlignment={Enum.TextXAlignment.Left}
 									ZIndex={16}
 								></textlabel>
+								<CloseButton
+									Size={new UDim2(0.1, 0, 0.75, 0)}
+									Position={new UDim2(0.95, 0, 0.5, 0)}
+									AnchorPoint={new Vector2(0.95, 0.5)}
+									Callback={this.props.closeResults}
+								/>
 
 								<uigradient {...gradientProperties}></uigradient>
 							</imagelabel>
@@ -191,21 +197,33 @@ interface storeState {
 	fetchExp: PROFILE_FORMAT;
 }
 
-export = RoactRodux.connect((state: storeState) => {
-	const ResultsFrame = ResultsRef.getValue() as Frame;
-	if (ResultsFrame && oldFade !== state.toggleResults.toggle) {
-		oldFade = state.toggleResults.toggle;
-		// Update the frame's position when the toggle changes
-		state.toggleResults.toggle
-			? movingFadeAbsolute(ResultsFrame, true, new UDim2(0.5, 0, 0.4, 0), true)
-			: movingFadeAbsolute(ResultsFrame, false, new UDim2(0.5, 0, 0.1, 0), true);
-	}
+export = RoactRodux.connect(
+	(state: storeState) => {
+		const ResultsFrame = ResultsRef.getValue() as Frame;
+		if (ResultsFrame && oldFade !== state.toggleResults.toggle) {
+			oldFade = state.toggleResults.toggle;
+			// Update the frame's position when the toggle changes
+			state.toggleResults.toggle
+				? movingFadeAbsolute(ResultsFrame, true, new UDim2(0.5, 0, 0.4, 0), true)
+				: movingFadeAbsolute(ResultsFrame, false, new UDim2(0.5, 0, 0.1, 0), true);
+		}
 
-	return {
-		toggle: state.toggleResults.toggle,
-		playerResults: state.updateResultsInfo.playerResults,
-		goldEarned: state.updateResultsInfo.goldEarned,
-		expCap: state.fetchExp.ExpCap,
-		currentExp: state.fetchExp.Experience,
-	};
-})(Results);
+		return {
+			toggle: state.toggleResults.toggle,
+			playerResults: state.updateResultsInfo.playerResults,
+			goldEarned: state.updateResultsInfo.goldEarned,
+			expCap: state.fetchExp.ExpCap,
+			currentExp: state.fetchExp.Experience,
+		};
+	},
+	(dispatch) => {
+		return {
+			closeResults: () => {
+				dispatch({
+					type: "setResultsToggle",
+					payload: { toggle: false },
+				});
+			},
+		};
+	},
+)(Results);

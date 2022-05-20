@@ -1,6 +1,6 @@
 import { RunService } from "@rbxts/services";
 
-export default (frame: ViewportFrame, model: Model | Tool, camera: Camera) => {
+export default (frame: ViewportFrame, model: Model | Tool, camera: Camera, minDistOffset?: number) => {
 	// Case: The model is a tool; put the tool in a model
 	if (model.IsA("Tool")) {
 		const par = new Instance("Model");
@@ -66,7 +66,7 @@ export default (frame: ViewportFrame, model: Model | Tool, camera: Camera) => {
 				currentAngle += 1 * dt * 60;
 				camera.CFrame = modelCF
 					.mul(CFrame.fromEulerAnglesYXZ(0, math.rad(currentAngle), 0))
-					.mul(new CFrame(0, 0, minDist + 3));
+					.mul(new CFrame(0, 2, (minDistOffset !== undefined && minDist / 3) || minDist));
 			}
 		});
 	})();

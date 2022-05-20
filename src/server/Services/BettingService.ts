@@ -17,6 +17,8 @@ export const BettingService = Knit.CreateService({
 	PlayerBets: new Map<Player, { Gold: number; Choice: Player | string }>(),
 
 	Client: {
+		CloseBetting: new RemoteSignal<() => void>(),
+		FetchBettingInfo: new RemoteSignal<(participants: Player[], mode: string) => void>(),
 		PlaceBet(Player: Player, Gold: number, Choice: Player | string) {
 			return this.Server.PlaceBet(Player, Gold, Choice);
 		},
@@ -24,6 +26,10 @@ export const BettingService = Knit.CreateService({
 
 	ResetBets() {
 		this.PlayerBets.clear();
+	},
+
+	FetchBettingInfo(participants: Player[], mode: string) {
+		this.Client.FetchBettingInfo.FireAll(participants, mode);
 	},
 
 	PlaceBet(player: Player, BetAmt: number, Choice: Player | string) {
@@ -38,7 +44,7 @@ export const BettingService = Knit.CreateService({
 						player,
 						`Successfully placed bet on ${
 							(typeIs(Choice, "Instance") && (Choice as Instance).Name) || Choice
-						}`,
+						} for ${BetAmt} gold!`,
 					);
 					success = true;
 				} else {

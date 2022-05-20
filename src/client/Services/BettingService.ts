@@ -7,10 +7,16 @@ const BettingClient = {
 		return BettingService.PlaceBet(gold, choice);
 	},
 	FetchBettingInfo: (choices: Player[] | string[], mode: string) => {
-		Store.dispatch({ type: "updateBettingInfo", payload: { choices: choices, mode: mode } });
+		Store.dispatch({ type: "updateBettingInfo", payload: { choices: choices, mode: mode, toggle: true } });
+	},
+	CloseBetting: () => {
+		Store.dispatch({ type: "setBettingToggle", payload: { toggle: false } });
 	},
 	init: () => {
-		BettingClient.FetchBettingInfo(Players.GetPlayers(), "FFA");
+		BettingService.CloseBetting.Connect(BettingClient.CloseBetting);
+		BettingService.FetchBettingInfo.Connect((participants: Player[], mode: string) => {
+			BettingClient.FetchBettingInfo(participants, mode);
+		});
 	},
 };
 

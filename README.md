@@ -64,7 +64,7 @@
 - [ ] PTL
 
 > Services
-- [ ] Voting Service
+- [x] Voting Service
 - [x] Gold Service
 - [ ] Trading Service
 - [ ] Crafting Service
@@ -84,8 +84,8 @@
 > Shared
 - [x] Sword Data
 - [x] Level Data
-- [ ] Map Descriptions
-- [ ] Mode Descriptions
+- [x] Map Descriptions
+- [x] Mode Descriptions
 - [x] Interaction Information
 - [x] Location Data
 - [x] Settings Info
@@ -110,7 +110,7 @@
 - [x] Interaction UI
 - [x] Settings UI
 - [x] Gamepass UI
-- [ ] Map/Mode Selection UI
+- [x] Map/Mode Selection UI
 - [x] Betting UI
 - [x] Inventory UI
 - [x] Twitter UI
@@ -118,5 +118,5 @@
 - [x] Profile UI
 - [x] Daily Reward UI
 - [x] Menu Buttons UI
-- [x] Match Panel UI
-- [ ] Match Results UI
+- [ ] Match Panel UI
+- [x] Match Results UI

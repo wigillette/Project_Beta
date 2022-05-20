@@ -6,7 +6,9 @@ import FFA from "../GameModes/FFA";
 import { GoldService } from "./GoldService";
 import { ProfileService } from "./ProfileService";
 import { BettingService } from "./BettingService";
+import { VotingService } from "./VotingService";
 import { EquippedFormat } from "shared/InventoryInfo";
+import { modes } from "shared/GameInfo";
 
 interface playerResult {
 	Player: Player;
@@ -29,8 +31,9 @@ const MatchService = Knit.CreateService({
 	ModeLibraries: {
 		FFA: FFA,
 	},
-	isRunning: false,
-	IntermissionTime: 60,
+	IntermissionTime: 5,
+	VotingTime: 30,
+	BettingTime: 30,
 
 	Client: {
 		// Handles client-server communication; OnServerEvent
@@ -74,7 +77,6 @@ const MatchService = Knit.CreateService({
 	},
 
 	ResetMatch() {
-		this.isRunning = false;
 		this.UpdateMatchSettings("None", "None");
 		// Place all the players from the match in the lobby
 
@@ -232,12 +234,17 @@ const MatchService = Knit.CreateService({
 
 	ChooseMap() {
 		const maps = mapsFolder?.GetChildren();
-		let toReturn = undefined;
+		let toReturn = "Beach";
 		if (maps) {
 			const randomMap = maps[math.floor(math.random() * maps.size())];
 			toReturn = randomMap.Name;
 		}
 		return toReturn;
+	},
+
+	ChooseMode() {
+		const randomMode = modes[math.floor(math.random() * modes.size())];
+		return randomMode;
 	},
 
 	// Initialize on service startup
@@ -295,17 +302,39 @@ const MatchService = Knit.CreateService({
 			while (Players.GetPlayers().size() === 0) {
 				wait(0.05);
 			}
-
 			this.Client.InitialMatchPanel.FireAll(this.IntermissionTime, this.CurrentMode, this.CurrentMap, 0);
 			while (Players.GetPlayers().size() > 0) {
 				//	if (Players.GetPlayers().size() >= 2) {
 				// Do the voting here
-				wait(this.IntermissionTime + 4);
-				this.CurrentMap = (this.ChooseMap() !== undefined && this.ChooseMap()) || "Beach";
-				this.CurrentMode = "FFA";
+				wait(this.IntermissionTime);
+				VotingService.SelectChosen();
+				// Display the voting page for all clients
+				this.Client.InitialMatchPanel.FireAll(this.VotingTime, this.CurrentMode, this.CurrentMap, 0);
+				wait(this.VotingTime);
+				// Close the voting page for all clients
+				VotingService.Client.CloseVoting.FireAll();
+				wait(1);
+
+				// Total up the votes to get the map and mode
+				const matchSelection = VotingService.TotalVotes();
+				this.CurrentMap = matchSelection[0] || this.ChooseMap();
+				this.CurrentMode = matchSelection[1] || this.ChooseMode();
+				SnackbarService.PushAll(`Mode: ${this.CurrentMode} | Map: ${this.CurrentMap}`);
+
+				const lobbyTeam = Teams.FindFirstChild("Lobby") as Team;
+				if (lobbyTeam) {
+					// Change this to a get participants function soon
+					// Display the betting UI
+					BettingService.FetchBettingInfo(lobbyTeam.GetPlayers(), this.CurrentMode);
+					// Update the panel for the betting time
+					this.Client.InitialMatchPanel.FireAll(this.BettingTime, this.CurrentMode, this.CurrentMap, 0);
+					wait(this.BettingTime);
+					BettingService.Client.CloseBetting.FireAll();
+					wait(1);
+				}
+				// Begin setting up the match
 				this.LoadMatch();
 				//	} else {
-				wait(0.05);
 				//	}
 			}
 		})();

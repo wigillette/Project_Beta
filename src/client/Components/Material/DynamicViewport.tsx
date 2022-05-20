@@ -12,6 +12,7 @@ interface UIProps {
 	ZIndex: number;
 	rotate: boolean;
 	Animation: string | undefined;
+	viewDistance?: number;
 }
 
 class DynamicViewport extends Roact.Component<UIProps> {
@@ -199,7 +200,7 @@ class DynamicViewport extends Roact.Component<UIProps> {
 		newModel.Parent = viewportFrame;
 		// Initialize the rotation
 		if (this.props.rotate) {
-			ViewportRotation(viewportFrame, newModel, newCamera);
+			ViewportRotation(viewportFrame, newModel, newCamera, this.props.viewDistance);
 		} else {
 			// Handle NPCs
 			const worldModel = new Instance("WorldModel");
