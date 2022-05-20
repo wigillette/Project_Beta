@@ -4,7 +4,7 @@ import { googleMaterial, whiteGradientProperties, gradientProperties } from "cli
 import { SSProperties, circleSSProperties, runSpriteSheet, CircleBG } from "client/UIProperties/Spritesheets";
 
 interface UIProps {
-	Text: string;
+	cap: number;
 	Ratio: number;
 	Size: UDim2;
 	AnchorPoint: Vector2;
@@ -26,21 +26,21 @@ class Card extends Roact.Component<UIProps> {
 				Size={this.props.Size}
 				AnchorPoint={this.props.AnchorPoint}
 				Position={this.props.Position}
-				ZIndex={16}
 				{...RectContainer}
+				ZIndex={16}
 			>
 				<uiaspectratioconstraint {...SquareAspectRatio}></uiaspectratioconstraint>
 				<imagelabel
-					ZIndex={18}
 					ImageColor3={googleMaterial.buttonColor}
 					{...SSProperties}
+					ZIndex={18}
 					Size={new UDim2(0.95, 0, 0.95, 0)}
 					Ref={this.imageRef}
 				>
 					<uigradient {...whiteGradientProperties}></uigradient>
 					<textlabel
-						ZIndex={19}
 						{...RectText}
+						ZIndex={19}
 						TextColor3={googleMaterial.cardFont}
 						Position={new UDim2(0.5, 0, 0.5, 0)}
 						AnchorPoint={new Vector2(0.5, 0.5)}
@@ -72,23 +72,24 @@ class Card extends Roact.Component<UIProps> {
 				circleSSProperties.spriteAmt,
 				circleSSProperties.spriteSize,
 				circleSSProperties.grid,
+				this.props.cap,
 			);
+		}
+	}
 
-			/*
-			let ratio = 0.2;
-			while (ratio <= 1) {
-				runSpriteSheet(
-					image,
-					progressLabel,
-					ratio,
-					circleSSProperties.spriteAmt,
-					circleSSProperties.spriteSize,
-					circleSSProperties.grid,
-				);
-				ratio += 0.2;
-				wait(3);
-			}
-            */
+	protected didUpdate(previousProps: UIProps, previousState: {}): void {
+		const image = this.imageRef.getValue();
+		const progressLabel = this.progressLabelRef.getValue();
+		if (image && progressLabel) {
+			runSpriteSheet(
+				image,
+				progressLabel,
+				this.props.Ratio,
+				circleSSProperties.spriteAmt,
+				circleSSProperties.spriteSize,
+				circleSSProperties.grid,
+				this.props.cap,
+			);
 		}
 	}
 }

@@ -16,7 +16,7 @@ import { googleMaterial, gradientProperties, whiteGradientProperties } from "cli
 import ObjectUtils from "@rbxts/object-utils";
 import CircularProgress from "../Material/CircularProgress";
 import RectButton from "../Material/RectButton";
-import { registerGridDynamicScrolling } from "../../UIProperties/DynamicScrolling";
+import { registerGridDynamicScrolling, registerListDynamicScrolling } from "../../UIProperties/DynamicScrolling";
 import ResultsItem from "./ResultsItem";
 import { playerResult, ResultsState } from "../../Rodux/Reducers/ResultsReducer";
 import { goldState } from "client/Rodux/Reducers/GoldReducer";
@@ -24,7 +24,6 @@ import { PROFILE_FORMAT } from "shared/LevelInfo";
 
 interface UIProps {
 	toggle: boolean;
-	expEarned: number;
 	currentExp: number;
 	expCap: number;
 	playerResults: playerResult[];
@@ -41,7 +40,7 @@ class Results extends Roact.Component<UIProps> {
 	constructor(props: UIProps) {
 		super(props);
 		this.containerRef = Roact.createRef<Frame>();
-		this.gridRef = Roact.createRef<UIGridLayout>();
+		this.gridRef = Roact.createRef<UIListLayout>();
 		this.scrollRef = Roact.createRef<ScrollingFrame>();
 		this.connections = [];
 	}
@@ -101,14 +100,13 @@ class Results extends Roact.Component<UIProps> {
 									BorderSizePixel={0}
 									ZIndex={16}
 								>
-									<uigridlayout
+									<uilistlayout
 										Ref={this.gridRef}
-										{...CardGridLayout}
-										CellSize={new UDim2(0.2, 0, 0.2, 0)}
-										FillDirectionMaxCells={4}
-									>
-										<uiaspectratioconstraint {...SquareAspectRatio}></uiaspectratioconstraint>
-									</uigridlayout>
+										VerticalAlignment={Enum.VerticalAlignment.Top}
+										HorizontalAlignment={Enum.HorizontalAlignment.Center}
+										FillDirection={Enum.FillDirection.Vertical}
+										Padding={new UDim(0.05, 0)}
+									></uilistlayout>
 									{
 										// Display all the results using the Results item prop
 										ObjectUtils.values(this.props.playerResults).map((Item) => {
@@ -131,11 +129,11 @@ class Results extends Roact.Component<UIProps> {
 							<imagelabel ImageColor3={googleMaterial.innerBG2} {...RectBG} ZIndex={14}>
 								<uiaspectratioconstraint {...SquareAspectRatio}></uiaspectratioconstraint>
 								<CircularProgress
-									Text={`${this.props.currentExp + this.props.expEarned}/${this.props.expCap}`}
+									cap={this.props.expCap}
 									AnchorPoint={new Vector2(0.5, 0.5)}
 									Position={new UDim2(0.5, 0, 0.5, 0)}
 									Size={new UDim2(0.95, 0, 0.95, 0)}
-									Ratio={(this.props.currentExp + this.props.expEarned) / this.props.expCap}
+									Ratio={this.props.currentExp / this.props.expCap}
 								></CircularProgress>
 							</imagelabel>
 						</frame>
@@ -172,7 +170,7 @@ class Results extends Roact.Component<UIProps> {
 		const scroll = this.scrollRef.getValue();
 		// Make the scroll frame change size depending on number of items
 		if (grid && scroll) {
-			const connection = registerGridDynamicScrolling(scroll, grid);
+			const connection = registerListDynamicScrolling(scroll, grid);
 			this.connections.push(connection);
 		}
 	}
@@ -190,31 +188,24 @@ interface storeState {
 	setResultsToggle: ResultsState;
 	updateResultsInfo: ResultsState;
 	toggleResults: ResultsState;
-	updateGold: goldState;
 	fetchExp: PROFILE_FORMAT;
 }
 
-export = RoactRodux.connect(
-	(state: storeState) => {
-		const ResultsFrame = ResultsRef.getValue() as Frame;
-		if (ResultsFrame && oldFade !== state.toggleResults.toggle) {
-			oldFade = state.toggleResults.toggle;
-			// Update the frame's position when the toggle changes
-			state.toggleResults.toggle
-				? movingFadeAbsolute(ResultsFrame, true, new UDim2(0.5, 0, 0.4, 0), true)
-				: movingFadeAbsolute(ResultsFrame, false, new UDim2(0.5, 0, 0.1, 0), true);
-		}
+export = RoactRodux.connect((state: storeState) => {
+	const ResultsFrame = ResultsRef.getValue() as Frame;
+	if (ResultsFrame && oldFade !== state.toggleResults.toggle) {
+		oldFade = state.toggleResults.toggle;
+		// Update the frame's position when the toggle changes
+		state.toggleResults.toggle
+			? movingFadeAbsolute(ResultsFrame, true, new UDim2(0.5, 0, 0.4, 0), true)
+			: movingFadeAbsolute(ResultsFrame, false, new UDim2(0.5, 0, 0.1, 0), true);
+	}
 
-		return {
-			toggle: state.toggleResults.toggle,
-			playerResults: state.updateResultsInfo.playerResults,
-			expEarned: state.updateResultsInfo.expEarned,
-			goldEarned: state.updateResultsInfo.goldEarned,
-			expCap: state.fetchExp.ExpCap,
-			currentExp: state.fetchExp.Experience,
-		};
-	},
-	(dispatch) => {
-		return {};
-	},
-)(Results);
+	return {
+		toggle: state.toggleResults.toggle,
+		playerResults: state.updateResultsInfo.playerResults,
+		goldEarned: state.updateResultsInfo.goldEarned,
+		expCap: state.fetchExp.ExpCap,
+		currentExp: state.fetchExp.Experience,
+	};
+})(Results);

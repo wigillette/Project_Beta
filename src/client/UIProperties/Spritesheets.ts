@@ -30,6 +30,7 @@ export const runSpriteSheet = (
 	spriteAmt: number,
 	spriteSize: number[],
 	grid: number[],
+	cap: number,
 ) => {
 	// Sprite Sheet Size: dimensions of the entire sheet
 	// Individual Sprite Size: dimensions of each sprite
@@ -45,7 +46,7 @@ export const runSpriteSheet = (
 				((i - 1) % grid[1]) * spriteSize[1],
 				math.floor((i - 1) / grid[0]) * spriteSize[0],
 			);
-			progressLabel.Text = `${i}/${spriteAmt}`;
+			progressLabel.Text = `${math.floor(ratio * cap)}/${cap}`;
 			wait(0.0075);
 		}
 	})();

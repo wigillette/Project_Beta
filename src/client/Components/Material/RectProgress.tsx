@@ -78,9 +78,8 @@ class RectProgress extends Roact.Component<UIProps> {
 						Size={new UDim2(0.45, 0, 0.9, 0)}
 						AnchorPoint={new Vector2(1, 0.5)}
 						Position={new UDim2(0.95, 0, 0.5, 0)}
-						Text={`${tostring(math.round((this.props.percentage / this.props.cap) * 100))}/${tostring(
-							this.props.cap,
-						)}`}
+						Text={`${tostring(math.round(this.props.percentage))}/${tostring(this.props.cap)}`}
+						Ref={this.textRef}
 						TextStrokeTransparency={0.9}
 						TextXAlignment={Enum.TextXAlignment.Right}
 						TextColor3={Color3.fromRGB(255, 255, 255)}
@@ -121,6 +120,22 @@ class RectProgress extends Roact.Component<UIProps> {
 				</imagelabel>
 			</frame>
 		);
+	}
+
+	protected didUpdate(previousProps: UIProps, previousState: {}): void {
+		const shadow = this.shadowRef.getValue();
+		if (shadow) {
+			pcall(() => {
+				shadow.TweenSize(
+					new UDim2(this.props.percentage / this.props.cap, 0, 1, 0),
+					Enum.EasingDirection.Out,
+					Enum.EasingStyle.Quad,
+					0.2,
+					true,
+					undefined,
+				);
+			});
+		}
 	}
 }
 

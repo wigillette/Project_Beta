@@ -80,7 +80,7 @@ class MatchPanel extends Roact.Component<UIProps, UIState> {
 		const hours = (minutes - (minutes % 60)) / 60;
 		minutes -= hours * 60;
 
-		const HMSString = string.format("%02i:%02i", hours, minutes, seconds);
+		const HMSString = string.format("%02i:%02i", minutes, seconds);
 
 		return HMSString;
 	}
@@ -102,6 +102,7 @@ class MatchPanel extends Roact.Component<UIProps, UIState> {
 
 interface storeState {
 	updateMatchInfo: matchState;
+	updateAliveCounter: matchState;
 }
 
 export = RoactRodux.connect(function (state: storeState) {
@@ -109,6 +110,6 @@ export = RoactRodux.connect(function (state: storeState) {
 		initialTime: state.updateMatchInfo.initialTime,
 		modeName: state.updateMatchInfo.modeName,
 		mapName: state.updateMatchInfo.mapName,
-		aliveCounter: state.updateMatchInfo.aliveCounter,
+		aliveCounter: state.updateAliveCounter.aliveCounter,
 	};
 })(MatchPanel);

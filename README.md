@@ -54,9 +54,17 @@
 - [x] SQL Database vs. Datastore2
 - [x] User Data Module
 
+> Game Modes
+- [x] FFA
+- [ ] TDM
+- [ ] SFT
+- [ ] Ghosts
+- [ ] Teamswap
+- [ ] Streak
+- [ ] PTL
+
 > Services
-- [ ] Map Service
-- [ ] Mode Service
+- [ ] Voting Service
 - [x] Gold Service
 - [ ] Trading Service
 - [ ] Crafting Service
@@ -71,7 +79,7 @@
 - [x] Twitter Service
 - [x] Daily Reward Service
 - [x] Menu Service
-- [ ] Match Service
+- [x] Match Service
 
 > Shared
 - [x] Sword Data
@@ -111,4 +119,4 @@
 - [x] Daily Reward UI
 - [x] Menu Buttons UI
 - [x] Match Panel UI
-- [x] Match Results UI
+- [ ] Match Results UI

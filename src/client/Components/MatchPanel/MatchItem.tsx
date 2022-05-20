@@ -8,8 +8,10 @@ interface UIProps {
 }
 
 class MatchItem extends Roact.Component<UIProps> {
+	textLabelRef;
 	constructor(props: UIProps) {
 		super(props);
+		this.textLabelRef = Roact.createRef<TextLabel>();
 	}
 
 	render() {
@@ -21,6 +23,7 @@ class MatchItem extends Roact.Component<UIProps> {
 					AnchorPoint={new Vector2(1, 0)}
 					TextColor3={googleMaterial.cardFont}
 					Size={new UDim2(0.52, 0, 1, 0)}
+					Ref={this.textLabelRef}
 					Text={`${tostring(this.props.value)}`}
 					Font={Enum.Font.GothamBold}
 					TextXAlignment={Enum.TextXAlignment.Center}
@@ -41,6 +44,16 @@ class MatchItem extends Roact.Component<UIProps> {
 				<uigradient {...whiteGradientProperties}></uigradient>
 			</frame>
 		);
+	}
+
+	protected didUpdate(previousProps: UIProps, previousState: {}): void {
+		/*
+		const label = this.textLabelRef.getValue();
+
+		if (label) {
+			label.Text = tostring(this.props.value);
+		}
+		*/
 	}
 }
 

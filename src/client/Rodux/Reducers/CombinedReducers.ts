@@ -30,6 +30,7 @@ const reducer = Rodux.combineReducers({
 	toggleDailyReward: dailyRewardReducer,
 	updateStreak: dailyRewardReducer,
 	updateMatchInfo: matchReducer,
+	updateAliveCounter: matchReducer,
 	updateBettingInfo: bettingReducer,
 	updateBetAmount: bettingReducer,
 	setBettingToggle: bettingReducer,

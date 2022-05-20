@@ -6,25 +6,22 @@ export interface playerResult {
 }
 export interface ResultsState {
 	toggle: boolean;
-	expEarned: number;
 	playerResults: playerResult[];
 	goldEarned: number;
 }
 
 interface Action {
 	type: string;
-	payload?: { toggle: boolean; expEarned: number; playerResults: playerResult[]; goldEarned: number };
+	payload?: { toggle: boolean; playerResults: playerResult[]; goldEarned: number };
 }
 
 export const ResultsReducer = Rodux.createReducer(
-	{ toggle: false, expEarned: 0, playerResults: [] as playerResult[], goldEarned: 0 },
+	{ toggle: false, playerResults: [] as playerResult[], goldEarned: 0 },
 	{
 		updateResultsInfo: (state: ResultsState, action: Action) => {
-			const newState: ResultsState = state;
+			let newState: ResultsState = state;
 			if (action.payload) {
-				newState.playerResults = action.payload.playerResults;
-				newState.goldEarned = action.payload.goldEarned;
-				newState.expEarned = action.payload.expEarned;
+				newState = action.payload;
 			}
 			return newState;
 		},
@@ -40,7 +37,6 @@ export const ResultsReducer = Rodux.createReducer(
 		toggleResults: (state: ResultsState) => {
 			const newState: ResultsState = {
 				toggle: !state.toggle,
-				expEarned: state.expEarned,
 				playerResults: state.playerResults,
 				goldEarned: state.goldEarned,
 			};

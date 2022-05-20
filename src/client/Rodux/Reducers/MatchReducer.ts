@@ -26,4 +26,13 @@ export const matchReducer = Rodux.createReducer(INITIAL_STATE, {
 
 		return newState;
 	},
+	updateAliveCounter: (state: matchState, action: Action) => {
+		const newState = state;
+
+		if (action.payload) {
+			newState.aliveCounter = action.payload.aliveCounter;
+		}
+
+		return newState;
+	},
 });
