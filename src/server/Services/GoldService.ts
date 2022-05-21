@@ -1,12 +1,32 @@
 import { KnitServer as Knit, Signal, RemoteSignal } from "@rbxts/knit";
 import { MarketplaceService, Players } from "@rbxts/services";
 import Database from "@rbxts/datastore2";
+import { PRODUCT_FUNCTIONS } from "server/Utils/DeveloperProducts";
 
 declare global {
 	interface KnitServices {
 		GoldService: typeof GoldService;
 	}
 }
+
+const ProcessReceipt = (receiptInfo: ReceiptInfo) => {
+	const player = Players.GetPlayerByUserId(receiptInfo.PlayerId);
+
+	if (!player) {
+		return Enum.ProductPurchaseDecision.NotProcessedYet;
+	}
+
+	if (receiptInfo.ProductId in PRODUCT_FUNCTIONS) {
+		const handler = PRODUCT_FUNCTIONS[receiptInfo.ProductId as keyof typeof PRODUCT_FUNCTIONS];
+		const response = pcall(handler, receiptInfo, player);
+		if (!response[0] || response[1] === 0) {
+			return Enum.ProductPurchaseDecision.NotProcessedYet;
+		} else {
+			GoldService.AddGold(player, response[1]);
+		}
+	}
+	return Enum.ProductPurchaseDecision.PurchaseGranted;
+};
 
 export const GoldService = Knit.CreateService({
 	Name: "GoldService",
@@ -57,6 +77,7 @@ export const GoldService = Knit.CreateService({
 
 	KnitInit() {
 		print("Gold Service Initialized | Server");
+		MarketplaceService.ProcessReceipt = ProcessReceipt;
 		Players.PlayerRemoving.Connect((player) => this.PlayerGold.delete(player));
 	},
 });

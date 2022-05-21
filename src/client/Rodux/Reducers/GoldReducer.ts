@@ -11,6 +11,7 @@ export interface productFormat {
 	PriceInRobux: number;
 	Description: string;
 	IconImageAssetId: number;
+	ProductId: number;
 }
 
 interface Action {

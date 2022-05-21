@@ -30,6 +30,9 @@ export const bettingReducer = Rodux.createReducer(
 
 			if (action.payload) {
 				newState.toggle = action.payload.toggle;
+				if (!action.payload.toggle) {
+					newState.choice = "";
+				}
 			}
 
 			return newState;

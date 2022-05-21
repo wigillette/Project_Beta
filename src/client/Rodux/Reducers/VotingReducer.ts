@@ -30,6 +30,10 @@ export const votingReducer = Rodux.createReducer(
 
 			if (action.payload) {
 				newState.toggle = action.payload.toggle;
+				if (!action.payload.toggle) {
+					newState.chosenMap = "";
+					newState.chosenMode = "";
+				}
 			}
 
 			return newState;

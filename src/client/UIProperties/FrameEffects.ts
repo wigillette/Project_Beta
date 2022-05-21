@@ -48,7 +48,7 @@ export const tweenPosAbsolute = (frame: Frame, position: UDim2) => {
 const tweenTransparencyRecurse = (children: Instance[], recurse: boolean, transparency: number) => {
 	children.forEach((object: Instance) => {
 		if (object.Name !== "Shadow" || transparency !== 0) {
-			if (object.IsA("ImageLabel") || object.IsA("ImageButton")) {
+			if ((object.IsA("ImageLabel") || object.IsA("ImageButton")) && object.Name !== "ToggleShadow") {
 				if (object.Name !== "Lock") {
 					TweenService.Create(
 						object,

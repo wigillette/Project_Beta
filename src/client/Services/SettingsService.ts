@@ -10,12 +10,12 @@ const SettingsClient = {
 	SettingsChanged: (Settings: SETTINGS_FORMAT) => {
 		Store.dispatch({
 			type: "updateSettings",
-			payload: Settings,
+			payload: { settings: Settings },
 		});
 		ObjectUtils.entries(Settings).forEach((setting) => {
-			if (setting[1]) {
-				// Activate the setting function
-				SETTINGS_FUNCTIONS[setting[0] as keyof typeof SETTINGS_FUNCTIONS](Players.LocalPlayer);
+			// Activate the setting function
+			if (setting[0] in SETTINGS_FUNCTIONS) {
+				SETTINGS_FUNCTIONS[setting[0] as keyof typeof SETTINGS_FUNCTIONS](setting[1]);
 			}
 		});
 	},

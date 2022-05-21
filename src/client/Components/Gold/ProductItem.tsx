@@ -2,11 +2,13 @@ import Roact from "@rbxts/roact";
 import { RectBG, RectContainer, RectShadow, RectText, SquareAspectRatio } from "client/UIProperties/RectUI";
 import { googleMaterial, whiteGradientProperties } from "client/UIProperties/ColorSchemes";
 import RectButton from "../Material/RectButton";
+import { MarketplaceService, Players } from "@rbxts/services";
 
 interface UIProps {
 	icon: string;
 	title: string;
 	description: string;
+	productId: number;
 }
 
 class MatchItem extends Roact.Component<UIProps> {
@@ -52,6 +54,7 @@ class MatchItem extends Roact.Component<UIProps> {
 						Position={new UDim2(0.05, 0, 0.95, 0)}
 						AnchorPoint={new Vector2(0.05, 0.95)}
 						Callback={() => {
+							MarketplaceService.PromptProductPurchase(Players.LocalPlayer, this.props.productId);
 							print(`Purchasing ${this.props.title}`);
 						}}
 					/>

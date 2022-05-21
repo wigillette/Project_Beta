@@ -70,9 +70,9 @@
 - [ ] Crafting Service
 - [x] Interaction Service
 - [x] Touch Service
-- [ ] Developer Product Service
+- [x] Developer Product Service
 - [ ] Gamepass Service
-- [ ] Settings Service
+- [x] Settings Service
 - [x] Betting Service
 - [x] Profile Service
 - [x] Shop Service
@@ -124,6 +124,6 @@
 - [ ] Gamepass UI
 
 > Bug/Revamp List
-- [ ] TouchService UIs overlaying on betting/voting/results UIs
+- [x] TouchService UIs overlaying on betting/voting/results UIs
 - [ ] Rework snackbar service to use mapDispatchToProps and mount it on main
-- [ ] Use componentDidUpdate to reset state on betting and voting UIs
+- [x] Use componentDidUpdate to reset state on betting and voting UIs

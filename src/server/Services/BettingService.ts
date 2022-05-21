@@ -29,7 +29,9 @@ export const BettingService = Knit.CreateService({
 	},
 
 	FetchBettingInfo(participants: Player[], mode: string) {
-		this.Client.FetchBettingInfo.FireAll(participants, mode);
+		participants.forEach((participant: Player) => {
+			this.Client.FetchBettingInfo.Fire(participant, participants, mode);
+		});
 	},
 
 	PlaceBet(player: Player, BetAmt: number, Choice: Player | string) {

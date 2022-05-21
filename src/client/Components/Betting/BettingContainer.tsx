@@ -56,6 +56,7 @@ class Betting extends Roact.Component<UIProps> {
 				AnchorPoint={new Vector2(0.5, 0.5)}
 				Position={new UDim2(0.5, 0, 0.4, 0)}
 				Ref={bettingRef}
+				ZIndex={20}
 			>
 				<uiaspectratioconstraint {...MenuAspectRatio}></uiaspectratioconstraint>
 				<frame
@@ -234,7 +235,7 @@ export = RoactRodux.connect(
 		return {
 			closeBetting: () => {
 				dispatch({
-					type: "toggleBetting",
+					type: "setBettingToggle",
 					payload: { toggle: false },
 				});
 			},

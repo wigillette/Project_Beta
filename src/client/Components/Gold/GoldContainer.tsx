@@ -74,6 +74,7 @@ class GoldContainer extends Roact.Component<UIProps> {
 										title={product.Name}
 										icon={`rbxassetid://${product.IconImageAssetId || "5350867529"}`}
 										description={product.Description}
+										productId={product.ProductId}
 									></ProductItem>
 								);
 							})}

@@ -4,6 +4,7 @@ import Database from "@rbxts/datastore2";
 import { TwitterCodes } from "../Utils/TwitterCodes";
 import SnackbarService from "./SnackbarService";
 import { INITIAL_SETTINGS, SETTINGS_FORMAT } from "shared/SettingsInfo";
+import MatchService from "./MatchService";
 
 declare global {
 	interface KnitServices {
@@ -31,6 +32,9 @@ export const SettingsService = Knit.CreateService({
 		const userSettings = this.GetSettings(Player);
 		if (Setting in userSettings) {
 			userSettings[Setting as keyof typeof userSettings] = Value;
+			if (Setting === "Playing") {
+				MatchService.SetPlaying(Player, Value);
+			}
 
 			// Update the UI and change the map, update database
 			this.PlayerSettings.set(Player, userSettings);

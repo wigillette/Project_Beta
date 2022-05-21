@@ -36,7 +36,7 @@ class Settings extends Roact.Component<UIProps> {
 				{...RectContainer}
 				Position={new UDim2(0.5, 0, 0.5, 0)}
 				AnchorPoint={new Vector2(0.5, 0.5)}
-				Size={new UDim2(0.5, 0, 0.6, 0)}
+				Size={new UDim2(0.5, 0, 0.7, 0)}
 				Ref={settingsRef}
 			>
 				<uiaspectratioconstraint
@@ -61,8 +61,8 @@ class Settings extends Roact.Component<UIProps> {
 						<uigridlayout
 							{...CardGridLayout}
 							FillDirectionMaxCells={2}
-							CellPadding={new UDim2(0.03, 0, 0.1, 0)}
-							CellSize={new UDim2(0.45, 0, 0.3, 0)}
+							CellPadding={new UDim2(0.03, 0, 0.06, 0)}
+							CellSize={new UDim2(0.45, 0, 0.275, 0)}
 						></uigridlayout>
 						{ObjectUtils.entries(this.props.settings).map((settings) => {
 							return (

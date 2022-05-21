@@ -23,6 +23,7 @@ class ToggleButton extends Roact.Component<UIProps, UIState> {
 	buttonFrameRef;
 	frameRef;
 	shadowRef;
+	buttonFrameSize;
 
 	state = {
 		toggle: true,
@@ -34,6 +35,8 @@ class ToggleButton extends Roact.Component<UIProps, UIState> {
 		this.frameRef = Roact.createRef<Frame>();
 		this.shadowRef = Roact.createRef<ImageLabel>();
 		this.state.toggle = !this.props.initialToggle;
+		const buttonFrame = this.buttonFrameRef.getValue();
+		this.buttonFrameSize = (buttonFrame !== undefined && buttonFrame.AbsoluteSize.X / 2) || 50;
 	}
 
 	render() {
@@ -72,7 +75,10 @@ class ToggleButton extends Roact.Component<UIProps, UIState> {
 					<imagelabel ImageColor3={googleMaterial.cardBG} {...CircBG} ZIndex={1}>
 						<frame
 							Size={new UDim2(1, 0, 1, 0)}
-							Position={new UDim2(0, 0, 0, -1.5)}
+							Position={
+								(!this.state.toggle && new UDim2(1, -this.buttonFrameSize, 0, 0)) ||
+								new UDim2(0, 0, 0, 0)
+							}
 							{...CircContainer}
 							Ref={this.buttonFrameRef}
 						>
@@ -100,8 +106,7 @@ class ToggleButton extends Roact.Component<UIProps, UIState> {
 
 										if (buttonFrame && shadow) {
 											const finalPos =
-												(this.state.toggle &&
-													new UDim2(1, -buttonFrame.AbsoluteSize.X, 0, 0)) ||
+												(this.state.toggle && new UDim2(1, -this.buttonFrameSize, 0, 0)) ||
 												new UDim2(0, 0, 0, 0);
 											rippleEffect(buttonFrame, mouse);
 											tweenPosAbsolute(buttonFrame, finalPos);
@@ -121,9 +126,9 @@ class ToggleButton extends Roact.Component<UIProps, UIState> {
 							{...CircBG}
 							ZIndex={2}
 							Size={new UDim2(0.9, 0, 0.9, 0)}
-							ImageTransparency={1}
+							ImageTransparency={(this.state.toggle && 1) || 0}
 							Ref={this.shadowRef}
-							Key={"Shadow"}
+							Key={"ToggleShadow"}
 						>
 							<uigradient {...gradientProperties}></uigradient>
 						</imagelabel>

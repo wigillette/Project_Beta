@@ -1,10 +1,13 @@
 import TouchManager from "client/Controllers/TouchManager";
 import { Players, RunService } from "@rbxts/services";
 import { locations } from "../../shared/LocationLinks";
+import { KnitClient } from "@rbxts/knit";
+import { pushNotification } from "./SnackbarService";
 
 export default function init() {
 	print("Touch Service Initialized | Client");
 	// Client Objects
+	const MatchService = KnitClient.GetService("MatchService");
 	const client = Players.LocalPlayer;
 	const pg = client.WaitForChild("PlayerGui");
 	const main = pg.WaitForChild("Main");
@@ -29,7 +32,13 @@ export default function init() {
 			triggerHooks.forEach((hook) => {
 				const withinRange = hook.isWithinRange();
 				if (withinRange) {
-					hook.displayUI();
+					const canAccess = MatchService.CanAccess();
+					if (!canAccess[0] || canAccess[1]) {
+						hook.displayUI();
+					} else {
+						hook.hideUI();
+						//pushNotification(`Cannot access during the round`);
+					}
 				} else {
 					hook.hideUI();
 				}
