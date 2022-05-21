@@ -56,11 +56,11 @@
 
 > Game Modes
 - [x] FFA
-- [ ] TDM
+- [x] TDM
 - [ ] SFT
-- [ ] Ghosts
-- [ ] Teamswap
-- [ ] Streak
+- [x] Ghosts
+- [x] Teamswap
+- [x] Streak
 - [ ] PTL
 
 > Services
@@ -127,3 +127,8 @@
 - [x] TouchService UIs overlaying on betting/voting/results UIs
 - [ ] Rework snackbar service to use mapDispatchToProps and mount it on main
 - [x] Use componentDidUpdate to reset state on betting and voting UIs
+- [x] Selected Maps and Modes not changing
+- [x] Kills not changing in leaderboard
+- [ ] Betting needs to work with teams
+- [ ] Results UI needs to display winner
+- [x] Negative experience

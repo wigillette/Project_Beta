@@ -14,16 +14,8 @@ const shuffleTable = (t: Player[]) => {
 	return t;
 };
 
-export const randomizeTeams = () => {
+export const randomizeTeams = (participants: Player[]) => {
 	if (Teams.GetChildren().size() > 1) {
-		let list: Player[] = [];
-		const P = Players.GetPlayers();
-		P.forEach((player: Player) => {
-			if (RESERVED_TEAMS.includes(player.TeamColor)) {
-				list.push(player);
-			}
-		});
-
 		const teamList: Team[] = [];
 		const teams = Teams.GetTeams();
 		teams.forEach((team) => {
@@ -32,14 +24,16 @@ export const randomizeTeams = () => {
 			}
 		});
 
-		const numPerTeam = list.size() / teamList.size();
+		const numPerTeam = participants.size() / teamList.size();
 
 		math.randomseed(os.time());
-		list = shuffleTable(list);
+		const shuffledParticipants = shuffleTable(participants);
 		let num = 0;
 		teamList.forEach((team) => {
 			for (let i = 0; i < numPerTeam; i++) {
-				list[num].TeamColor = team.TeamColor;
+				if (shuffledParticipants[num]) {
+					shuffledParticipants[num].TeamColor = team.TeamColor;
+				}
 				num += 1;
 			}
 		});

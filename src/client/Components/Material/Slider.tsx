@@ -186,6 +186,23 @@ class Slider extends Roact.Component<UIProps, UIState> {
 			</frame>
 		);
 	}
+	protected didUpdate(previousProps: UIProps, previousState: UIState): void {
+		if (previousProps.UpperBound !== this.props.UpperBound) {
+			this.setState({ value: 0, percentage: 0, held: false });
+			const progress = this.shadowRef.getValue();
+			const button = this.buttonRef.getValue();
+			const textLabel = this.textRef.getValue();
+			if (progress) {
+				progress.Size = new UDim2(0, 0, 0.8, 0);
+			}
+			if (button) {
+				button.Position = new UDim2(0, 0, 0.5, -1);
+			}
+			if (textLabel) {
+				textLabel.Text = "0";
+			}
+		}
+	}
 }
 
 export default Slider;

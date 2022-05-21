@@ -23,7 +23,7 @@ export const ProfileService = Knit.CreateService({
 	},
 
 	IncrementExp(Player: Player, Amount: number) {
-		if (Amount !== 0) {
+		if (Amount > 0) {
 			print(`Adding ${Amount} experience to ${Player.Name} | Server`);
 			const profile = this.GetProfile(Player);
 			const currentCap = profile.ExpCap;

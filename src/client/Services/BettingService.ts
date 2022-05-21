@@ -7,7 +7,10 @@ const BettingClient = {
 		return BettingService.PlaceBet(gold, choice);
 	},
 	FetchBettingInfo: (choices: Player[] | string[], mode: string) => {
-		Store.dispatch({ type: "updateBettingInfo", payload: { choices: choices, mode: mode, toggle: true } });
+		Store.dispatch({
+			type: "updateBettingInfo",
+			payload: { choices: choices, mode: mode, toggle: true },
+		});
 	},
 	CloseBetting: () => {
 		Store.dispatch({ type: "setBettingToggle", payload: { toggle: false } });

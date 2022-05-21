@@ -49,6 +49,8 @@ export const VotingService = Knit.CreateService({
 	},
 
 	SelectChosen(participants: Player[]) {
+		this.ChosenMaps.clear();
+		this.ChosenModes.clear();
 		while (this.ChosenMaps.size() !== 3) {
 			const randomChoice = maps[math.floor(math.random() * maps.size())];
 			if (randomChoice) {
@@ -65,6 +67,7 @@ export const VotingService = Knit.CreateService({
 		}
 
 		participants.forEach((participant: Player) => {
+			print(participant.Name, this.ChosenMaps, this.ChosenModes);
 			this.Client.PushChosen.Fire(participant, this.ChosenMaps, this.ChosenModes);
 		});
 	},

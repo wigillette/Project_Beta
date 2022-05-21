@@ -45,16 +45,6 @@ class MatchItem extends Roact.Component<UIProps> {
 			</frame>
 		);
 	}
-
-	protected didUpdate(previousProps: UIProps, previousState: {}): void {
-		/*
-		const label = this.textLabelRef.getValue();
-
-		if (label) {
-			label.Text = tostring(this.props.value);
-		}
-		*/
-	}
 }
 
 export default MatchItem;

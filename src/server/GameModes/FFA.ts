@@ -26,21 +26,18 @@ const FFAProperties = {
 			}
 		}
 	},
-	teamPlayers: () => {
+	teamPlayers: (participants: Player[]) => {
 		const matchService = KnitServer.GetService("MatchService");
-		const participants = matchService.GetParticipants();
 		participants.forEach((player: Player) => {
-			if (player.TeamColor === new BrickColor("White")) {
-				matchService.GiveWeapon(player);
-				pcall(() => {
-					player.TeamColor = FFAProperties.TEAMS[0];
-					player.LoadCharacter();
-				});
-				spawn(() => {
-					wait(0.5);
-					FFAProperties.addSpeed(player);
-				});
-			}
+			matchService.GiveWeapon(player, false);
+			pcall(() => {
+				player.TeamColor = FFAProperties.TEAMS[0];
+				player.LoadCharacter();
+			});
+			spawn(() => {
+				wait(0.5);
+				FFAProperties.addSpeed(player);
+			});
 		});
 		spawn(() => {
 			wait(5);
@@ -49,11 +46,11 @@ const FFAProperties = {
 			});
 		});
 	},
-	init: (teams: Team[], playingList: Player[]) => {
+	init: (teams: Team[], participants: Player[]) => {
 		print("Loading FFA..");
 
 		const matchService = KnitServer.GetService("MatchService");
-
+		FFAProperties.teamPlayers(participants);
 		matchService.StartTimer(
 			FFAProperties.TIME_LIMIT,
 			teams,
@@ -64,7 +61,7 @@ const FFAProperties = {
 				}
 				return toReturn;
 			},
-			playingList,
+			participants,
 		);
 	},
 };
