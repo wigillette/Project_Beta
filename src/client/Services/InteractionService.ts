@@ -29,7 +29,7 @@ export default function init() {
 					head.FindFirstChildOfClass("ProximityPrompt") || new Instance("ProximityPrompt", head);
 				proximityPrompt.ObjectText = interaction.Name;
 				proximityPrompt.KeyboardKeyCode = Enum.KeyCode.E;
-				proximityPrompt.HoldDuration = 2;
+				proximityPrompt.HoldDuration = 0.5;
 				proximityPrompt.UIOffset = new Vector2(0, 80);
 
 				// Play the animation and display the interaction UI when finished holding

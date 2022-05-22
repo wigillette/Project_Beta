@@ -7,6 +7,7 @@ interface UIProps {
 	cap: number;
 	Ratio: number;
 	Size: UDim2;
+	Title: string;
 	AnchorPoint: Vector2;
 	Position: UDim2;
 }
@@ -42,9 +43,24 @@ class Card extends Roact.Component<UIProps> {
 						{...RectText}
 						ZIndex={19}
 						TextColor3={googleMaterial.cardFont}
-						Position={new UDim2(0.5, 0, 0.5, 0)}
-						AnchorPoint={new Vector2(0.5, 0.5)}
-						Size={new UDim2(0.5, 0, 0.5, 0)}
+						Position={new UDim2(0.5, 0, 0.25, 0)}
+						AnchorPoint={new Vector2(0.5, 0.25)}
+						Size={new UDim2(0.5, 0, 0.3, 0)}
+						Text={this.props.Title}
+					>
+						<uiaspectratioconstraint
+							AspectRatio={1}
+							DominantAxis={Enum.DominantAxis.Width}
+							AspectType={Enum.AspectType.ScaleWithParentSize}
+						></uiaspectratioconstraint>
+					</textlabel>
+					<textlabel
+						{...RectText}
+						ZIndex={19}
+						TextColor3={googleMaterial.cardFont}
+						Position={new UDim2(0.5, 0, 0.75, 0)}
+						AnchorPoint={new Vector2(0.5, 0.75)}
+						Size={new UDim2(0.5, 0, 0.3, 0)}
 						Ref={this.progressLabelRef}
 					>
 						<uiaspectratioconstraint

@@ -42,7 +42,7 @@ const StreakProperties = {
 													participants.forEach((participant) => {
 														SnackbarService.PushPlayer(
 															participant,
-															`${player.Name} is in the lead with a streak of ${greatestStreak}!`,
+															`${killer.Name} is in the lead with a streak of ${greatestStreak}!`,
 														);
 													});
 												}
@@ -63,6 +63,10 @@ const StreakProperties = {
 	init: (teams: Team[], participants: Player[]) => {
 		print("Loading Streak..");
 		streakTable = new Map<Player, number>();
+
+		participants.forEach((player) => {
+			streakTable.set(player, 0);
+		});
 
 		const matchService = KnitServer.GetService("MatchService");
 		StreakProperties.teamPlayers(participants);

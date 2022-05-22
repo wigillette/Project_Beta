@@ -26,6 +26,8 @@ interface UIProps {
 	expCap: number;
 	playerResults: playerResult[];
 	goldEarned: number;
+	currentLevel: number;
+	winner: string;
 	closeResults: () => void;
 }
 
@@ -139,6 +141,7 @@ class Results extends Roact.Component<UIProps> {
 									AnchorPoint={new Vector2(0.5, 0.5)}
 									Position={new UDim2(0.5, 0, 0.5, 0)}
 									Size={new UDim2(0.95, 0, 0.95, 0)}
+									Title={tostring(this.props.currentLevel)}
 									Ratio={this.props.currentExp / this.props.expCap}
 								></CircularProgress>
 							</imagelabel>
@@ -154,11 +157,20 @@ class Results extends Roact.Component<UIProps> {
 								<textlabel
 									ZIndex={15}
 									{...RectText}
-									Size={new UDim2(0.95, 0, 0.95, 0)}
-									Position={new UDim2(0.5, 0, 0.5, 0)}
-									AnchorPoint={new Vector2(0.5, 0.5)}
+									Size={new UDim2(0.95, 0, 0.45, 0)}
+									Position={new UDim2(0.5, 0, 0.05, 0)}
+									AnchorPoint={new Vector2(0.5, 0.05)}
 									Font={Enum.Font.GothamBold}
 									Text={`Gold Earned: ${this.props.goldEarned}`}
+								></textlabel>
+								<textlabel
+									ZIndex={15}
+									{...RectText}
+									Size={new UDim2(0.95, 0, 0.45, 0)}
+									Position={new UDim2(0.5, 0, 0.95, 0)}
+									AnchorPoint={new Vector2(0.5, 0.95)}
+									Font={Enum.Font.GothamBold}
+									Text={`Winner: ${tostring(this.props.winner)}`}
 								></textlabel>
 							</imagelabel>
 						</frame>
@@ -210,10 +222,12 @@ export = RoactRodux.connect(
 
 		return {
 			toggle: state.toggleResults.toggle,
+			winner: state.updateResultsInfo.winner,
 			playerResults: state.updateResultsInfo.playerResults,
 			goldEarned: state.updateResultsInfo.goldEarned,
 			expCap: state.fetchExp.ExpCap,
 			currentExp: state.fetchExp.Experience,
+			currentLevel: state.fetchExp.Level,
 		};
 	},
 	(dispatch) => {

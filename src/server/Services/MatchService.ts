@@ -7,6 +7,9 @@ import TDM from "../GameModes/TDM";
 import Teamswap from "server/GameModes/Teamswap";
 import Streak from "server/GameModes/Streak";
 import Ghosts from "server/GameModes/Ghosts";
+import Juggernaut from "server/GameModes/Juggernaut";
+import PTL from "server/GameModes/PTL";
+import SFT from "server/GameModes/SFT";
 import { GoldService } from "./GoldService";
 import { ProfileService } from "./ProfileService";
 import { BettingService } from "./BettingService";
@@ -14,6 +17,7 @@ import { VotingService } from "./VotingService";
 import { EquippedFormat } from "shared/InventoryInfo";
 import { modes } from "shared/GameInfo";
 import ObjectUtils from "@rbxts/object-utils";
+import { leaderFormat } from "server/GameModes/PTL";
 
 interface playerResult {
 	Player: Player;
@@ -42,6 +46,9 @@ const MatchService = Knit.CreateService({
 		Teamswap: Teamswap,
 		Streak: Streak,
 		Ghosts: Ghosts,
+		Juggernaut: Juggernaut,
+		PTL: PTL,
+		SFT: SFT,
 	},
 	IntermissionTime: 45,
 	VotingTime: 20,
@@ -52,16 +59,19 @@ const MatchService = Knit.CreateService({
 	Client: {
 		// Handles client-server communication; OnServerEvent
 		InitialMatchPanel: new RemoteSignal<(modeName: string, mapName: string, aliveCounter: number) => void>(),
+		HideMatchResults: new RemoteSignal<() => void>(),
 		UpdateAliveCounter: new RemoteSignal<(aliveCounter: number) => void>(),
-		UpdateMatchResults: new RemoteSignal<(goldEarned: number, playerResults: playerResult[]) => void>(),
+		UpdateMatchResults: new RemoteSignal<
+			(goldEarned: number, playerResults: playerResult[], winner: string) => void
+		>(),
 		CanAccess(Player: Player) {
 			return this.Server.CanAccess(Player);
 		},
 	},
 
 	// Push a notification to a single client
-	PushResult(client: Player, goldEarned: number, playerResults: playerResult[]) {
-		this.Client.UpdateMatchResults.Fire(client, goldEarned, playerResults);
+	PushResult(client: Player, goldEarned: number, playerResults: playerResult[], winner: string) {
+		this.Client.UpdateMatchResults.Fire(client, goldEarned, playerResults, winner);
 	},
 
 	CanAccess(client: Player) {
@@ -144,14 +154,21 @@ const MatchService = Knit.CreateService({
 				if (leaderstats) {
 					const kills = leaderstats.FindFirstChild("Kills") as IntValue;
 					const deaths = leaderstats.FindFirstChild("Deaths") as IntValue;
-					if (kills && deaths && player.Team) {
+					if (kills && deaths) {
 						// Need to keep track of teams a new way?
 						const isWinner = winner === player || winningTeam.includes(player);
 						const expEarned = math.max(kills.Value * 50 - deaths.Value * 25 + ((isWinner && 100) || 0), 0);
 						const goldEarned = (isWinner && 50) || 10;
 						GoldService.AddGold(player, goldEarned);
 						ProfileService.IncrementExp(player, expEarned);
-						this.PushResult(player, goldEarned, playerResults);
+						let winnerName = "Error";
+
+						if (typeIs(winner, "Player")) {
+							winnerName = winner.Name;
+						} else {
+							winnerName = winner as string;
+						}
+						this.PushResult(player, goldEarned, playerResults, winnerName);
 						// Reset kills and deaths
 						kills.Value = 0;
 						deaths.Value = 0;
@@ -197,13 +214,22 @@ const MatchService = Knit.CreateService({
 		teams: Team[],
 		callback: (aliveCounter: number) => Player | string | undefined,
 		participants: Player[],
+		leaders?: leaderFormat,
 	) {
 		timer.Value = timeLimit;
 		let playersAlive = true;
 		let formerAliveCounter = 0;
 		let aliveCounter = 0;
 
-		while (timer.Value > 0 && (playersAlive || aliveCounter > 1)) {
+		while (
+			timer.Value > 0 &&
+			((leaders &&
+				leaders.Blue &&
+				leaders.Red &&
+				leaders.Red.TeamColor !== new BrickColor("White") &&
+				leaders.Blue.TeamColor !== new BrickColor("White")) ||
+				(!leaders && (playersAlive || aliveCounter > 1)))
+		) {
 			aliveCounter = 0;
 			teams.forEach((team: Team) => {
 				if (playersAlive && team) {
@@ -222,7 +248,6 @@ const MatchService = Knit.CreateService({
 		const winner = callback(aliveCounter);
 		let winningTeam: Player[] = [];
 		if (typeOf(winner) === "string") {
-			print(winner as string);
 			const team = Teams.FindFirstChild(winner as string) as Team;
 			if (team) {
 				winningTeam = team.GetPlayers();
@@ -391,29 +416,38 @@ const MatchService = Knit.CreateService({
 					// Change this to a get participants function soon
 					// Display the betting UI
 					const modeLibraries = this.ModeLibraries;
-					const library = modeLibraries[this.CurrentMode as keyof typeof modeLibraries];
+					if (this.CurrentMode in modeLibraries) {
+						const library = modeLibraries[this.CurrentMode as keyof typeof modeLibraries];
 
-					BettingService.FetchBettingInfo(
-						participants,
-						(library.TEAMS.size() === 1 && participants) || library.TEAM_NAMES,
-						this.CurrentMode,
-					);
-					// Update the panel for the betting time
-					status.Value = "Winner Predictions..";
-					timer.Value = this.BettingTime;
-					this.DecrementTimer();
-					BettingService.Client.CloseBetting.FireAll();
-					wait(1);
+						BettingService.FetchBettingInfo(
+							participants,
+							((library.TEAMS.size() === 1 || this.CurrentMode === "SFT") && participants) ||
+								library.TEAM_NAMES,
+							this.CurrentMode,
+						);
+						// Update the panel for the betting time
+						status.Value = "Winner Predictions..";
+						timer.Value = this.BettingTime;
+						this.DecrementTimer();
+						BettingService.Client.CloseBetting.FireAll();
+						wait(1);
 
-					// Begin setting up the match
-					status.Value = `Mode: ${this.CurrentMode} | Map: ${this.CurrentMap}`;
-					this.LoadMatch(participants);
+						// Begin setting up the match
+						status.Value = `${this.CurrentMode} | ${this.CurrentMap}`;
+						this.LoadMatch(participants);
+						spawn(() => {
+							wait(25);
+							this.Client.HideMatchResults.FireAll();
+						});
+					} else {
+						SnackbarService.PushAll(`Unable to locate ${this.CurrentMode} module..`);
+					}
 				} else {
 					if (status.Value !== "Need at least two players..") {
 						status.Value = "Need at least two players..";
 					}
 					wait(0.5);
-				} //	}
+				}
 			}
 		})();
 	},

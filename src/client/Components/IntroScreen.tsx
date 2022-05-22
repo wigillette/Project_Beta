@@ -95,6 +95,7 @@ class MenuButtons extends Roact.Component<UIProps, UIState> {
 		const word = this.wordRef.getValue();
 		const credits = this.creditRef.getValue();
 		coroutine.wrap(() => {
+			wait(0.15);
 			if (container && word && credits) {
 				tweenTransparency(container, false, true);
 				let counter = 0;

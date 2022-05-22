@@ -1,6 +1,6 @@
 import { ReplicatedStorage } from "@rbxts/services";
 
-export const modes = ["FFA", "Teamswap", "Ghosts", "TDM", "Streak", "SFT", "PTL"];
+export const modes = ["FFA", "Teamswap", "Ghosts", "TDM", "Streak", "SFT", "PTL", "Juggernaut"];
 export const modeDescriptions = {
 	FFA: "Players will fight to the death with five lives.",
 	TDM: "Players will be sorted into teams and battle to the death with five lives.",
@@ -9,5 +9,6 @@ export const modeDescriptions = {
 	Streak: "Players will duel for 3.5 minutes in a FFA. The person with the greatest overall kill streak wins.",
 	PTL: "A leader will be randomly chosen on each team. Players must kill the opposing team's leader.",
 	Ghosts: "A quarter of the participants are chosen as ghosts. Ghosts are invisible but have a shadow that appears every few seconds. Kill the opposing team to win!",
+	Juggernaut: "A team must kill a random player that has a significant amount of health.",
 };
 export const maps = ReplicatedStorage.WaitForChild("Maps").GetChildren();

@@ -70,7 +70,7 @@ class Profile extends Roact.Component<UIProps, UIState> {
 						></RectProgress>
 						<imagelabel
 							{...RectBG}
-							ZIndex={7}
+							ZIndex={10}
 							Position={new UDim2(0, 0, 1, 0)}
 							Size={new UDim2(0.25, 0, 1, 0)}
 							AnchorPoint={new Vector2(0, 1)}
@@ -86,7 +86,7 @@ class Profile extends Roact.Component<UIProps, UIState> {
 								Size={new UDim2(0.9, 0, 0.9, 0)}
 								TextColor3={googleMaterial.cardFont}
 								Text={tostring(this.props.Level)}
-								ZIndex={10}
+								ZIndex={11}
 							></textlabel>
 						</imagelabel>
 					</imagelabel>

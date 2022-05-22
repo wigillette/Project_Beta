@@ -8,6 +8,24 @@ const GhostProperties = {
 	TIME_LIMIT: 180,
 	OUTSCORE: 1,
 	GHOST_PERCENTAGE: 0.25,
+	tweenTransparency: (part: BasePart | MeshPart | Part, humanoid: Humanoid) => {
+		spawn(() => {
+			while (humanoid.Health > 0) {
+				TweenService.Create(
+					part,
+					new TweenInfo(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0),
+					{ Transparency: 0.7 },
+				).Play();
+				wait(2);
+				TweenService.Create(
+					part,
+					new TweenInfo(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0),
+					{ Transparency: 1 },
+				).Play();
+				wait(10);
+			}
+		});
+	},
 	teamPlayers: (participants: Player[]) => {
 		const matchService = KnitServer.GetService("MatchService");
 		const ghostAmt = math.round(participants.size() * GhostProperties.GHOST_PERCENTAGE);
@@ -20,46 +38,33 @@ const GhostProperties = {
 				pcall(() => {
 					randomGhost.TeamColor = GhostProperties.TEAMS[0];
 					const charLoadedConnection = randomGhost.CharacterAdded.Connect((char) => {
+						wait(0.5);
 						if (char) {
 							const humanoid = char.FindFirstChildOfClass("Humanoid");
+
 							if (humanoid) {
-								char.GetDescendants().forEach((child) => {
+								char.ChildAdded.Connect((child: Instance) => {
+									const handle = child.FindFirstChildOfClass("Part") as Part;
 									if (child.IsA("BasePart") || child.IsA("MeshPart") || child.IsA("Part")) {
 										child.Transparency = 1;
-										spawn(() => {
-											while (humanoid.Health > 0) {
-												TweenService.Create(
-													child,
-													new TweenInfo(
-														0.3,
-														Enum.EasingStyle.Quad,
-														Enum.EasingDirection.Out,
-														0,
-														false,
-														0,
-													),
-													{ Transparency: 0.7 },
-												).Play();
-												wait(2);
-												TweenService.Create(
-													child,
-													new TweenInfo(
-														0.3,
-														Enum.EasingStyle.Quad,
-														Enum.EasingDirection.Out,
-														0,
-														false,
-														0,
-													),
-													{ Transparency: 1 },
-												).Play();
-												wait(10);
-											}
-										});
-									} else if (child.IsA("Accessory")) {
-										char.Archivable = true;
-										child.Destroy();
-										char.Archivable = false;
+										GhostProperties.tweenTransparency(child, humanoid);
+									}
+
+									if (handle) {
+										handle.Transparency = 1;
+										GhostProperties.tweenTransparency(handle, humanoid);
+									}
+								});
+								char.GetChildren().forEach((child) => {
+									const handle = child.FindFirstChildOfClass("Part") as Part;
+									if (child.IsA("BasePart") || child.IsA("MeshPart") || child.IsA("Part")) {
+										child.Transparency = 1;
+										GhostProperties.tweenTransparency(child, humanoid);
+									}
+
+									if (handle) {
+										handle.Transparency = 1;
+										GhostProperties.tweenTransparency(handle, humanoid);
 									}
 								});
 							}
@@ -72,7 +77,9 @@ const GhostProperties = {
 
 		participants.forEach((player: Player) => {
 			if (!ghosts.includes(player)) {
-				player.TeamColor = GhostProperties.TEAMS[1];
+				pcall(() => {
+					player.TeamColor = GhostProperties.TEAMS[1];
+				});
 			}
 			matchService.GiveWeapon(player, true);
 			pcall(() => {

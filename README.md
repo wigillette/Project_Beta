@@ -29,7 +29,6 @@
 - Executes on the client directly after the respective player connects to the game
 - Initializes the client-side services
 ### **TASK LIST**
-
 > UI Properties Setup
 - [x] Tween Animation Handler, Ripple Effect
 - [x] Color Schemes
@@ -53,15 +52,24 @@
 > Data Storage
 - [x] SQL Database vs. Datastore2
 - [x] User Data Module
+- [ ] Kills/Wins/Donations Ordered Datastores
+
+> Miscellaneous
+- [ ] Name Tags
+- [ ] Sword on Back
+- [ ] Obby Chest
+- [ ] Spinning coins in lobby
 
 > Game Modes
 - [x] FFA
 - [x] TDM
-- [ ] SFT
+- [x] SFT
 - [x] Ghosts
 - [x] Teamswap
 - [x] Streak
-- [ ] PTL
+- [x] PTL
+- [x] Juggernaut
+- [ ] 2v2 SFT
 
 > Services
 - [x] Voting Service
@@ -81,6 +89,7 @@
 - [x] Daily Reward Service
 - [x] Menu Service
 - [x] Match Service
+- [ ] Chat Service
 
 > Shared
 - [x] Sword Data
@@ -123,6 +132,15 @@
 - [x] Match Results UI
 - [ ] Gamepass UI
 
+> Surface Components
+- [ ] Profile Board
+- [ ] Maps Board
+- [ ] Modes Board
+- [ ] Top Kills Board
+- [ ] Top Donors Board
+- [ ] Top Wins Board
+- [ ] Group Advertisement Board
+
 > Bug/Revamp List
 - [x] TouchService UIs overlaying on betting/voting/results UIs
 - [ ] Rework snackbar service to use mapDispatchToProps and mount it on main
@@ -130,5 +148,8 @@
 - [x] Selected Maps and Modes not changing
 - [x] Kills not changing in leaderboard
 - [x] Betting needs to work with teams
-- [ ] Results UI needs to display winner
+- [x] Results UI needs to display winner, exp earned, level
 - [x] Negative experience
+- [ ] Viewport blocky head bug
+- [ ] Settings Packages Function
+- [ ] Menu UIs overlaying on match UIs

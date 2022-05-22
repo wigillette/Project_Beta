@@ -67,7 +67,6 @@ export const VotingService = Knit.CreateService({
 		}
 
 		participants.forEach((participant: Player) => {
-			print(participant.Name, this.ChosenMaps, this.ChosenModes);
 			this.Client.PushChosen.Fire(participant, this.ChosenMaps, this.ChosenModes);
 		});
 	},

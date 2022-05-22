@@ -11,6 +11,14 @@ interface UIProps {
 	buttonText: string;
 }
 
+const brickColors = {
+	Red: new BrickColor("Bright red"),
+	Blue: new BrickColor("Bright blue"),
+	Ghosts: new BrickColor("Bright red"),
+	Survivors: new BrickColor("Bright blue"),
+	Juggernaut: new BrickColor("Bright red"),
+};
+
 class BettingItem extends Roact.Component<UIProps> {
 	constructor(props: UIProps) {
 		super(props);
@@ -33,20 +41,29 @@ class BettingItem extends Roact.Component<UIProps> {
 						Font={Enum.Font.GothamBold}
 						TextXAlignment={Enum.TextXAlignment.Center}
 					></textlabel>
-					<imagelabel
-						{...RectContainer}
-						Image={
-							(typeIs(this.props.item, "Instance") &&
-								`https://www.roblox.com/headshot-thumbnail/image?userId=${this.props.item.UserId}&width=420&height=420&format=png`) ||
-							""
-						}
-						Size={new UDim2(0.55, 0, 0.55, 0)}
-						Position={new UDim2(0.5, 0, 0.5, 0)}
-						AnchorPoint={new Vector2(0.5, 0.5)}
-					>
-						<uiaspectratioconstraint {...SquareAspectRatio}></uiaspectratioconstraint>
-					</imagelabel>
-
+					{
+						<imagelabel
+							{...RectContainer}
+							Image={
+								(typeIs(this.props.item, "Instance") &&
+									`https://www.roblox.com/headshot-thumbnail/image?userId=${this.props.item.UserId}&width=420&height=420&format=png`) ||
+								"rbxassetid://5350360532"
+							}
+							ImageColor3={
+								(!typeIs(this.props.item, "Instance") &&
+									brickColors[this.props.item as keyof typeof brickColors].Color) ||
+								new BrickColor("White").Color
+							}
+							Size={
+								(!typeIs(this.props.item, "Instance") && new UDim2(0.35, 0, 0.35, 0)) ||
+								new UDim2(0.55, 0, 0.55, 0)
+							}
+							Position={new UDim2(0.5, 0, 0.5, 0)}
+							AnchorPoint={new Vector2(0.5, 0.5)}
+						>
+							<uiaspectratioconstraint {...SquareAspectRatio}></uiaspectratioconstraint>
+						</imagelabel>
+					}
 					<RectButton
 						ButtonText={this.props.buttonText}
 						Size={new UDim2(0.6, 0, 0.3, 0)}

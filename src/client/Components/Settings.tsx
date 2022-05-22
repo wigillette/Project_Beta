@@ -1,15 +1,6 @@
 import Roact from "@rbxts/roact";
 import RoactRodux from "@rbxts/roact-rodux";
-import {
-	Body,
-	CardGridLayout,
-	Header,
-	MenuAspectRatio,
-	RectBG,
-	RectContainer,
-	RectShadow,
-	RectText,
-} from "client/UIProperties/RectUI";
+import { Body, CardGridLayout, Header, RectBG, RectContainer, RectShadow, RectText } from "client/UIProperties/RectUI";
 import { mediumGradientProperties } from "client/UIProperties/ColorSchemes";
 import { movingFadeAbsolute } from "../UIProperties/FrameEffects";
 import { settingsState } from "client/Rodux/Reducers/SettingsReducer";

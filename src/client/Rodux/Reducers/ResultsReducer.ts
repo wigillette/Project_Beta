@@ -8,15 +8,16 @@ export interface ResultsState {
 	toggle: boolean;
 	playerResults: playerResult[];
 	goldEarned: number;
+	winner: string;
 }
 
 interface Action {
 	type: string;
-	payload?: { toggle: boolean; playerResults: playerResult[]; goldEarned: number };
+	payload?: { toggle: boolean; playerResults: playerResult[]; goldEarned: number; winner: string };
 }
 
 export const ResultsReducer = Rodux.createReducer(
-	{ toggle: false, playerResults: [] as playerResult[], goldEarned: 0 },
+	{ toggle: false, playerResults: [] as playerResult[], goldEarned: 0, winner: "None" },
 	{
 		updateResultsInfo: (state: ResultsState, action: Action) => {
 			let newState: ResultsState = state;
@@ -39,6 +40,7 @@ export const ResultsReducer = Rodux.createReducer(
 				toggle: !state.toggle,
 				playerResults: state.playerResults,
 				goldEarned: state.goldEarned,
+				winner: state.winner,
 			};
 
 			return newState;

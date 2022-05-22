@@ -159,6 +159,7 @@ class DynamicViewport extends Roact.Component<UIProps> {
 	}
 
 	replicateState(model: Model, worldModel: WorldModel) {
+		wait(0.5);
 		const charObjects = model.GetDescendants();
 		// Create an empty model to store the assets
 		const viewModel = new Instance("Model");
