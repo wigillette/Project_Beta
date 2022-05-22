@@ -4,6 +4,7 @@ import { randomizeTeams } from "server/Utils/RandomizeTeams";
 
 const GhostProperties = {
 	TEAMS: [new BrickColor("Bright red"), new BrickColor("Bright blue")],
+	TEAM_NAMES: ["Ghosts", "Survivors"],
 	TIME_LIMIT: 180,
 	OUTSCORE: 1,
 	GHOST_PERCENTAGE: 0.25,
@@ -90,12 +91,8 @@ const GhostProperties = {
 			(aliveCounter: number) => {
 				let toReturn = undefined;
 				teams.forEach((team) => {
-					if (team.GetPlayers().size() === 0) {
-						if (aliveCounter > 0) {
-							toReturn = team.Name;
-						} else {
-							toReturn = "None";
-						}
+					if (team.GetPlayers().size() !== 0) {
+						toReturn = team.Name;
 					}
 				});
 

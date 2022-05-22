@@ -129,6 +129,6 @@
 - [x] Use componentDidUpdate to reset state on betting and voting UIs
 - [x] Selected Maps and Modes not changing
 - [x] Kills not changing in leaderboard
-- [ ] Betting needs to work with teams
+- [x] Betting needs to work with teams
 - [ ] Results UI needs to display winner
 - [x] Negative experience

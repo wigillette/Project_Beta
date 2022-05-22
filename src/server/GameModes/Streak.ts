@@ -7,6 +7,7 @@ const charLoadedConnections = [] as RBXScriptConnection[];
 let streakTable = new Map<Player, number>();
 const StreakProperties = {
 	TEAMS: [new BrickColor("Bright green")],
+	TEAM_NAMES: ["FFA"],
 	TIME_LIMIT: 210,
 	OUTSCORE: 100000,
 	teamPlayers: (participants: Player[]) => {

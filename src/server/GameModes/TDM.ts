@@ -3,6 +3,7 @@ import { randomizeTeams } from "server/Utils/RandomizeTeams";
 
 const TDMProperties = {
 	TEAMS: [new BrickColor("Bright red"), new BrickColor("Bright blue")],
+	TEAM_NAMES: ["Red", "Blue"],
 	TIME_LIMIT: 240,
 	OUTSCORE: 3,
 	teamPlayers: (participants: Player[]) => {
@@ -26,12 +27,8 @@ const TDMProperties = {
 			(aliveCounter: number) => {
 				let toReturn = undefined;
 				teams.forEach((team) => {
-					if (team.GetPlayers().size() === 0) {
-						if (aliveCounter > 0) {
-							toReturn = team.Name;
-						} else {
-							toReturn = "None";
-						}
+					if (team.GetPlayers().size() !== 0) {
+						toReturn = team.Name;
 					}
 				});
 				return toReturn;

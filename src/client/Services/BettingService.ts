@@ -17,8 +17,8 @@ const BettingClient = {
 	},
 	init: () => {
 		BettingService.CloseBetting.Connect(BettingClient.CloseBetting);
-		BettingService.FetchBettingInfo.Connect((participants: Player[], mode: string) => {
-			BettingClient.FetchBettingInfo(participants, mode);
+		BettingService.FetchBettingInfo.Connect((choices: Player[] | string[], mode: string) => {
+			BettingClient.FetchBettingInfo(choices, mode);
 		});
 	},
 };

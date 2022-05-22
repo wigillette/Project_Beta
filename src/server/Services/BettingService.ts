@@ -18,7 +18,7 @@ export const BettingService = Knit.CreateService({
 
 	Client: {
 		CloseBetting: new RemoteSignal<() => void>(),
-		FetchBettingInfo: new RemoteSignal<(participants: Player[], mode: string) => void>(),
+		FetchBettingInfo: new RemoteSignal<(choices: Player[] | string[], mode: string) => void>(),
 		PlaceBet(Player: Player, Gold: number, Choice: Player | string) {
 			return this.Server.PlaceBet(Player, Gold, Choice);
 		},
@@ -28,9 +28,9 @@ export const BettingService = Knit.CreateService({
 		this.PlayerBets.clear();
 	},
 
-	FetchBettingInfo(participants: Player[], mode: string) {
-		participants.forEach((participant: Player) => {
-			this.Client.FetchBettingInfo.Fire(participant, participants, mode);
+	FetchBettingInfo(participants: Player[], bettingOptions: Player[] | string[], mode: string) {
+		participants.forEach((participant) => {
+			this.Client.FetchBettingInfo.Fire(participant, bettingOptions, mode);
 		});
 	},
 

@@ -3,6 +3,7 @@ import { Players, ReplicatedStorage } from "@rbxts/services";
 
 const FFAProperties = {
 	TEAMS: [new BrickColor("Bright green")],
+	TEAM_NAMES: ["FFA"],
 	TIME_LIMIT: 30,
 	OUTSCORE: 3,
 	addSpeed: (player: Player) => {

@@ -120,7 +120,7 @@ const MatchService = Knit.CreateService({
 		this.Client.InitialMatchPanel.FireAll(this.CurrentMode, this.CurrentMap, 0);
 	},
 
-	DisplayResults(winner: Player | string, playingList: Player[]) {
+	DisplayResults(winner: Player | string, playingList: Player[], winningTeam: Player[]) {
 		const playerResults: playerResult[] = [];
 		// Fetch the leaderboard results
 		const participants = playingList;
@@ -146,7 +146,7 @@ const MatchService = Knit.CreateService({
 					const deaths = leaderstats.FindFirstChild("Deaths") as IntValue;
 					if (kills && deaths && player.Team) {
 						// Need to keep track of teams a new way?
-						const isWinner = winner === player || player.Team.Name === winner;
+						const isWinner = winner === player || winningTeam.includes(player);
 						const expEarned = math.max(kills.Value * 50 - deaths.Value * 25 + ((isWinner && 100) || 0), 0);
 						const goldEarned = (isWinner && 50) || 10;
 						GoldService.AddGold(player, goldEarned);
@@ -195,7 +195,7 @@ const MatchService = Knit.CreateService({
 	StartTimer(
 		timeLimit: number,
 		teams: Team[],
-		callback: (aliveCounter: number) => Player | undefined,
+		callback: (aliveCounter: number) => Player | string | undefined,
 		participants: Player[],
 	) {
 		timer.Value = timeLimit;
@@ -220,18 +220,26 @@ const MatchService = Knit.CreateService({
 			wait(1);
 		}
 		const winner = callback(aliveCounter);
-
+		let winningTeam: Player[] = [];
+		if (typeOf(winner) === "string") {
+			print(winner as string);
+			const team = Teams.FindFirstChild(winner as string) as Team;
+			if (team) {
+				winningTeam = team.GetPlayers();
+			}
+		}
 		this.ResetMatch(participants);
-		if (winner) {
-			this.DisplayResults(winner, participants);
+		if (winner !== undefined) {
+			this.DisplayResults(winner, participants, winningTeam);
 		}
 	},
 
-	CreateTeams(teamsList: BrickColor[]) {
+	CreateTeams(teamsList: BrickColor[], teamNames: string[]) {
 		const teams: Team[] = [];
-		teamsList.forEach((color: BrickColor) => {
+		ObjectUtils.entries(teamsList).forEach((color) => {
 			const team = new Instance("Team");
-			team.TeamColor = color;
+			team.Name = teamNames[color[0] - 1];
+			team.TeamColor = color[1];
 			team.Parent = Teams;
 			teams.push(team);
 		});
@@ -248,7 +256,7 @@ const MatchService = Knit.CreateService({
 				if (this.CurrentMode in this.ModeLibraries) {
 					const modeLibraries = this.ModeLibraries; // for some reason it was bugging when i put this.ModeLibraries below lol
 					const library = modeLibraries[this.CurrentMode as keyof typeof modeLibraries];
-					const teams = this.CreateTeams(library.TEAMS); // Create the teams
+					const teams = this.CreateTeams(library.TEAMS, library.TEAM_NAMES); // Create the teams
 					this.Client.InitialMatchPanel.FireAll(this.CurrentMode, this.CurrentMap, participants.size());
 					library.init(teams, participants); // execute the init function of the mode
 				} else {
@@ -382,7 +390,14 @@ const MatchService = Knit.CreateService({
 
 					// Change this to a get participants function soon
 					// Display the betting UI
-					BettingService.FetchBettingInfo(participants, this.CurrentMode);
+					const modeLibraries = this.ModeLibraries;
+					const library = modeLibraries[this.CurrentMode as keyof typeof modeLibraries];
+
+					BettingService.FetchBettingInfo(
+						participants,
+						(library.TEAMS.size() === 1 && participants) || library.TEAM_NAMES,
+						this.CurrentMode,
+					);
 					// Update the panel for the betting time
 					status.Value = "Winner Predictions..";
 					timer.Value = this.BettingTime;

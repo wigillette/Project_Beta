@@ -7,6 +7,7 @@ const charLoadedConnections = [] as RBXScriptConnection[];
 
 const TeamswapProperties = {
 	TEAMS: [new BrickColor("Bright red"), new BrickColor("Bright blue")],
+	TEAM_NAMES: ["Red", "Blue"],
 	TIME_LIMIT: 240,
 	OUTSCORE: 3,
 	teamPlayers: (participants: Player[]) => {
@@ -46,12 +47,8 @@ const TeamswapProperties = {
 			(aliveCounter: number) => {
 				let toReturn = undefined;
 				teams.forEach((team) => {
-					if (team.GetPlayers().size() === 0) {
-						if (aliveCounter > 0) {
-							toReturn = team.Name;
-						} else {
-							toReturn = "None";
-						}
+					if (team.GetPlayers().size() !== 0) {
+						toReturn = team.Name;
 					}
 				});
 
