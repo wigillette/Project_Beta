@@ -14,6 +14,18 @@ const VotingClient = {
 	},
 	PushChosen: (maps: string[], modes: string[]) => {
 		Store.dispatch({ type: "updateVotingOptions", payload: { maps: maps, modes: modes, toggle: true } });
+		Store.dispatch({
+			type: "setInventoryToggle",
+			payload: { toggle: false },
+		});
+		Store.dispatch({
+			type: "setTwitterToggle",
+			payload: { toggle: false },
+		});
+		Store.dispatch({
+			type: "setSettingsToggle",
+			payload: { toggle: false },
+		});
 	},
 	CloseVoting: () => {
 		Store.dispatch({ type: "setVotingToggle", payload: { toggle: false } });

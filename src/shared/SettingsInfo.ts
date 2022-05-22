@@ -23,6 +23,9 @@ const partCache = new Map<BasePart | Part | WedgePart | MeshPart, Enum.Material>
 const extraPartsFolder = ReplicatedStorage.WaitForChild("ExtraParts");
 const instances = ReplicatedStorage.WaitForChild("Instances");
 const hitboxConnections = new Map<Player, RBXScriptConnection>();
+const packageConnections = new Map<Player, RBXScriptConnection>();
+let packagePlayerAdded: RBXScriptConnection | undefined = undefined;
+let packagePlayerRemoved: RBXScriptConnection | undefined = undefined;
 let playerAddedConnection: RBXScriptConnection | undefined = undefined;
 
 const fillPartCache = () => {
@@ -96,6 +99,20 @@ const applyHitBox = (player: Player) => {
 	}
 };
 
+const removePackage = (player: Player) => {
+	if (player) {
+		const character = player.Character || player.CharacterAdded.Wait()[0];
+		if (character) {
+			const children = character.GetChildren();
+			children.forEach((child) => {
+				if (child.IsA("CharacterMesh")) {
+					child.Destroy();
+				}
+			});
+		}
+	}
+};
+
 export const SETTINGS_FUNCTIONS = {
 	ReducedParts: (activate: boolean) => {
 		if (!activate) {
@@ -148,5 +165,47 @@ export const SETTINGS_FUNCTIONS = {
 	},
 	Packages: (activate: boolean) => {
 		print("Updating packages...");
+		if (activate) {
+			Players.GetPlayers().forEach((player) => {
+				removePackage(player);
+				packageConnections.set(
+					player,
+					player.CharacterAdded.Connect(() => {
+						wait(0.5);
+						removePackage(player);
+					}),
+				);
+			});
+
+			packagePlayerAdded = Players.PlayerAdded.Connect((player: Player) => {
+				removePackage(player);
+				packageConnections.set(
+					player,
+					player.CharacterAdded.Connect(() => {
+						wait(0.5);
+						removePackage(player);
+					}),
+				);
+			});
+
+			packagePlayerRemoved = Players.PlayerRemoving.Connect((player: Player) => {
+				packageConnections.delete(player);
+			});
+		} else {
+			packageConnections.forEach((connection) => {
+				connection.Disconnect();
+			});
+			packageConnections.clear();
+
+			if (packagePlayerAdded) {
+				packagePlayerAdded.Disconnect();
+				packagePlayerAdded = undefined;
+			}
+
+			if (packagePlayerRemoved) {
+				packagePlayerRemoved.Disconnect();
+				packagePlayerRemoved = undefined;
+			}
+		}
 	},
 };

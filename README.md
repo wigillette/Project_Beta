@@ -48,6 +48,7 @@
 - [x] Match Reducer
 - [x] Betting Reducer
 - [x] Results Reducer
+- [x] PlayerList Reducer
 
 > Data Storage
 - [x] SQL Database vs. Datastore2
@@ -69,7 +70,6 @@
 - [x] Streak
 - [x] PTL
 - [x] Juggernaut
-- [ ] 2v2 SFT
 
 > Services
 - [x] Voting Service
@@ -90,6 +90,7 @@
 - [x] Menu Service
 - [x] Match Service
 - [ ] Chat Service
+- [ ] FriendService Gold Service
 
 > Shared
 - [x] Sword Data
@@ -131,11 +132,12 @@
 - [x] Match Panel UI
 - [x] Match Results UI
 - [ ] Gamepass UI
+- [x] Playerlist UI
 
 > Surface Components
 - [ ] Profile Board
 - [ ] Maps Board
-- [ ] Modes Board
+- [ ] Modes Board   
 - [ ] Top Kills Board
 - [ ] Top Donors Board
 - [ ] Top Wins Board
@@ -150,6 +152,6 @@
 - [x] Betting needs to work with teams
 - [x] Results UI needs to display winner, exp earned, level
 - [x] Negative experience
-- [ ] Viewport blocky head bug
-- [ ] Settings Packages Function
-- [ ] Menu UIs overlaying on match UIs
+- [x] Viewport blocky head bug
+- [x] Settings Packages Function
+- [x] Menu UIs overlaying on match UIs

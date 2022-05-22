@@ -80,12 +80,10 @@ export const InventoryService = Knit.CreateService({
 	UpdateInventoryData(Player: Player, newInventory: InventoryFormat) {
 		const InventoryStore = Database("Inventory", Player);
 		InventoryStore.Set(newInventory);
-		print(newInventory);
 	},
 
 	// Initialize the inventory Map
 	InitData(Player: Player, Inventory: InventoryFormat, Equipped: EquippedFormat) {
-		print(Equipped);
 		this.PlayerInventories.set(Player, Inventory);
 		this.PlayerEquipped.set(Player, Equipped);
 		this.Client.InventoryChanged.Fire(Player, Inventory);

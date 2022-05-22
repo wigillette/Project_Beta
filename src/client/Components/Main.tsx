@@ -12,6 +12,7 @@ import BettingContainer from "./Betting/BettingContainer";
 import IntroScreen from "./IntroScreen";
 import MatchResults from "./Results/MatchResults";
 import VotingContainer from "./Voting/VotingContainer";
+import PlayerList from "./PlayerList/PlayerList";
 
 const Main = () => {
 	return (
@@ -29,6 +30,7 @@ const Main = () => {
 			<IntroScreen />
 			<MatchResults />
 			<VotingContainer />
+			<PlayerList />
 		</screengui>
 	);
 };

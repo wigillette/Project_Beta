@@ -443,7 +443,7 @@ const MatchService = Knit.CreateService({
 						SnackbarService.PushAll(`Unable to locate ${this.CurrentMode} module..`);
 					}
 				} else {
-					if (status.Value !== "Need at least two players..") {
+					if (status.Value === "") {
 						status.Value = "Need at least two players..";
 					}
 					wait(0.5);

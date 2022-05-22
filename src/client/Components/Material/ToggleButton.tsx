@@ -23,7 +23,6 @@ class ToggleButton extends Roact.Component<UIProps, UIState> {
 	buttonFrameRef;
 	frameRef;
 	shadowRef;
-	buttonFrameSize;
 
 	state = {
 		toggle: true,
@@ -35,15 +34,13 @@ class ToggleButton extends Roact.Component<UIProps, UIState> {
 		this.frameRef = Roact.createRef<Frame>();
 		this.shadowRef = Roact.createRef<ImageLabel>();
 		this.state.toggle = !this.props.initialToggle;
-		const buttonFrame = this.buttonFrameRef.getValue();
-		this.buttonFrameSize = buttonFrame !== undefined && buttonFrame.AbsoluteSize.X / 2;
 	}
 
 	getButtonSize() {
 		const button = this.buttonFrameRef.getValue();
 		let toReturn = -10;
 		if (button) {
-			toReturn = -button.AbsoluteSize.X / 4;
+			toReturn = -button.AbsoluteSize.X;
 		}
 		return toReturn;
 	}
@@ -116,7 +113,7 @@ class ToggleButton extends Roact.Component<UIProps, UIState> {
 										if (buttonFrame && shadow) {
 											const finalPos =
 												(this.state.toggle &&
-													new UDim2(1, -buttonFrame.AbsoluteSize.X / 4, 0, 0)) ||
+													new UDim2(1, -buttonFrame.AbsoluteSize.X, 0, 0)) ||
 												new UDim2(0, 0, 0, 0);
 											rippleEffect(buttonFrame, mouse);
 											tweenPosAbsolute(buttonFrame, finalPos);

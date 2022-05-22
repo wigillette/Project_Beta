@@ -10,6 +10,7 @@ import { matchReducer } from "./MatchReducer";
 import { bettingReducer } from "./BettingReducer";
 import { ResultsReducer } from "./ResultsReducer";
 import { votingReducer } from "./VotingReducer";
+import { playerListReducer } from "./PlayerListReducer";
 
 const reducer = Rodux.combineReducers({
 	toggleShop: shopReducer,
@@ -44,6 +45,7 @@ const reducer = Rodux.combineReducers({
 	setVotingToggle: votingReducer,
 	setChosenMap: votingReducer,
 	setChosenMode: votingReducer,
+	updatePlayers: playerListReducer,
 });
 
 export default reducer;

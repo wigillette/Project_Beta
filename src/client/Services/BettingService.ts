@@ -11,6 +11,18 @@ const BettingClient = {
 			type: "updateBettingInfo",
 			payload: { choices: choices, mode: mode, toggle: true },
 		});
+		Store.dispatch({
+			type: "setInventoryToggle",
+			payload: { toggle: false },
+		});
+		Store.dispatch({
+			type: "setTwitterToggle",
+			payload: { toggle: false },
+		});
+		Store.dispatch({
+			type: "setSettingsToggle",
+			payload: { toggle: false },
+		});
 	},
 	CloseBetting: () => {
 		Store.dispatch({ type: "setBettingToggle", payload: { toggle: false } });
