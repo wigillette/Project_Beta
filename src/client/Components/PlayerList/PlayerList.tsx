@@ -71,7 +71,7 @@ class PlayerList extends Roact.Component<UIProps> {
 			this.connections.push(connection);
 		}
 
-		// TO-DO: Dispatch to the rodux store the current player list
+		// Dispatch to the rodux store the current player list
 		this.props.updatePlayers(Players.GetPlayers());
 		this.connections.push(
 			Players.PlayerAdded.Connect((player: Player) => {
