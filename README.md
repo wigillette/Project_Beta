@@ -89,7 +89,7 @@
 - [x] Daily Reward Service
 - [x] Menu Service
 - [x] Match Service
-- [ ] Chat Service
+- [x] Chat Service
 - [ ] FriendService Gold Service
 
 > Shared
