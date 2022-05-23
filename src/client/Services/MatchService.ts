@@ -1,4 +1,5 @@
 import { KnitClient as Knit } from "@rbxts/knit";
+import { SoundService } from "@rbxts/services";
 import { playerResult } from "client/Rodux/Reducers/ResultsReducer";
 import Store from "../Rodux/Store";
 const MatchService = Knit.GetService("MatchService");
@@ -43,6 +44,20 @@ const ResultsClient = {
 		});
 		MatchService.HideMatchResults.Connect(() => {
 			ResultsClient.hideMatchResults();
+		});
+
+		MatchService.PlayClientSound.Connect((swordName: string) => {
+			// Playing sword death effect sound
+			const soundsFolder = SoundService.FindFirstChild("SFX");
+			if (soundsFolder) {
+				const swordSounds = soundsFolder.FindFirstChild("Swords");
+				if (swordSounds) {
+					const swordSFX = swordSounds.FindFirstChild(swordName) as Sound;
+					if (swordSFX) {
+						swordSFX.Play();
+					}
+				}
+			}
 		});
 	},
 };

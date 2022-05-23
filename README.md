@@ -60,6 +60,7 @@
 - [x] Sword on Back
 - [ ] Obby Chest
 - [ ] Spinning coins in lobby
+- [ ] Lobby/Match Music
 
 > Game Modes
 - [x] FFA
@@ -90,11 +91,11 @@
 - [x] Menu Service
 - [x] Match Service
 - [x] Chat Service
-- [ ] FriendService Gold Service
+- [x] Friend Service
 
 > Shared
 - [x] Sword Data
-- [ ] Death Effect Functions
+- [x] Death Effect Functions
 - [x] Level Data
 - [x] Map Descriptions
 - [x] Mode Descriptions
@@ -155,3 +156,5 @@
 - [x] Viewport blocky head bug
 - [x] Settings Packages Function
 - [x] Menu UIs overlaying on match UIs
+- [ ] Use icons in Results UI
+- [ ] Blocky head in viewport frames; meshes not loading

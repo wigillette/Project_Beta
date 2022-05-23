@@ -19,6 +19,7 @@ import { modeObjectives, modes } from "shared/GameInfo";
 import ObjectUtils from "@rbxts/object-utils";
 import { leaderFormat } from "server/GameModes/PTL";
 import { InventoryService } from "./InventoryService";
+import { DEATH_FUNCTIONS } from "../Utils/DeathEffects";
 
 interface playerResult {
 	Player: Player;
@@ -63,6 +64,7 @@ const MatchService = Knit.CreateService({
 		InitialMatchPanel: new RemoteSignal<(modeName: string, mapName: string, aliveCounter: number) => void>(),
 		HideMatchResults: new RemoteSignal<() => void>(),
 		UpdateAliveCounter: new RemoteSignal<(aliveCounter: number) => void>(),
+		PlayClientSound: new RemoteSignal<(swordName: string) => void>(),
 		UpdateMatchResults: new RemoteSignal<
 			(goldEarned: number, playerResults: playerResult[], winner: string) => void
 		>(),
@@ -449,9 +451,20 @@ const MatchService = Knit.CreateService({
 						}
 						const tag = humanoid.FindFirstChild("creator") as ObjectValue;
 						if (tag) {
-							const killer = tag.Value;
+							const killer = tag.Value as Player;
 							if (killer) {
 								const killerLS = killer.FindFirstChild("leaderstats");
+								const killerEquipped = InventoryService.FetchEquipped(killer);
+								if (killerEquipped) {
+									const killerSword = killerEquipped.Swords;
+									if (killerSword !== undefined && killerSword in DEATH_FUNCTIONS) {
+										this.Client.PlayClientSound.Fire(player, killerSword);
+										this.Client.PlayClientSound.Fire(killer, killerSword);
+										coroutine.wrap(() => {
+											DEATH_FUNCTIONS[killerSword as keyof typeof DEATH_FUNCTIONS](player);
+										})();
+									}
+								}
 								if (killerLS) {
 									const killerKills = killerLS.FindFirstChild("Kills") as IntValue;
 									if (killerKills) {

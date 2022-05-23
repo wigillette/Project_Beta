@@ -26,14 +26,15 @@ export const ProfileService = Knit.CreateService({
 		if (Amount > 0) {
 			print(`Adding ${Amount} experience to ${Player.Name} | Server`);
 			const profile = this.GetProfile(Player);
-			const currentCap = profile.ExpCap;
+			let currentCap = profile.ExpCap;
 			// Increment current exp
 			let newExp = profile.Experience + Amount;
 			let newLevel = profile.Level;
 			// Carry over user's experience and increment level
-			if (newExp >= currentCap) {
+			while (newExp >= currentCap) {
 				newLevel += 1;
 				newExp -= currentCap;
+				currentCap = CAP_FORMULA(newLevel);
 			}
 
 			const newProfile: PROFILE_FORMAT = {

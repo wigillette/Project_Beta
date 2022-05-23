@@ -59,8 +59,13 @@ const GhostProperties = {
 										GhostProperties.tweenTransparency(handle, humanoid);
 									}
 								});
+								const backSword = char.FindFirstChild("BackSword") as Model;
+								if (backSword) {
+									backSword.Destroy();
+								}
 								char.GetChildren().forEach((child) => {
 									const handle = child.FindFirstChildOfClass("Part") as Part;
+
 									if (child.IsA("BasePart") || child.IsA("MeshPart") || child.IsA("Part")) {
 										child.Transparency = 1;
 										GhostProperties.tweenTransparency(child, humanoid);
