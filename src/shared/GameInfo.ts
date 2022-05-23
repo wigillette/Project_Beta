@@ -11,4 +11,14 @@ export const modeDescriptions = {
 	Ghosts: "A quarter of the participants are chosen as ghosts. Ghosts are invisible but have a shadow that appears every few seconds. Kill the opposing team to win!",
 	Juggernaut: "A team must kill a random player that has a significant amount of health.",
 };
+export const modeObjectives = {
+	FFA: "Kill the surrounding players!",
+	TDM: "Defeat the opposing team. Each player has five lives.",
+	Teamswap: "Swap everyone on the opposing team to your team!",
+	Streak: "Compete to hold the highest killstreak!",
+	PTL: "Defeat the opposing team's leader!",
+	Ghosts: "Defeat the opposing team!",
+	Juggernaut: "Defeat the player with extra health!",
+};
+
 export const maps = ReplicatedStorage.WaitForChild("Maps").GetChildren();

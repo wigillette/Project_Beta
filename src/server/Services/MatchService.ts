@@ -15,9 +15,10 @@ import { ProfileService } from "./ProfileService";
 import { BettingService } from "./BettingService";
 import { VotingService } from "./VotingService";
 import { EquippedFormat } from "shared/InventoryInfo";
-import { modes } from "shared/GameInfo";
+import { modeObjectives, modes } from "shared/GameInfo";
 import ObjectUtils from "@rbxts/object-utils";
 import { leaderFormat } from "server/GameModes/PTL";
+import { InventoryService } from "./InventoryService";
 
 interface playerResult {
 	Player: Player;
@@ -30,6 +31,7 @@ declare global {
 	}
 }
 
+const modelsFolder = ReplicatedStorage.WaitForChild("ModelsFolder");
 const mapsFolder = ReplicatedStorage.WaitForChild("Maps");
 const mapHolder = Workspace.WaitForChild("Holder");
 const objectValues = ReplicatedStorage.WaitForChild("ObjectValues");
@@ -330,6 +332,50 @@ const MatchService = Knit.CreateService({
 		return participantList;
 	},
 
+	AddSword(player: Player) {
+		const char = player.Character || player.CharacterAdded.Wait()[0];
+		if (char) {
+			const torso = char.FindFirstChild("Torso") as Part;
+			const equipped = InventoryService.FetchEquipped(player);
+			const backSword = char.FindFirstChild("BackSword");
+			if (backSword) {
+				backSword.Destroy();
+			}
+			if (equipped && torso) {
+				const equippedSword = equipped.Swords;
+				if (equippedSword !== undefined) {
+					const swordModel = modelsFolder.FindFirstChild(equippedSword) as Tool;
+					if (swordModel) {
+						const model = new Instance("Model");
+						model.Name = "BackSword";
+						model.Parent = char;
+						const handle = swordModel.FindFirstChild("Handle") as Part;
+						if (handle) {
+							const newHandle = handle.Clone();
+							const swordScript = newHandle.FindFirstChild("SwordScript");
+							if (swordScript) {
+								swordScript.Destroy();
+							}
+							newHandle.CanCollide = false;
+							newHandle.Parent = model;
+							const attachment = new Instance("Attachment");
+							attachment.Parent = torso;
+							attachment.Position = new Vector3(0, 0, 0.6);
+
+							const weld = new Instance("Weld");
+							weld.Name = "BackWeld";
+							weld.Part0 = torso;
+							weld.Part1 = newHandle;
+							weld.C0 = new CFrame(attachment.Position);
+							weld.C0 = weld.C0.mul(CFrame.fromEulerAnglesXYZ(math.rad(90), math.rad(330), 0));
+							weld.Parent = newHandle;
+						}
+					}
+				}
+			}
+		}
+	},
+
 	// Initialize on service startup
 	KnitInit() {
 		print("Match Service Initialized | Server");
@@ -352,18 +398,53 @@ const MatchService = Knit.CreateService({
 			deaths.Value = 0;
 			deaths.Parent = leaderstats;
 
+			this.AddSword(player);
 			player.CharacterAdded.Connect((char: Model) => {
+				wait(0.5);
+				this.AddSword(player);
 				const humanoid = char.FindFirstChildOfClass("Humanoid");
 
+				// Add Sword on Back
+				char.ChildAdded.Connect((child) => {
+					const equipped = InventoryService.FetchEquipped(player);
+					if (equipped) {
+						const equippedSword = equipped.Swords;
+						if (equippedSword !== undefined) {
+							if (child.Name === equippedSword && child.IsA("Tool")) {
+								const backSword = char.FindFirstChild("BackSword");
+								if (player.Team && player.Team.Name !== "Ghosts" && backSword) {
+									backSword.Destroy();
+								}
+							}
+						}
+					}
+				});
+				char.ChildRemoved.Connect((child) => {
+					const equipped = InventoryService.FetchEquipped(player);
+					if (equipped) {
+						const equippedSword = equipped.Swords;
+						if (equippedSword !== undefined) {
+							if (child.Name === equippedSword && child.IsA("Tool")) {
+								const backSword = char.FindFirstChild("BackSword");
+								if (player.Team && player.Team.Name !== "Ghosts" && !backSword) {
+									this.AddSword(player);
+								}
+							}
+						}
+					}
+				});
+				// Leaderboard Stuff
 				if (humanoid) {
 					humanoid.Died.Connect(() => {
 						deaths.Value += 1;
 
 						if (!RESERVED_TEAMS.includes(player.TeamColor) && this.CurrentMode !== "None") {
 							const modeLibraries = this.ModeLibraries; // for some reason it was bugging when i put this.ModeLibraries below lol
-							const library = modeLibraries[this.CurrentMode as keyof typeof modeLibraries];
-							if (deaths.Value >= library.OUTSCORE) {
-								player.TeamColor = new BrickColor("White");
+							if (this.CurrentMode in modeLibraries) {
+								const library = modeLibraries[this.CurrentMode as keyof typeof modeLibraries];
+								if (deaths.Value >= library.OUTSCORE) {
+									player.TeamColor = new BrickColor("White");
+								}
 							}
 						}
 						const tag = humanoid.FindFirstChild("creator") as ObjectValue;
@@ -382,6 +463,10 @@ const MatchService = Knit.CreateService({
 					});
 				}
 			});
+		});
+
+		Players.PlayerRemoving.Connect((player) => {
+			this.Participants.delete(player);
 		});
 
 		coroutine.wrap(() => {
@@ -433,7 +518,9 @@ const MatchService = Knit.CreateService({
 						wait(1);
 
 						// Begin setting up the match
-						status.Value = `${this.CurrentMode} | ${this.CurrentMap}`;
+						if (this.CurrentMode in modeObjectives) {
+							status.Value = modeObjectives[this.CurrentMode as keyof typeof modeObjectives];
+						}
 						this.LoadMatch(participants);
 						spawn(() => {
 							wait(25);
@@ -443,10 +530,8 @@ const MatchService = Knit.CreateService({
 						SnackbarService.PushAll(`Unable to locate ${this.CurrentMode} module..`);
 					}
 				} else {
-					if (status.Value === "") {
-						status.Value = "Need at least two players..";
-					}
 					wait(0.5);
+					status.Value = "Need at least two players..";
 				}
 			}
 		})();

@@ -57,7 +57,7 @@
 
 > Miscellaneous
 - [ ] Name Tags
-- [ ] Sword on Back
+- [x] Sword on Back
 - [ ] Obby Chest
 - [ ] Spinning coins in lobby
 
@@ -94,6 +94,7 @@
 
 > Shared
 - [x] Sword Data
+- [ ] Death Effect Functions
 - [x] Level Data
 - [x] Map Descriptions
 - [x] Mode Descriptions
@@ -145,7 +146,6 @@
 
 > Bug/Revamp List
 - [x] TouchService UIs overlaying on betting/voting/results UIs
-- [ ] Rework snackbar service to use mapDispatchToProps and mount it on main
 - [x] Use componentDidUpdate to reset state on betting and voting UIs
 - [x] Selected Maps and Modes not changing
 - [x] Kills not changing in leaderboard

@@ -29,7 +29,21 @@ let packagePlayerRemoved: RBXScriptConnection | undefined = undefined;
 let playerAddedConnection: RBXScriptConnection | undefined = undefined;
 
 const fillPartCache = () => {
-	const descendants = Workspace.GetDescendants();
+	let descendants = Workspace.GetDescendants();
+	descendants.forEach((descendant) => {
+		if (
+			descendant.IsA("BasePart") ||
+			descendant.IsA("Part") ||
+			descendant.IsA("WedgePart") ||
+			descendant.IsA("MeshPart")
+		) {
+			if (!partCache.get(descendant)) {
+				partCache.set(descendant, descendant.Material);
+			}
+		}
+	});
+
+	descendants = ReplicatedStorage.GetDescendants();
 	descendants.forEach((descendant) => {
 		if (
 			descendant.IsA("BasePart") ||

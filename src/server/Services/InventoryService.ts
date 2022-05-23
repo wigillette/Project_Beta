@@ -67,6 +67,12 @@ export const InventoryService = Knit.CreateService({
 		this.PlayerEquipped.set(Player, equippedItems);
 		this.UpdateEquippedData(Player, equippedItems);
 		this.Client.EquippedChanged.Fire(Player, equippedItems);
+		if (Category === "Swords") {
+			const matchService = Knit.GetService("MatchService");
+			if (matchService) {
+				matchService.AddSword(Player);
+			}
+		}
 		return `Successfully equipped ${ItemName}`;
 	},
 

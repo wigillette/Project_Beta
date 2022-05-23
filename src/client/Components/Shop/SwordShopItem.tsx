@@ -107,21 +107,6 @@ class SwordShopItem extends Roact.Component<UIProps> {
 			</frame>
 		);
 	}
-
-	protected didMount(): void {
-		const container = this.containerRef.getValue();
-
-		if (container) {
-			coroutine.wrap(() => {
-				container.Visible = false;
-				tweenTransparency(container, true, false);
-				wait(0.35);
-				container.Visible = true;
-				tweenTransparency(container, true, true);
-				container.Visible = true;
-			})();
-		}
-	}
 }
 
 export default SwordShopItem;

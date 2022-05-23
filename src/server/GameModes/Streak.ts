@@ -40,8 +40,7 @@ const StreakProperties = {
 												if (greatestStreakPlayer !== player) {
 													greatestStreakPlayer = player;
 													participants.forEach((participant) => {
-														SnackbarService.PushPlayer(
-															participant,
+														SnackbarService.PushAll(
 															`${killer.Name} is in the lead with a streak of ${greatestStreak}!`,
 														);
 													});

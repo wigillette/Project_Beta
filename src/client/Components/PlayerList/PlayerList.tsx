@@ -82,7 +82,7 @@ class PlayerList extends Roact.Component<UIProps> {
 		);
 
 		this.connections.push(
-			Players.PlayerAdded.Connect((player: Player) => {
+			Players.PlayerRemoving.Connect((player: Player) => {
 				const players = Players.GetPlayers();
 				this.props.updatePlayers(players);
 				// Dispatch to the rodux store the old player list

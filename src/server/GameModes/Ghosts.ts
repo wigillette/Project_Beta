@@ -41,6 +41,10 @@ const GhostProperties = {
 						wait(0.5);
 						if (char) {
 							const humanoid = char.FindFirstChildOfClass("Humanoid");
+							const face = char.FindFirstChild("face", true);
+							if (face) {
+								face.Destroy();
+							}
 
 							if (humanoid) {
 								char.ChildAdded.Connect((child: Instance) => {
