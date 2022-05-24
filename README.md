@@ -156,5 +156,5 @@
 - [x] Viewport blocky head bug
 - [x] Settings Packages Function
 - [x] Menu UIs overlaying on match UIs
-- [ ] Use icons in Results UI
+- [x] Use icons in Results UI
 - [ ] Blocky head in viewport frames; meshes not loading
