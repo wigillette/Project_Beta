@@ -18,7 +18,7 @@ export interface productFormat {
 
 export interface itemsFormat {
 	products: productFormat[];
-	gamepasses: AssetProductInfo[];
+	gamepasses: [number, AssetProductInfo][];
 }
 
 interface Action {
@@ -28,7 +28,7 @@ interface Action {
 
 const initialProducts = {
 	products: [] as productFormat[],
-	gamepasses: [] as AssetProductInfo[],
+	gamepasses: [] as [number, AssetProductInfo][],
 };
 
 export const goldReducer = Rodux.createReducer(

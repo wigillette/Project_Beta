@@ -106,27 +106,39 @@ class GoldContainer extends Roact.Component<UIProps> {
 							{ObjectUtils.values(
 								this.props.items[this.props.currentTab as keyof typeof this.props.items],
 							).map((product) => {
-								const newProduct: productFormat | AssetProductInfo = product as
-									| productFormat
-									| AssetProductInfo;
+								let newProduct = product as productFormat | [number, AssetProductInfo];
 
-								return (
-									<ProductItem
-										title={newProduct.Name}
-										icon={`rbxassetid://${newProduct.IconImageAssetId || "5350867529"}`}
-										description={
-											(newProduct.Description !== undefined && newProduct.Description) || ""
-										}
-										productId={
-											((newProduct as AssetProductInfo).AssetId !== undefined &&
-												(newProduct as AssetProductInfo).AssetId) ||
-											((newProduct as productFormat).ProductId !== undefined &&
-												(newProduct as productFormat).ProductId) ||
-											0
-										}
-										isGamePass={this.props.currentTab === "gamepasses"}
-									></ProductItem>
-								);
+								if (!("Name" in newProduct)) {
+									newProduct = newProduct as [number, AssetProductInfo];
+									return (
+										<ProductItem
+											title={newProduct[1].Name}
+											icon={`rbxassetid://${newProduct[1].IconImageAssetId || "5350867529"}`}
+											description={
+												(newProduct[1].Description !== undefined &&
+													newProduct[1].Description) ||
+												""
+											}
+											productId={newProduct[0]}
+											isGamePass={this.props.currentTab === "gamepasses"}
+										></ProductItem>
+									);
+								} else {
+									newProduct = newProduct as productFormat;
+									return (
+										<ProductItem
+											title={newProduct.Name}
+											icon={`rbxassetid://${newProduct.IconImageAssetId || "5350867529"}`}
+											description={
+												(newProduct.Description !== undefined && newProduct.Description) || ""
+											}
+											productId={
+												(newProduct.ProductId !== undefined && newProduct.ProductId) || 0
+											}
+											isGamePass={this.props.currentTab === "gamepasses"}
+										></ProductItem>
+									);
+								}
 							})}
 						</scrollingframe>
 					</frame>

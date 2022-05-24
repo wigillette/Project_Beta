@@ -11,6 +11,15 @@ declare global {
 	}
 }
 
+const purchaseGamepass = (client: Player, gamePassId: number) => {
+	if (client && gamePassId in gamepassEvents) {
+		const handler = gamepassEvents[gamePassId as keyof typeof gamepassEvents];
+		const response = pcall(() => {
+			handler(client);
+		});
+	}
+};
+
 const ProcessReceipt = (receiptInfo: ReceiptInfo) => {
 	const player = Players.GetPlayerByUserId(receiptInfo.PlayerId);
 
@@ -25,15 +34,6 @@ const ProcessReceipt = (receiptInfo: ReceiptInfo) => {
 			return Enum.ProductPurchaseDecision.NotProcessedYet;
 		} else {
 			GoldService.AddGold(player, response[1]);
-		}
-	} else if (receiptInfo.ProductId in gamepassEvents) {
-		const handler = gamepassEvents[receiptInfo.ProductId as keyof typeof gamepassEvents];
-		const response = pcall(() => {
-			handler(player);
-		});
-
-		if (!response[0]) {
-			return Enum.ProductPurchaseDecision.NotProcessedYet;
 		}
 	}
 
@@ -92,6 +92,13 @@ export const GoldService = Knit.CreateService({
 
 	KnitInit() {
 		print("Gold Service Initialized | Server");
+		MarketplaceService.PromptGamePassPurchaseFinished.Connect(
+			(player: Player, gamepassId: number, wasPurchased: boolean) => {
+				if (wasPurchased) {
+					purchaseGamepass(player, gamepassId);
+				}
+			},
+		);
 		MarketplaceService.ProcessReceipt = ProcessReceipt;
 		Players.PlayerAdded.Connect((player) => {
 			// Handling recurring gamepasses
