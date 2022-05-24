@@ -80,7 +80,7 @@
 - [x] Interaction Service
 - [x] Touch Service
 - [x] Developer Product Service
-- [ ] Gamepass Service
+- [x] Gamepass Service
 - [x] Settings Service
 - [x] Betting Service
 - [x] Profile Service
