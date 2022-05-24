@@ -2,6 +2,7 @@ import { KnitServer as Knit, Signal, RemoteSignal } from "@rbxts/knit";
 import { MarketplaceService, Players } from "@rbxts/services";
 import Database from "@rbxts/datastore2";
 import { PRODUCT_FUNCTIONS } from "server/Utils/DeveloperProducts";
+import { gamepassesOnJoin, gamepassEvents } from "../Utils/Gamepasses";
 
 declare global {
 	interface KnitServices {
@@ -78,6 +79,16 @@ export const GoldService = Knit.CreateService({
 	KnitInit() {
 		print("Gold Service Initialized | Server");
 		MarketplaceService.ProcessReceipt = ProcessReceipt;
+		Players.PlayerAdded.Connect((player) => {
+			// Handling recurring gamepasses
+			gamepassesOnJoin.forEach((gamepassId) => {
+				if (MarketplaceService.UserOwnsGamePassAsync(player.UserId, gamepassId)) {
+					if (gamepassId in gamepassEvents) {
+						gamepassEvents[gamepassId as keyof typeof gamepassEvents](player);
+					}
+				}
+			});
+		});
 		Players.PlayerRemoving.Connect((player) => this.PlayerGold.delete(player));
 	},
 });
