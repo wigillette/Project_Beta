@@ -2,16 +2,19 @@ import Roact from "@rbxts/roact";
 import RoactRodux from "@rbxts/roact-rodux";
 import { googleMaterial, whiteGradientProperties } from "client/UIProperties/ColorSchemes";
 import { MenuAspectRatio, RectBG, RectContainer, RectShadow, RectText, Header, Body } from "client/UIProperties/RectUI";
-import { MarketplaceService } from "@rbxts/services";
+import { MarketplaceService, PolicyService } from "@rbxts/services";
 import ProductItem from "./ProductItem";
 import { movingFadeAbsolute } from "client/UIProperties/FrameEffects";
 import ObjectUtils from "@rbxts/object-utils";
-import { productFormat, goldState } from "../../Rodux/Reducers/GoldReducer";
+import { goldState, itemsFormat, productFormat } from "../../Rodux/Reducers/GoldReducer";
 import { registerGridDynamicScrolling } from "../../UIProperties/DynamicScrolling";
+import RectButton from "../Material/RectButton";
 
 interface UIProps {
 	toggle: boolean;
-	products: productFormat[];
+	items: itemsFormat;
+	currentTab: string;
+	switchTab: (tabName: string) => void;
 }
 
 const goldRef = Roact.createRef<Frame>();
@@ -32,7 +35,7 @@ class GoldContainer extends Roact.Component<UIProps> {
 			<frame
 				{...RectContainer}
 				Position={new UDim2(0.5, 0, 0.5, 0)}
-				Size={new UDim2(0.4, 0, 0.4, 0)}
+				Size={new UDim2(0.5, 0, 0.6, 0)}
 				Ref={goldRef}
 				AnchorPoint={new Vector2(0.5, 0.5)}
 			>
@@ -49,7 +52,33 @@ class GoldContainer extends Roact.Component<UIProps> {
 							TextColor3={googleMaterial.bgFont}
 						></textlabel>
 					</frame>
-					<frame {...Body}>
+					<frame
+						{...RectContainer}
+						Size={new UDim2(0.95, 0, 0.15, 0)}
+						Position={new UDim2(0.5, 0, 0.225, 0)}
+						AnchorPoint={new Vector2(0.5, 0.225)}
+					>
+						<uilistlayout
+							FillDirection={Enum.FillDirection.Horizontal}
+							HorizontalAlignment={Enum.HorizontalAlignment.Center}
+							VerticalAlignment={Enum.VerticalAlignment.Center}
+							Padding={new UDim(0.1, 0)}
+						></uilistlayout>
+						{ObjectUtils.keys(this.props.items).map((item) => {
+							return (
+								<RectButton
+									Size={new UDim2(0.35, 0, 0.95, 0)}
+									Position={new UDim2(0, 0, 0, 0)}
+									AnchorPoint={new Vector2(0, 0)}
+									Callback={() => {
+										this.props.switchTab(item);
+									}}
+									ButtonText={item.upper()}
+								/>
+							);
+						})}
+					</frame>
+					<frame {...Body} Size={new UDim2(0.95, 0, 0.6, 0)}>
 						<scrollingframe
 							BackgroundTransparency={1}
 							Ref={this.scrollRef}
@@ -61,20 +90,41 @@ class GoldContainer extends Roact.Component<UIProps> {
 							<uigridlayout
 								Ref={this.gridRef}
 								CellSize={new UDim2(0.45, 0, 0.45, 0)}
-								CellPadding={new UDim2(0.05, 0, 0.05, 0)}
+								CellPadding={new UDim2(0.05, 0, 0.03, 0)}
 								SortOrder={Enum.SortOrder.Name}
 								HorizontalAlignment={Enum.HorizontalAlignment.Center}
 								VerticalAlignment={Enum.VerticalAlignment.Top}
 								FillDirection={Enum.FillDirection.Horizontal}
 								FillDirectionMaxCells={2}
-							></uigridlayout>
-							{ObjectUtils.values(this.props.products).map((product) => {
+							>
+								<uiaspectratioconstraint
+									AspectRatio={2}
+									DominantAxis={"Width"}
+									AspectType={"ScaleWithParentSize"}
+								></uiaspectratioconstraint>
+							</uigridlayout>
+							{ObjectUtils.values(
+								this.props.items[this.props.currentTab as keyof typeof this.props.items],
+							).map((product) => {
+								const newProduct: productFormat | AssetProductInfo = product as
+									| productFormat
+									| AssetProductInfo;
+
 								return (
 									<ProductItem
-										title={product.Name}
-										icon={`rbxassetid://${product.IconImageAssetId || "5350867529"}`}
-										description={product.Description}
-										productId={product.ProductId}
+										title={newProduct.Name}
+										icon={`rbxassetid://${newProduct.IconImageAssetId || "5350867529"}`}
+										description={
+											(newProduct.Description !== undefined && newProduct.Description) || ""
+										}
+										productId={
+											((newProduct as AssetProductInfo).AssetId !== undefined &&
+												(newProduct as AssetProductInfo).AssetId) ||
+											((newProduct as productFormat).ProductId !== undefined &&
+												(newProduct as productFormat).ProductId) ||
+											0
+										}
+										isGamePass={this.props.currentTab === "gamepasses"}
 									></ProductItem>
 								);
 							})}
@@ -108,18 +158,33 @@ class GoldContainer extends Roact.Component<UIProps> {
 interface storeState {
 	fetchProducts: goldState;
 	toggleProducts: goldState;
+	switchGoldTab: goldState;
 }
 
-export = RoactRodux.connect(function (state: storeState) {
-	const goldFrame = goldRef.getValue() as Frame;
-	if (goldFrame && state.toggleProducts.toggle !== oldFadeIn) {
-		oldFadeIn = state.toggleProducts.toggle;
-		state.toggleProducts.toggle
-			? movingFadeAbsolute(goldFrame, true, new UDim2(0.5, 0, 0.4, 0), true)
-			: movingFadeAbsolute(goldFrame, false, new UDim2(0.5, 0, 0.1, 0), true);
-	}
-	return {
-		toggle: state.toggleProducts.toggle,
-		products: state.fetchProducts.products,
-	};
-})(GoldContainer);
+export = RoactRodux.connect(
+	function (state: storeState) {
+		const goldFrame = goldRef.getValue() as Frame;
+		if (goldFrame && state.toggleProducts.toggle !== oldFadeIn) {
+			oldFadeIn = state.toggleProducts.toggle;
+			state.toggleProducts.toggle
+				? movingFadeAbsolute(goldFrame, true, new UDim2(0.5, 0, 0.4, 0), true)
+				: movingFadeAbsolute(goldFrame, false, new UDim2(0.5, 0, 0.1, 0), true);
+		}
+
+		return {
+			toggle: state.toggleProducts.toggle,
+			items: state.fetchProducts.items,
+			currentTab: state.switchGoldTab.currentTab,
+		};
+	},
+	(dispatch) => {
+		return {
+			switchTab: (tabName: string) => {
+				dispatch({
+					type: "switchGoldTab",
+					payload: { tabName: tabName },
+				});
+			},
+		};
+	},
+)(GoldContainer);

@@ -1,6 +1,6 @@
 import { KnitServer } from "@rbxts/knit";
 import Object from "@rbxts/object-utils";
-import { InsertService, ServerStorage } from "@rbxts/services";
+import { InsertService, MarketplaceService, ServerStorage } from "@rbxts/services";
 import { PACK_INFO } from "shared/ShopData";
 const tools = ServerStorage.WaitForChild("Tools");
 const InventoryService = KnitServer.GetService("InventoryService");
@@ -72,9 +72,6 @@ export const gamepassEvents = {
 		if (goldService) {
 			goldService.AddGold(client, 250);
 		}
-	},
-	8353972: (client: Player) => {
-		// x2 Coins
 		const rareItems = [] as string[];
 		Object.entries(PACK_INFO).forEach((pack) => {
 			pack[1].forEach((sword) => {
@@ -87,4 +84,11 @@ export const gamepassEvents = {
 		const randomSword = rareItems[math.floor(math.random() * rareItems.size())];
 		InventoryService.AddToInventory(client, randomSword, "Swords");
 	},
+	8353972: (client: Player) => {
+		// x2 Coins
+	},
 };
+
+export const gamepassInfo = Object.keys(gamepassEvents).map((gamepassId) => {
+	return MarketplaceService.GetProductInfo(gamepassId, Enum.InfoType.GamePass);
+});

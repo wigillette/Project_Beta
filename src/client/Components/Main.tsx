@@ -20,8 +20,6 @@ const Main = () => {
 			<Profile />
 			<Shop />
 			<Inventory />
-			<Gold />
-			<GoldContainer />
 			<Twitter />
 			<Settings />
 			<DailyReward />
@@ -31,6 +29,8 @@ const Main = () => {
 			<MatchResults />
 			<VotingContainer />
 			<PlayerList />
+			<Gold />
+			<GoldContainer />
 		</screengui>
 	);
 };

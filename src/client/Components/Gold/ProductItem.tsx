@@ -9,6 +9,7 @@ interface UIProps {
 	title: string;
 	description: string;
 	productId: number;
+	isGamePass: boolean;
 }
 
 class MatchItem extends Roact.Component<UIProps> {
@@ -19,6 +20,11 @@ class MatchItem extends Roact.Component<UIProps> {
 	render() {
 		return (
 			<frame {...RectContainer} Size={new UDim2(0.5, 0, 1, 0)} ZIndex={-1}>
+				<uiaspectratioconstraint
+					AspectRatio={2}
+					DominantAxis={"Width"}
+					AspectType={"ScaleWithParentSize"}
+				></uiaspectratioconstraint>
 				<imagelabel {...RectBG} ImageColor3={googleMaterial.cardBG}>
 					<textlabel
 						{...RectText}
@@ -43,7 +49,7 @@ class MatchItem extends Roact.Component<UIProps> {
 						{...RectText}
 						Position={new UDim2(0.95, 0, 0.35, 0)}
 						AnchorPoint={new Vector2(0.95, 0.35)}
-						Size={new UDim2(0.65, 0, 0.5, 0)}
+						Size={new UDim2(0.65, 0, 0.4, 0)}
 						Text={this.props.description || "No description."}
 						TextXAlignment={Enum.TextXAlignment.Left}
 						TextYAlignment={Enum.TextYAlignment.Center}
@@ -54,7 +60,11 @@ class MatchItem extends Roact.Component<UIProps> {
 						Position={new UDim2(0.05, 0, 0.95, 0)}
 						AnchorPoint={new Vector2(0.05, 0.95)}
 						Callback={() => {
-							MarketplaceService.PromptProductPurchase(Players.LocalPlayer, this.props.productId);
+							if (this.props.isGamePass) {
+								MarketplaceService.PromptGamePassPurchase(Players.LocalPlayer, this.props.productId);
+							} else {
+								MarketplaceService.PromptProductPurchase(Players.LocalPlayer, this.props.productId);
+							}
 							print(`Purchasing ${this.props.title}`);
 						}}
 					/>

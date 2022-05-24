@@ -1,5 +1,5 @@
 import { KnitServer as Knit, RemoteSignal, Service } from "@rbxts/knit";
-import { ReplicatedStorage, Workspace, Teams, Players } from "@rbxts/services";
+import { ReplicatedStorage, Workspace, Teams, Players, MarketplaceService } from "@rbxts/services";
 import { RESERVED_TEAMS } from "server/Utils/ReservedTeams";
 import SnackbarService from "./SnackbarService";
 import MusicService from "./MusicService";
@@ -161,10 +161,13 @@ const MatchService = Knit.CreateService({
 					const kills = leaderstats.FindFirstChild("Kills") as IntValue;
 					const deaths = leaderstats.FindFirstChild("Deaths") as IntValue;
 					if (kills && deaths) {
-						// Need to keep track of teams a new way?
+						const ownsDoubleExp = MarketplaceService.UserOwnsGamePassAsync(player.UserId, 8270062);
+						const ownsDoubleCoins = MarketplaceService.UserOwnsGamePassAsync(player.UserId, 8353972);
 						const isWinner = winner === player || winningTeam.includes(player);
-						const expEarned = math.max(kills.Value * 50 - deaths.Value * 25 + ((isWinner && 100) || 0), 0);
-						const goldEarned = (isWinner && 50) || 10;
+						let expEarned = math.max(kills.Value * 50 - deaths.Value * 25 + ((isWinner && 100) || 0), 0);
+						expEarned = (ownsDoubleExp && expEarned * 2) || expEarned;
+						let goldEarned = (isWinner && 50) || 10;
+						goldEarned = (ownsDoubleCoins && goldEarned * 2) || goldEarned;
 						GoldService.AddGold(player, goldEarned);
 						ProfileService.IncrementExp(player, expEarned);
 						let winnerName = "Error";

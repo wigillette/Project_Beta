@@ -2,7 +2,8 @@ import { KnitServer as Knit, Signal, RemoteSignal } from "@rbxts/knit";
 import { MarketplaceService, Players } from "@rbxts/services";
 import Database from "@rbxts/datastore2";
 import { PRODUCT_FUNCTIONS } from "server/Utils/DeveloperProducts";
-import { gamepassesOnJoin, gamepassEvents } from "../Utils/Gamepasses";
+import { gamepassesOnJoin, gamepassEvents, gamepassInfo } from "../Utils/Gamepasses";
+import ObjectUtils from "@rbxts/object-utils";
 
 declare global {
 	interface KnitServices {
@@ -25,7 +26,17 @@ const ProcessReceipt = (receiptInfo: ReceiptInfo) => {
 		} else {
 			GoldService.AddGold(player, response[1]);
 		}
+	} else if (receiptInfo.ProductId in gamepassEvents) {
+		const handler = gamepassEvents[receiptInfo.ProductId as keyof typeof gamepassEvents];
+		const response = pcall(() => {
+			handler(player);
+		});
+
+		if (!response[0]) {
+			return Enum.ProductPurchaseDecision.NotProcessedYet;
+		}
 	}
+
 	return Enum.ProductPurchaseDecision.PurchaseGranted;
 };
 
@@ -58,7 +69,10 @@ export const GoldService = Knit.CreateService({
 	},
 
 	GetProducts() {
-		return MarketplaceService.GetDeveloperProductsAsync().GetCurrentPage();
+		return {
+			products: MarketplaceService.GetDeveloperProductsAsync().GetCurrentPage(),
+			gamepasses: gamepassInfo,
+		};
 	},
 
 	GetGold(Player: Player) {

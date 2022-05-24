@@ -23,6 +23,7 @@ const reducer = Rodux.combineReducers({
 	updateGold: goldReducer,
 	toggleProducts: goldReducer,
 	fetchProducts: goldReducer,
+	switchGoldTab: goldReducer,
 	fetchExp: profileReducer,
 	toggleTwitter: twitterReducer,
 	setTwitterToggle: twitterReducer,

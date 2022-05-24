@@ -133,7 +133,7 @@
 - [x] Menu Buttons UI
 - [x] Match Panel UI
 - [x] Match Results UI
-- [ ] Gamepass UI
+- [x] Gamepass UI
 - [x] Playerlist UI
 
 > Surface Components
