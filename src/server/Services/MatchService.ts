@@ -2,6 +2,7 @@ import { KnitServer as Knit, RemoteSignal, Service } from "@rbxts/knit";
 import { ReplicatedStorage, Workspace, Teams, Players } from "@rbxts/services";
 import { RESERVED_TEAMS } from "server/Utils/ReservedTeams";
 import SnackbarService from "./SnackbarService";
+import MusicService from "./MusicService";
 import FFA from "../GameModes/FFA";
 import TDM from "../GameModes/TDM";
 import Teamswap from "server/GameModes/Teamswap";
@@ -131,6 +132,7 @@ const MatchService = Knit.CreateService({
 			mapHolder.ClearAllChildren();
 		}
 		// Restart the lobby stuff
+		MusicService.ChangeMusic(participants, "Lobby");
 		this.Client.InitialMatchPanel.FireAll(this.CurrentMode, this.CurrentMap, 0);
 	},
 
@@ -287,6 +289,7 @@ const MatchService = Knit.CreateService({
 					const library = modeLibraries[this.CurrentMode as keyof typeof modeLibraries];
 					const teams = this.CreateTeams(library.TEAMS, library.TEAM_NAMES); // Create the teams
 					this.Client.InitialMatchPanel.FireAll(this.CurrentMode, this.CurrentMap, participants.size());
+					MusicService.ChangeMusic(participants, "Match");
 					library.init(teams, participants); // execute the init function of the mode
 				} else {
 					SnackbarService.PushAll("Unable to locate mode module..");

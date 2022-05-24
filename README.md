@@ -60,7 +60,7 @@
 - [x] Sword on Back
 - [ ] Obby Chest
 - [ ] Spinning coins in lobby
-- [ ] Lobby/Match Music
+- [x] Lobby/Match Music
 
 > Game Modes
 - [x] FFA

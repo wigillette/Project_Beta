@@ -28,7 +28,7 @@ const FriendService = Knit.CreateService({
 				GoldService.AddGold(player, 5);
 				chatService.PostFeedback(
 					player,
-					`You have received five coins since your friend ${client.Name} joined the game!`,
+					`You have received five coins because your friend ${client.Name} joined the game!`,
 				);
 			}
 		});

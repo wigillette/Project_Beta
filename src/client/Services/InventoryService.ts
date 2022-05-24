@@ -28,7 +28,6 @@ const InventoryClient = {
 	},
 	init: () => {
 		const initialInventory = InventoryService.FetchInventory();
-		print(initialInventory);
 		// Display the initial inventory upon joining
 		InventoryClient.FetchInventory(initialInventory);
 
