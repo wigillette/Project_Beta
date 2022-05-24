@@ -154,24 +154,58 @@ class Results extends Roact.Component<UIProps> {
 							AnchorPoint={new Vector2(0.95, 0.925)}
 						>
 							<imagelabel ImageColor3={googleMaterial.innerBG2} {...RectBG} ZIndex={15}>
-								<textlabel
-									ZIndex={15}
-									{...RectText}
+								<frame
+									{...RectContainer}
 									Size={new UDim2(0.95, 0, 0.45, 0)}
 									Position={new UDim2(0.5, 0, 0.05, 0)}
 									AnchorPoint={new Vector2(0.5, 0.05)}
-									Font={Enum.Font.GothamBold}
-									Text={`Gold Earned: ${this.props.goldEarned}`}
-								></textlabel>
-								<textlabel
-									ZIndex={15}
-									{...RectText}
+								>
+									<imagelabel
+										{...RectContainer}
+										Size={new UDim2(0.3, 0, 0.95, 0)}
+										Position={new UDim2(0, 0, 0.5, 0)}
+										AnchorPoint={new Vector2(0, 0.5)}
+										Image={"rbxassetid://5350867529"}
+										ZIndex={15}
+									>
+										<uiaspectratioconstraint {...SquareAspectRatio}></uiaspectratioconstraint>
+									</imagelabel>
+									<textlabel
+										ZIndex={15}
+										{...RectText}
+										Size={new UDim2(0.55, 0, 0.45, 0)}
+										Position={new UDim2(1, 0, 0.5, 0)}
+										AnchorPoint={new Vector2(1, 0.5)}
+										Font={Enum.Font.GothamBold}
+										Text={`Gold Earned: ${this.props.goldEarned}`}
+									></textlabel>
+								</frame>
+								<frame
+									{...RectContainer}
 									Size={new UDim2(0.95, 0, 0.45, 0)}
 									Position={new UDim2(0.5, 0, 0.95, 0)}
 									AnchorPoint={new Vector2(0.5, 0.95)}
-									Font={Enum.Font.GothamBold}
-									Text={`Winner: ${tostring(this.props.winner)}`}
-								></textlabel>
+								>
+									<imagelabel
+										{...RectContainer}
+										Size={new UDim2(0.3, 0, 0.95, 0)}
+										Position={new UDim2(0, 0, 0.5, 0)}
+										AnchorPoint={new Vector2(0, 0.5)}
+										Image={"rbxassetid://9711348873"}
+										ZIndex={15}
+									>
+										<uiaspectratioconstraint {...SquareAspectRatio}></uiaspectratioconstraint>
+									</imagelabel>
+									<textlabel
+										ZIndex={15}
+										{...RectText}
+										Size={new UDim2(0.55, 0, 0.45, 0)}
+										Position={new UDim2(1, 0, 0.5, 0)}
+										AnchorPoint={new Vector2(1, 0.5)}
+										Font={Enum.Font.GothamBold}
+										Text={`Winner: ${tostring(this.props.winner)}`}
+									></textlabel>
+								</frame>
 							</imagelabel>
 						</frame>
 

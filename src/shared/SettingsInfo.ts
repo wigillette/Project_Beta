@@ -3,7 +3,7 @@ import ObjectUtils from "@rbxts/object-utils";
 
 export const INITIAL_SETTINGS = {
 	ReducedParts: false,
-	Music: true,
+	Music: false,
 	Hitbox: false,
 	Material: false,
 	Playing: true,
@@ -136,7 +136,7 @@ export const SETTINGS_FUNCTIONS = {
 		}
 	},
 	Music: (activate: boolean) => {
-		activateMusic(activate);
+		activateMusic(!activate);
 	},
 	Hitbox: (activate: boolean) => {
 		if (activate) {

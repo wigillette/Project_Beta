@@ -15,6 +15,20 @@ const MusicClient = {
 		if (songFolder) {
 			if (currentlyPlaying) {
 				currentlyPlaying.Stop();
+				const lobbyFolder = SFXFolder.FindFirstChild("Lobby");
+				const matchFolder = SFXFolder.FindFirstChild("Match");
+				if (lobbyFolder && matchFolder) {
+					lobbyFolder.GetChildren().forEach((song) => {
+						if (song.IsA("Sound") && song.IsPlaying) {
+							song.Stop();
+						}
+					});
+					matchFolder.GetChildren().forEach((song) => {
+						if (song.IsA("Sound") && song.IsPlaying) {
+							song.Stop();
+						}
+					});
+				}
 			}
 
 			coroutine.wrap(() => {
