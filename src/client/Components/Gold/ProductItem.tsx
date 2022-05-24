@@ -40,8 +40,8 @@ class MatchItem extends Roact.Component<UIProps> {
 						{...RectContainer}
 						Image={this.props.icon}
 						Size={new UDim2(0.25, 0, 1, 0)}
-						Position={new UDim2(0.05, 0, 0, 0)}
-						AnchorPoint={new Vector2(0.05, 0)}
+						Position={new UDim2(0.05, 0, 0.05, 0)}
+						AnchorPoint={new Vector2(0.05, 0.05)}
 					>
 						<uiaspectratioconstraint {...SquareAspectRatio}></uiaspectratioconstraint>
 					</imagelabel>
@@ -49,7 +49,7 @@ class MatchItem extends Roact.Component<UIProps> {
 						{...RectText}
 						Position={new UDim2(0.95, 0, 0.35, 0)}
 						AnchorPoint={new Vector2(0.95, 0.35)}
-						Size={new UDim2(0.65, 0, 0.4, 0)}
+						Size={new UDim2(0.6, 0, 0.35, 0)}
 						Text={this.props.description || "No description."}
 						TextXAlignment={Enum.TextXAlignment.Left}
 						TextYAlignment={Enum.TextYAlignment.Center}

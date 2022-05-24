@@ -48,7 +48,7 @@ class GoldContainer extends Roact.Component<UIProps> {
 							Position={new UDim2(0.5, 0, 0.5, 0)}
 							AnchorPoint={new Vector2(0.5, 0.5)}
 							Size={new UDim2(0.6, 0, 1, 0)}
-							Text={"Developer Products"}
+							Text={this.props.currentTab.upper()}
 							TextColor3={googleMaterial.bgFont}
 						></textlabel>
 					</frame>
