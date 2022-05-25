@@ -17,6 +17,8 @@ import PlayerList from "./PlayerList/PlayerList";
 const Main = () => {
 	return (
 		<screengui ResetOnSpawn={false}>
+			<IntroScreen />
+
 			<Profile />
 			<Shop />
 			<Inventory />
@@ -25,7 +27,6 @@ const Main = () => {
 			<DailyReward />
 			<MatchPanel />
 			<BettingContainer />
-			<IntroScreen />
 			<MatchResults />
 			<VotingContainer />
 			<PlayerList />

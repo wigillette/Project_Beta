@@ -53,7 +53,7 @@
 > Data Storage
 - [x] SQL Database vs. Datastore2
 - [x] User Data Module
-- [ ] Kills/Wins/Donations Ordered Datastores
+- [x] Kills/Wins/Donations Ordered Datastores
 
 > Miscellaneous
 - [ ] Name Tags

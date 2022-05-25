@@ -38,9 +38,9 @@ export const tweenPos = (frame: Frame, direction: string, magnitude: number) => 
 	});
 };
 
-export const tweenPosAbsolute = (frame: Frame, position: UDim2) => {
+export const tweenPosAbsolute = (frame: Frame | TextLabel, position: UDim2) => {
 	pcall(() => {
-		frame.TweenPosition(position, Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.15, false, undefined);
+		frame.TweenPosition(position, Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.15, true, undefined);
 	});
 };
 
@@ -184,7 +184,7 @@ export const movingFadeAbsolute = (frame: Frame, fadeIn: boolean, position: UDim
 	debounce = false;
 };
 
-export const tweenRotation = (frame: Frame, rotation: number) => {
+export const tweenRotation = (frame: Frame | TextLabel | ImageLabel, rotation: number) => {
 	TweenService.Create(frame, new TweenInfo(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0), {
 		Rotation: rotation,
 	}).Play();

@@ -1,6 +1,6 @@
 import Roact from "@rbxts/roact";
 import RoactRodux from "@rbxts/roact-rodux";
-import { googleMaterial, whiteGradientProperties } from "client/UIProperties/ColorSchemes";
+import { googleMaterial, gradientProperties, whiteGradientProperties } from "client/UIProperties/ColorSchemes";
 import { MenuAspectRatio, RectBG, RectContainer, RectShadow, RectText, Header, Body } from "client/UIProperties/RectUI";
 import { MarketplaceService, PolicyService } from "@rbxts/services";
 import ProductItem from "./ProductItem";
@@ -41,22 +41,27 @@ class GoldContainer extends Roact.Component<UIProps> {
 			>
 				<uiaspectratioconstraint {...MenuAspectRatio}></uiaspectratioconstraint>
 				<imagelabel {...RectBG} ImageColor3={googleMaterial.outerBG}>
-					<frame {...Header}>
-						<textlabel
-							{...RectText}
-							Font={Enum.Font.GothamBold}
-							Position={new UDim2(0.5, 0, 0.5, 0)}
-							AnchorPoint={new Vector2(0.5, 0.5)}
-							Size={new UDim2(0.6, 0, 1, 0)}
-							Text={this.props.currentTab.upper()}
-							TextColor3={googleMaterial.bgFont}
-						></textlabel>
+					<frame {...Header} ZIndex={3}>
+						<imagelabel {...RectBG} ZIndex={4} ImageColor3={googleMaterial.buttonColor}>
+							<textlabel
+								{...RectText}
+								Font={Enum.Font.GothamBold}
+								Position={new UDim2(0.5, 0, 0.5, 0)}
+								AnchorPoint={new Vector2(0.5, 0.5)}
+								Size={new UDim2(0.8, 0, 1, 0)}
+								Text={this.props.currentTab.upper()}
+								TextColor3={googleMaterial.headerFont}
+								TextStrokeTransparency={0.8}
+								ZIndex={5}
+							></textlabel>
+							<uigradient {...gradientProperties}></uigradient>
+						</imagelabel>
 					</frame>
 					<frame
 						{...RectContainer}
-						Size={new UDim2(0.95, 0, 0.15, 0)}
-						Position={new UDim2(0.5, 0, 0.225, 0)}
-						AnchorPoint={new Vector2(0.5, 0.225)}
+						Size={new UDim2(0.95, 0, 0.125, 0)}
+						Position={new UDim2(0.5, 0, 0.25, 0)}
+						AnchorPoint={new Vector2(0.5, 0.25)}
 					>
 						<uilistlayout
 							FillDirection={Enum.FillDirection.Horizontal}

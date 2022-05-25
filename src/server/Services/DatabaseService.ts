@@ -1,5 +1,5 @@
 import { KnitServer as Knit } from "@rbxts/knit";
-import { Players } from "@rbxts/services";
+import { DataStoreService, Players } from "@rbxts/services";
 import Database from "@rbxts/datastore2";
 import { InventoryService } from "./InventoryService";
 import { GoldService } from "./GoldService";
@@ -18,8 +18,102 @@ declare global {
 	}
 }
 
+interface ODSEntryFormat {
+	UserId: number;
+	Stat: string;
+	Amount: number;
+}
+
+interface SortingFormat {
+	GlobalDonations: (string | number)[][];
+	MonthlyDonations: (string | number)[][];
+	GlobalWins: (string | number)[][];
+	MonthlyWins: (string | number)[][];
+}
+
 const DatabaseService = Knit.CreateService({
 	Name: "DatabaseService",
+
+	Client: {
+		GetSortingData(Player: Player, Category: string) {
+			return this.Server.GetSortingData(Category);
+		},
+	},
+
+	GlobalWins: DataStoreService.GetOrderedDataStore("GlobalWins"),
+	MonthlyWins: DataStoreService.GetOrderedDataStore(`MonthlyWins${math.floor(os.time() / 2629743) + 1}`),
+	GlobalDonations: DataStoreService.GetOrderedDataStore("GlobalDonations"),
+	MonthlyDonations: DataStoreService.GetOrderedDataStore(`MonthlyDonations${math.floor(os.time() / 2629743) + 1}`),
+	PendingEntries: [] as ODSEntryFormat[],
+	SortingTables: { GlobalDonations: [], MonthlyDonations: [], GlobalWins: [], MonthlyWins: [] } as SortingFormat,
+
+	CreateSortingTable(sortedTable: DataStorePages) {
+		const ds = [] as (string | number)[][];
+		let currPage;
+
+		for (let i = 0; i < 4 && !sortedTable.IsFinished; i++) {
+			currPage = sortedTable.GetCurrentPage();
+			currPage.forEach((entry) => {
+				ds.push([entry.key, entry.value as number]);
+			});
+
+			sortedTable.AdvanceToNextPageAsync();
+		}
+
+		return ds;
+	},
+
+	GetSortingData(cat: string) {
+		let toReturn = undefined;
+		if (cat in this.SortingTables) {
+			toReturn = this.SortingTables[cat as keyof typeof this.SortingTables];
+		}
+
+		return toReturn;
+	},
+
+	InitSortingTables() {
+		this.SortingTables.GlobalDonations = this.CreateSortingTable(this.GlobalDonations.GetSortedAsync(false, 6));
+		this.SortingTables.MonthlyDonations = this.CreateSortingTable(this.MonthlyDonations.GetSortedAsync(false, 6));
+		this.SortingTables.GlobalWins = this.CreateSortingTable(this.GlobalDonations.GetSortedAsync(false, 6));
+		this.SortingTables.MonthlyWins = this.CreateSortingTable(this.MonthlyDonations.GetSortedAsync(false, 6));
+	},
+
+	SaveODSStat(userId: number, stat: string, amt: number) {
+		if (stat in this) {
+			const item = this[stat as keyof typeof this] as OrderedDataStore;
+			item.IncrementAsync(tostring(userId), amt);
+		}
+	},
+
+	AppendPendingEntry(userId: number, stat: string, amount: number) {
+		this.PendingEntries.push({ UserId: userId, Stat: stat, Amount: amount });
+	},
+
+	IncrementEntry(userId: number, stat: string, increment: number) {
+		let foundEntry = false;
+		this.PendingEntries.forEach((entry) => {
+			if (!foundEntry && entry.UserId === userId && entry.Stat === stat) {
+				entry.Amount += increment;
+				foundEntry = true;
+			}
+		});
+	},
+
+	InitializePendingListener() {
+		while (Players.GetPlayers().size() > 0) {
+			if (this.PendingEntries.size() > 0) {
+				this.PendingEntries.forEach((entry, index) => {
+					if (entry.UserId !== undefined && entry.Stat !== undefined && entry.Amount) {
+						this.PendingEntries.remove(index);
+						wait(6);
+					}
+				});
+			}
+
+			wait(30);
+		}
+	},
 
 	LoadData(Player: Player) {
 		print(`Attempting to load ${Player.Name}'s data`);
@@ -119,6 +213,12 @@ const DatabaseService = Knit.CreateService({
 		Players.PlayerAdded.Connect((player) => {
 			this.LoadData(player);
 		});
+		coroutine.wrap(() => {
+			this.InitSortingTables();
+		})();
+		coroutine.wrap(() => {
+			this.InitializePendingListener();
+		})();
 		print("Database Service Initialized | Server");
 	},
 });

@@ -47,8 +47,8 @@ class MatchItem extends Roact.Component<UIProps> {
 					</imagelabel>
 					<textlabel
 						{...RectText}
-						Position={new UDim2(0.95, 0, 0.35, 0)}
-						AnchorPoint={new Vector2(0.95, 0.35)}
+						Position={new UDim2(0.95, 0, 0.375, 0)}
+						AnchorPoint={new Vector2(0.95, 0.375)}
 						Size={new UDim2(0.6, 0, 0.35, 0)}
 						Text={this.props.description || "No description."}
 						TextXAlignment={Enum.TextXAlignment.Left}
