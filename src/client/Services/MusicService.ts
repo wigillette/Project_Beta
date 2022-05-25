@@ -54,7 +54,7 @@ const MusicClient = {
 			MusicClient.ChangeMusic(categoryName);
 		});
 
-		print("Chat Service Initialized | Client");
+		print("Music Service Initialized | Client");
 	},
 };
 

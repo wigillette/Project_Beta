@@ -11,6 +11,7 @@ import { bettingReducer } from "./BettingReducer";
 import { ResultsReducer } from "./ResultsReducer";
 import { votingReducer } from "./VotingReducer";
 import { playerListReducer } from "./PlayerListReducer";
+import { ODSReducer } from "./ODSReducer";
 
 const reducer = Rodux.combineReducers({
 	toggleShop: shopReducer,
@@ -47,6 +48,7 @@ const reducer = Rodux.combineReducers({
 	setChosenMap: votingReducer,
 	setChosenMode: votingReducer,
 	updatePlayers: playerListReducer,
+	fetchODSData: ODSReducer,
 });
 
 export default reducer;

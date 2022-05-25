@@ -29,14 +29,16 @@ interface SortingFormat {
 	MonthlyDonations: (string | number)[][];
 	GlobalWins: (string | number)[][];
 	MonthlyWins: (string | number)[][];
+	GlobalKills: (string | number)[][];
+	MonthlyKills: (string | number)[][];
 }
 
 const DatabaseService = Knit.CreateService({
 	Name: "DatabaseService",
 
 	Client: {
-		GetSortingData(Player: Player, Category: string) {
-			return this.Server.GetSortingData(Category);
+		GetAllSortingData(Player: Player) {
+			return this.Server.GetAllSortingData();
 		},
 	},
 
@@ -44,8 +46,17 @@ const DatabaseService = Knit.CreateService({
 	MonthlyWins: DataStoreService.GetOrderedDataStore(`MonthlyWins${math.floor(os.time() / 2629743) + 1}`),
 	GlobalDonations: DataStoreService.GetOrderedDataStore("GlobalDonations"),
 	MonthlyDonations: DataStoreService.GetOrderedDataStore(`MonthlyDonations${math.floor(os.time() / 2629743) + 1}`),
+	GlobalKills: DataStoreService.GetOrderedDataStore("GlobalKills"),
+	MonthlyKills: DataStoreService.GetOrderedDataStore(`MonthlyKills${math.floor(os.time() / 2629743) + 1}`),
 	PendingEntries: [] as ODSEntryFormat[],
-	SortingTables: { GlobalDonations: [], MonthlyDonations: [], GlobalWins: [], MonthlyWins: [] } as SortingFormat,
+	SortingTables: {
+		GlobalDonations: [],
+		MonthlyDonations: [],
+		GlobalWins: [],
+		MonthlyWins: [],
+		GlobalKills: [],
+		MonthlyKills: [],
+	} as SortingFormat,
 
 	CreateSortingTable(sortedTable: DataStorePages) {
 		const ds = [] as (string | number)[][];
@@ -72,11 +83,17 @@ const DatabaseService = Knit.CreateService({
 		return toReturn;
 	},
 
+	GetAllSortingData() {
+		return this.SortingTables;
+	},
+
 	InitSortingTables() {
 		this.SortingTables.GlobalDonations = this.CreateSortingTable(this.GlobalDonations.GetSortedAsync(false, 6));
 		this.SortingTables.MonthlyDonations = this.CreateSortingTable(this.MonthlyDonations.GetSortedAsync(false, 6));
 		this.SortingTables.GlobalWins = this.CreateSortingTable(this.GlobalDonations.GetSortedAsync(false, 6));
 		this.SortingTables.MonthlyWins = this.CreateSortingTable(this.MonthlyDonations.GetSortedAsync(false, 6));
+		this.SortingTables.GlobalKills = this.CreateSortingTable(this.GlobalKills.GetSortedAsync(false, 6));
+		this.SortingTables.MonthlyKills = this.CreateSortingTable(this.MonthlyKills.GetSortedAsync(false, 6));
 	},
 
 	SaveODSStat(userId: number, stat: string, amt: number) {

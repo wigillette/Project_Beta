@@ -9,11 +9,13 @@ interface UIProps {
 	AnchorPoint: Vector2;
 	Size: UDim2;
 	ButtonText: string;
+	UseShadow?: boolean;
 	Callback: () => void;
 }
 
 interface UIState {
 	debounce: boolean;
+	useShadow: boolean;
 }
 
 class RectButton extends Roact.Component<UIProps, UIState> {
@@ -23,10 +25,14 @@ class RectButton extends Roact.Component<UIProps, UIState> {
 		super(props);
 		this.buttonRef = Roact.createRef<ImageButton>();
 		this.frameRef = Roact.createRef<Frame>();
+		if (this.props.UseShadow !== undefined) {
+			this.setState({ useShadow: false });
+		}
 	}
 
 	state = {
 		debounce: false,
+		useShadow: true,
 	};
 
 	render() {
@@ -84,7 +90,9 @@ class RectButton extends Roact.Component<UIProps, UIState> {
 						{...RectButtonText}
 					></textlabel>
 				</imagebutton>
-				<imagelabel ImageColor3={googleMaterial.buttonShadow} {...RectShadow}></imagelabel>
+				{this.state.useShadow && (
+					<imagelabel ImageColor3={googleMaterial.buttonShadow} {...RectShadow}></imagelabel>
+				)}
 			</frame>
 		);
 	}

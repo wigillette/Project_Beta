@@ -140,9 +140,10 @@
 - [ ] Profile Board
 - [ ] Maps Board
 - [ ] Modes Board   
-- [ ] Top Kills Board
-- [ ] Top Donors Board
-- [ ] Top Wins Board
+- [x] Top Kills Board
+- [x] Top Donors Board
+- [x] Top Wins Board
+- [ ] Donations Board
 - [ ] Group Advertisement Board
 
 > Bug/Revamp List
@@ -158,3 +159,4 @@
 - [x] Menu UIs overlaying on match UIs
 - [x] Use icons in Results UI
 - [ ] Blocky head in viewport frames; meshes not loading
+- [ ] No set state in render methods for Surface UIs
