@@ -159,5 +159,5 @@
 - [x] Menu UIs overlaying on match UIs
 - [x] Use icons in Results UI
 - [ ] Blocky head in viewport frames; meshes not loading
-- [ ] No set state in render methods for Surface UIs
-- [ ] MVPs at boards
+- [x] No set state in render methods for Surface UIs
+- [x] MVPs at boards
