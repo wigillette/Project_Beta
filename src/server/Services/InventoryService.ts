@@ -63,7 +63,6 @@ export const InventoryService = Knit.CreateService({
 	EquipItem(Player: Player, ItemName: string, Category: string) {
 		const equippedItems = this.FetchEquipped(Player) as EquippedFormat;
 		equippedItems[Category as keyof typeof equippedItems] = ItemName;
-		print(equippedItems);
 		this.PlayerEquipped.set(Player, equippedItems);
 		this.UpdateEquippedData(Player, equippedItems);
 		this.Client.EquippedChanged.Fire(Player, equippedItems);

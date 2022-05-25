@@ -32,11 +32,11 @@ const initialProducts = {
 };
 
 export const goldReducer = Rodux.createReducer(
-	{ Gold: 500, toggle: false, items: initialProducts, currentTab: "products" as keyof typeof initialProducts },
+	{ Gold: 0, toggle: false, items: initialProducts, currentTab: "products" as keyof typeof initialProducts },
 	{
 		updateGold: (state: goldState, action: Action) => {
 			const newState: goldState = {
-				Gold: 500,
+				Gold: 0,
 				items: state.items,
 				toggle: state.toggle,
 				currentTab: state.currentTab,

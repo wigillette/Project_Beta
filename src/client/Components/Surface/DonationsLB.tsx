@@ -5,29 +5,28 @@ import RectButton from "../Material/RectButton";
 import Object from "@rbxts/object-utils";
 import LBEntry from "./LBEntry";
 import { ODSState } from "client/Rodux/Reducers/ODSReducer";
+import { Workspace } from "@rbxts/services";
+import ODSClient from "client/Services/ODSService";
 
 interface UIProps {
 	GlobalData: (string | number)[][][];
 	MonthlyData: (string | number)[][][];
-}
-
-interface UIState {
-	pageNumber: number;
 	category: string;
+	pageNumber: number;
+	switchPage: (pageNumber: number) => void;
+	switchCategory: (category: string) => void;
 }
 
-class DonationsLB extends Roact.Component<UIProps, UIState> {
+const leaderboards = Workspace.WaitForChild("Leaderboards");
+const mvpModel = leaderboards.WaitForChild("DonorMVP") as Model;
+
+class DonationsLB extends Roact.Component<UIProps> {
 	constructor(props: UIProps) {
 		super(props);
 	}
 
-	state = {
-		pageNumber: 0,
-		category: "Global",
-	};
-
 	render() {
-		const entries = this.props[`${this.state.category}Data` as keyof typeof this.props] as (string | number)[][][];
+		const entries = this.props[`${this.props.category}Data` as keyof typeof this.props] as (string | number)[][][];
 
 		return (
 			<frame
@@ -114,7 +113,7 @@ class DonationsLB extends Roact.Component<UIProps, UIState> {
 						AnchorPoint={new Vector2(0, 0)}
 						Size={new UDim2(0.4, 0, 0.9, 0)}
 						Callback={() => {
-							this.setState({ category: "Global" });
+							this.props.switchCategory("Global");
 						}}
 						UseShadow={false}
 					/>
@@ -124,7 +123,7 @@ class DonationsLB extends Roact.Component<UIProps, UIState> {
 						AnchorPoint={new Vector2(0, 0)}
 						Size={new UDim2(0.4, 0, 0.9, 0)}
 						Callback={() => {
-							this.setState({ category: "Monthly" });
+							this.props.switchCategory("Monthly");
 						}}
 						UseShadow={false}
 					/>
@@ -135,7 +134,7 @@ class DonationsLB extends Roact.Component<UIProps, UIState> {
 					Position={new UDim2(0.5, 0, 0.32, 0)}
 					Size={new UDim2(0.8, 0, 0.575, 0)}
 				>
-					{Object.entries(entries[this.state.pageNumber]).map((data, index) => {
+					{Object.entries(entries[this.props.pageNumber]).map((data, index) => {
 						return (
 							<LBEntry
 								playerId={
@@ -164,7 +163,7 @@ class DonationsLB extends Roact.Component<UIProps, UIState> {
 						Font={"GothamSemibold"}
 						TextXAlignment={"Center"}
 						TextYAlignment={"Center"}
-						Text={tostring(this.state.pageNumber)}
+						Text={tostring(this.props.pageNumber + 1)}
 					></textlabel>
 					<frame
 						Position={new UDim2(0.1, 0, 0, 0)}
@@ -175,7 +174,7 @@ class DonationsLB extends Roact.Component<UIProps, UIState> {
 						<RectButton
 							ButtonText="<"
 							Callback={() => {
-								this.setState({ pageNumber: math.max(0, this.state.pageNumber - 1) });
+								this.props.switchPage(math.max(this.props.pageNumber - 1, 0));
 							}}
 							Size={new UDim2(1, 0, 1, 0)}
 							AnchorPoint={new Vector2(0.5, 0.5)}
@@ -192,7 +191,7 @@ class DonationsLB extends Roact.Component<UIProps, UIState> {
 						<RectButton
 							ButtonText=">"
 							Callback={() => {
-								this.setState({ pageNumber: math.min(2, this.state.pageNumber + 1) });
+								this.props.switchPage(math.min(this.props.pageNumber + 1, 1));
 							}}
 							Size={new UDim2(1, 0, 1, 0)}
 							AnchorPoint={new Vector2(0.5, 0.5)}
@@ -204,50 +203,89 @@ class DonationsLB extends Roact.Component<UIProps, UIState> {
 			</frame>
 		);
 	}
+
+	protected didUpdate(previousProps: UIProps, previousState: {}): void {
+		if (previousProps.category !== this.props.category) {
+			const entry = this.props[`${this.props.category}Data` as keyof typeof this.props] as (
+				| string
+				| number
+			)[][][];
+			const firstCluster = entry[0]; // Check if there are any entries in the first cluster
+
+			if (firstCluster.size() > 0) {
+				const mvpUserId =
+					(tonumber(entry[0][0][0] as string) !== undefined && tonumber(entry[0][0][0] as string)) || 0;
+
+				ODSClient.UpdateMVP(mvpModel, mvpUserId);
+			}
+		}
+	}
 }
 
 interface storeState {
 	fetchODSData: ODSState;
+	switchODSPage: ODSState;
+	switchODSCategory: ODSState;
 }
 
-export = RoactRodux.connect(function (state: storeState) {
-	// Create clusters for the data..
-	const globalData = [] as (number | string)[][][];
-	let globalDataPage = [] as (number | string)[][];
-	state.fetchODSData.globalDonationsData.forEach((data, index) => {
-		if (index % 6 === 0) {
+export = RoactRodux.connect(
+	function (state: storeState) {
+		// Create clusters for the data..
+		const globalData = [] as (number | string)[][][];
+		let globalDataPage = [] as (number | string)[][];
+		state.fetchODSData.globalDonationsData.forEach((data, index) => {
+			if (index % 6 === 0) {
+				globalData.push(globalDataPage);
+				globalDataPage = [];
+			}
+			globalDataPage.push(data);
+		});
+
+		if (globalData.size() < 6) {
 			globalData.push(globalDataPage);
-			globalDataPage = [];
+			globalData.push([]);
+		} else if (globalData.size() < 12) {
+			globalData.push(globalDataPage);
 		}
-		globalDataPage.push(data);
-	});
 
-	if (globalData.size() < 6) {
-		globalData.push(globalDataPage);
-		globalData.push([]);
-	} else if (globalData.size() < 12) {
-		globalData.push(globalDataPage);
-	}
+		const monthlyData = [] as (number | string)[][][];
+		let monthlyDataPage = [] as (number | string)[][];
+		state.fetchODSData.monthlyDonationsData.forEach((data, index) => {
+			if (index % 6 === 0) {
+				monthlyData.push(monthlyDataPage);
+				monthlyDataPage = [];
+			}
+			monthlyDataPage.push(data);
+		});
 
-	const monthlyData = [] as (number | string)[][][];
-	let monthlyDataPage = [] as (number | string)[][];
-	state.fetchODSData.monthlyDonationsData.forEach((data, index) => {
-		if (index % 6 === 0) {
+		if (monthlyData.size() < 6) {
 			monthlyData.push(monthlyDataPage);
-			monthlyDataPage = [];
+			monthlyData.push([]);
+		} else if (monthlyData.size() < 12) {
+			monthlyData.push(monthlyDataPage);
 		}
-		monthlyDataPage.push(data);
-	});
 
-	if (monthlyData.size() < 6) {
-		monthlyData.push(monthlyDataPage);
-		monthlyData.push([]);
-	} else if (monthlyData.size() < 12) {
-		monthlyData.push(monthlyDataPage);
-	}
-
-	return {
-		GlobalData: globalData,
-		MonthlyData: monthlyData,
-	};
-})(DonationsLB);
+		return {
+			GlobalData: globalData,
+			MonthlyData: monthlyData,
+			pageNumber: state.switchODSPage.donationsPageNumber,
+			category: state.switchODSCategory.donationsCategory,
+		};
+	},
+	(dispatch) => {
+		return {
+			switchPage: (pageNumber: number) => {
+				dispatch({
+					type: "switchODSPage",
+					payload: { donationsPageNumber: pageNumber },
+				});
+			},
+			switchCategory: (category: string) => {
+				dispatch({
+					type: "switchODSCategory",
+					payload: { donationsCategory: category },
+				});
+			},
+		};
+	},
+)(DonationsLB);

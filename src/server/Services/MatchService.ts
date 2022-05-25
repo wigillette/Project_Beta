@@ -138,6 +138,7 @@ const MatchService = Knit.CreateService({
 
 	DisplayResults(winner: Player | string, playingList: Player[], winningTeam: Player[]) {
 		const playerResults: playerResult[] = [];
+		const DatabaseService = Knit.GetService("DatabaseService");
 		// Fetch the leaderboard results
 		const participants = playingList;
 		participants.forEach((player) => {
@@ -164,6 +165,9 @@ const MatchService = Knit.CreateService({
 						const ownsDoubleExp = MarketplaceService.UserOwnsGamePassAsync(player.UserId, 8270062);
 						const ownsDoubleCoins = MarketplaceService.UserOwnsGamePassAsync(player.UserId, 8353972);
 						const isWinner = winner === player || winningTeam.includes(player);
+						if (isWinner) {
+							DatabaseService.AppendPendingEntry(player.UserId, "Wins", 1);
+						}
 						let expEarned = math.max(kills.Value * 50 - deaths.Value * 25 + ((isWinner && 100) || 0), 0);
 						expEarned = (ownsDoubleExp && expEarned * 2) || expEarned;
 						let goldEarned = (isWinner && 50) || 10;
@@ -387,6 +391,7 @@ const MatchService = Knit.CreateService({
 	// Initialize on service startup
 	KnitInit() {
 		print("Match Service Initialized | Server");
+		const DatabaseService = Knit.GetService("DatabaseService");
 
 		Players.PlayerAdded.Connect((player: Player) => {
 			// Leaderstats Stuff Below
@@ -475,6 +480,7 @@ const MatchService = Knit.CreateService({
 									const killerKills = killerLS.FindFirstChild("Kills") as IntValue;
 									if (killerKills) {
 										killerKills.Value += 1;
+										DatabaseService.AppendPendingEntry(killer.UserId, "Kills", 1);
 									}
 								}
 							}

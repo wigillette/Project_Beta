@@ -1,4 +1,4 @@
-import { StarterGui } from "@rbxts/services";
+import { Players, StarterGui } from "@rbxts/services";
 import { KnitClient as Knit } from "@rbxts/knit";
 import { googleMaterial } from "client/UIProperties/ColorSchemes";
 import store from "client/Rodux/Store";
@@ -25,6 +25,67 @@ const ODSClient = {
 				monthlyKillData: data.MonthlyKills,
 				monthlyWinsData: data.MonthlyWins,
 			},
+		});
+	},
+	FindFirstMatchingAttachment(model: Instance, name: string) {
+		model.GetChildren().forEach((child) => {
+			if (child.IsA("Attachment") && child.Name === name) {
+				return child;
+			} else if (!child.IsA("Accoutrement") && !child.IsA("Tool")) {
+				const foundAttachment = ODSClient.FindFirstMatchingAttachment(child, name);
+				if (foundAttachment !== undefined) {
+					return foundAttachment;
+				}
+			}
+		});
+	},
+	WeldAttachments(attach1: Attachment, attach2: Attachment) {
+		let toReturn: Weld | undefined = undefined;
+		if (attach1.Parent && attach2.Parent) {
+			const weld = new Instance("Weld");
+			weld.Part0 = attach1.Parent as BasePart;
+			weld.Part1 = attach2.Parent as BasePart;
+			weld.C0 = attach1.CFrame;
+			weld.C1 = attach2.CFrame;
+			weld.Parent = attach1.Parent;
+			toReturn = weld;
+		}
+		return toReturn;
+	},
+	CleanUpMVP(mvpModel: Model) {
+		mvpModel.GetChildren().forEach((child) => {
+			if (child.IsA("Shirt") || child.IsA("Pants") || child.IsA("Accessory") || child.IsA("CharacterMesh")) {
+				child.Destroy();
+			}
+		});
+	},
+	UpdateMVP(mvpModel: Model, mvpUserId: number) {
+		pcall(() => {
+			const info = Players.GetCharacterAppearanceAsync(mvpUserId);
+			ODSClient.CleanUpMVP(mvpModel);
+
+			info.GetChildren().forEach((child) => {
+				if (child.IsA("Shirt") || child.IsA("Pants") || child.IsA("BodyColors") || child.IsA("CharacterMesh")) {
+					child.Parent = mvpModel;
+				} else if (child.IsA("Accessory")) {
+					const handle = child.FindFirstChild("Handle") as Part;
+					if (handle) {
+						const accoutrementAttachment = handle.FindFirstChildOfClass("Attachment");
+						if (accoutrementAttachment) {
+							const characterAttachment = this.FindFirstMatchingAttachment(
+								mvpModel,
+								accoutrementAttachment.Name,
+							);
+							if (characterAttachment !== undefined) {
+								ODSClient.WeldAttachments(characterAttachment, accoutrementAttachment);
+								child.Parent = mvpModel;
+							}
+						}
+					}
+				}
+			});
+
+			mvpModel.Name = Players.GetNameFromUserIdAsync(mvpUserId);
 		});
 	},
 	init() {

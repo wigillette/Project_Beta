@@ -98,23 +98,40 @@ const DatabaseService = Knit.CreateService({
 
 	SaveODSStat(userId: number, stat: string, amt: number) {
 		if (stat in this) {
-			const item = this[stat as keyof typeof this] as OrderedDataStore;
-			item.IncrementAsync(tostring(userId), amt);
+			const globalItem = this[`Global${stat}` as keyof typeof this] as OrderedDataStore;
+			const monthlyItem = this[`Monthly${stat}` as keyof typeof this] as OrderedDataStore;
+			globalItem.IncrementAsync(tostring(userId), amt);
+			monthlyItem.IncrementAsync(tostring(userId), amt);
 		}
 	},
 
 	AppendPendingEntry(userId: number, stat: string, amount: number) {
-		this.PendingEntries.push({ UserId: userId, Stat: stat, Amount: amount });
+		if (!this.FindExistingEntry(userId, stat)) {
+			this.PendingEntries.push({ UserId: userId, Stat: stat, Amount: amount });
+		} else {
+			this.IncrementEntry(userId, stat, amount);
+		}
 	},
 
-	IncrementEntry(userId: number, stat: string, increment: number) {
+	FindExistingEntry(userId: number, stat: string) {
 		let foundEntry = false;
+		let toReturn: ODSEntryFormat | undefined = undefined;
 		this.PendingEntries.forEach((entry) => {
 			if (!foundEntry && entry.UserId === userId && entry.Stat === stat) {
-				entry.Amount += increment;
+				toReturn = entry;
 				foundEntry = true;
 			}
 		});
+
+		return toReturn;
+	},
+
+	IncrementEntry(userId: number, stat: string, increment: number) {
+		const existingEntry = this.FindExistingEntry(userId, stat);
+
+		if (existingEntry !== undefined) {
+			(existingEntry as ODSEntryFormat).Amount += increment;
+		}
 	},
 
 	InitializePendingListener() {
@@ -122,6 +139,7 @@ const DatabaseService = Knit.CreateService({
 			if (this.PendingEntries.size() > 0) {
 				this.PendingEntries.forEach((entry, index) => {
 					if (entry.UserId !== undefined && entry.Stat !== undefined && entry.Amount) {
+						this.SaveODSStat(entry.UserId, entry.Stat, entry.Amount);
 						this.PendingEntries.remove(index);
 						wait(6);
 					}

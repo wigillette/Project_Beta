@@ -49,6 +49,8 @@ const reducer = Rodux.combineReducers({
 	setChosenMode: votingReducer,
 	updatePlayers: playerListReducer,
 	fetchODSData: ODSReducer,
+	switchODSCategory: ODSReducer,
+	switchODSPage: ODSReducer,
 });
 
 export default reducer;
