@@ -138,12 +138,12 @@
 
 > Surface Components
 - [ ] Profile Board
-- [ ] Maps Board
-- [ ] Modes Board   
+- [x] Maps Board
+- [x] Modes Board   
 - [x] Top Kills Board
 - [x] Top Donors Board
 - [x] Top Wins Board
-- [ ] Donations Board
+- [x] Donations Board
 - [ ] Group Advertisement Board
 
 > Bug/Revamp List

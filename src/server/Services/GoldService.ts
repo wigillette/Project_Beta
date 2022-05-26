@@ -4,6 +4,8 @@ import Database from "@rbxts/datastore2";
 import { PRODUCT_FUNCTIONS } from "server/Utils/DeveloperProducts";
 import { gamepassesOnJoin, gamepassEvents, gamepassInfo } from "../Utils/Gamepasses";
 import ObjectUtils from "@rbxts/object-utils";
+import { donationProducts } from "shared/DonationsInfo";
+import DatabaseService from "./DatabaseService";
 
 declare global {
 	interface KnitServices {
@@ -34,6 +36,18 @@ const ProcessReceipt = (receiptInfo: ReceiptInfo) => {
 			return Enum.ProductPurchaseDecision.NotProcessedYet;
 		} else {
 			GoldService.AddGold(player, response[1]);
+		}
+	} else {
+		let donationAmount: number | undefined = undefined;
+		ObjectUtils.entries(donationProducts).forEach((donationProduct) => {
+			if (donationProduct[1] === receiptInfo.ProductId && donationAmount === undefined) {
+				donationAmount = donationProduct[0];
+			}
+		});
+
+		if (donationAmount !== undefined) {
+			const databaseService = Knit.GetService("DatabaseService");
+			databaseService.AppendPendingEntry(player.UserId, "Donations", donationAmount);
 		}
 	}
 

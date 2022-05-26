@@ -28,16 +28,14 @@ const ODSClient = {
 		});
 	},
 	FindFirstMatchingAttachment(model: Instance, name: string) {
-		model.GetChildren().forEach((child) => {
+		let toReturn = undefined;
+		model.GetDescendants().forEach((child) => {
 			if (child.IsA("Attachment") && child.Name === name) {
-				return child;
-			} else if (!child.IsA("Accoutrement") && !child.IsA("Tool")) {
-				const foundAttachment = ODSClient.FindFirstMatchingAttachment(child, name);
-				if (foundAttachment !== undefined) {
-					return foundAttachment;
-				}
+				toReturn = child;
 			}
 		});
+
+		return toReturn;
 	},
 	WeldAttachments(attach1: Attachment, attach2: Attachment) {
 		let toReturn: Weld | undefined = undefined;
@@ -61,31 +59,46 @@ const ODSClient = {
 	},
 	UpdateMVP(mvpModel: Model, mvpUserId: number) {
 		pcall(() => {
-			const info = Players.GetCharacterAppearanceAsync(mvpUserId);
-			ODSClient.CleanUpMVP(mvpModel);
+			coroutine.wrap(() => {
+				const info = Players.GetCharacterAppearanceAsync(mvpUserId);
+				ODSClient.CleanUpMVP(mvpModel);
 
-			info.GetChildren().forEach((child) => {
-				if (child.IsA("Shirt") || child.IsA("Pants") || child.IsA("BodyColors") || child.IsA("CharacterMesh")) {
-					child.Parent = mvpModel;
-				} else if (child.IsA("Accessory")) {
-					const handle = child.FindFirstChild("Handle") as Part;
-					if (handle) {
-						const accoutrementAttachment = handle.FindFirstChildOfClass("Attachment");
-						if (accoutrementAttachment) {
-							const characterAttachment = this.FindFirstMatchingAttachment(
-								mvpModel,
-								accoutrementAttachment.Name,
-							);
-							if (characterAttachment !== undefined) {
-								ODSClient.WeldAttachments(characterAttachment, accoutrementAttachment);
-								child.Parent = mvpModel;
+				info.GetChildren().forEach((child) => {
+					if (
+						child.IsA("Shirt") ||
+						child.IsA("Pants") ||
+						child.IsA("BodyColors") ||
+						child.IsA("CharacterMesh")
+					) {
+						child.Parent = mvpModel;
+					} else if (child.IsA("Accessory")) {
+						const handle = child.FindFirstChild("Handle") as Part;
+						if (handle) {
+							const accoutrementAttachment = handle.FindFirstChildOfClass("Attachment");
+							if (accoutrementAttachment) {
+								const characterAttachment = this.FindFirstMatchingAttachment(
+									mvpModel,
+									accoutrementAttachment.Name,
+								);
+								if (characterAttachment !== undefined) {
+									ODSClient.WeldAttachments(characterAttachment, accoutrementAttachment);
+									child.Parent = mvpModel;
+								}
 							}
 						}
 					}
-				}
-			});
+				});
 
-			mvpModel.Name = Players.GetNameFromUserIdAsync(mvpUserId);
+				const mvpHead = mvpModel.FindFirstChild("Head", true) as Part;
+				if (mvpHead) {
+					const face = info.FindFirstChild("face", true) as Decal;
+					if (face) {
+						face.Clone().Parent = mvpHead;
+					}
+				}
+
+				mvpModel.Name = Players.GetNameFromUserIdAsync(mvpUserId);
+			})();
 		});
 	},
 	init() {

@@ -61,14 +61,18 @@ const DatabaseService = Knit.CreateService({
 	CreateSortingTable(sortedTable: DataStorePages) {
 		const ds = [] as (string | number)[][];
 		let currPage;
-
-		for (let i = 0; i < 4 && !sortedTable.IsFinished; i++) {
+		let finished = false;
+		for (let i = 0; i < 4 && !finished; i++) {
 			currPage = sortedTable.GetCurrentPage();
 			currPage.forEach((entry) => {
 				ds.push([entry.key, entry.value as number]);
 			});
 
-			sortedTable.AdvanceToNextPageAsync();
+			if (sortedTable.IsFinished) {
+				finished = true;
+			} else {
+				sortedTable.AdvanceToNextPageAsync();
+			}
 		}
 
 		return ds;
@@ -90,23 +94,32 @@ const DatabaseService = Knit.CreateService({
 	InitSortingTables() {
 		this.SortingTables.GlobalDonations = this.CreateSortingTable(this.GlobalDonations.GetSortedAsync(false, 6));
 		this.SortingTables.MonthlyDonations = this.CreateSortingTable(this.MonthlyDonations.GetSortedAsync(false, 6));
-		this.SortingTables.GlobalWins = this.CreateSortingTable(this.GlobalDonations.GetSortedAsync(false, 6));
-		this.SortingTables.MonthlyWins = this.CreateSortingTable(this.MonthlyDonations.GetSortedAsync(false, 6));
+		this.SortingTables.GlobalWins = this.CreateSortingTable(this.GlobalWins.GetSortedAsync(false, 6));
+		this.SortingTables.MonthlyWins = this.CreateSortingTable(this.MonthlyWins.GetSortedAsync(false, 6));
 		this.SortingTables.GlobalKills = this.CreateSortingTable(this.GlobalKills.GetSortedAsync(false, 6));
 		this.SortingTables.MonthlyKills = this.CreateSortingTable(this.MonthlyKills.GetSortedAsync(false, 6));
 	},
 
 	SaveODSStat(userId: number, stat: string, amt: number) {
-		if (stat in this) {
+		if (`Global${stat}` in this && `Monthly${stat}` in this) {
 			const globalItem = this[`Global${stat}` as keyof typeof this] as OrderedDataStore;
 			const monthlyItem = this[`Monthly${stat}` as keyof typeof this] as OrderedDataStore;
-			globalItem.IncrementAsync(tostring(userId), amt);
-			monthlyItem.IncrementAsync(tostring(userId), amt);
+			const response = pcall(() => {
+				globalItem.IncrementAsync(tostring(userId), amt);
+				monthlyItem.IncrementAsync(tostring(userId), amt);
+			});
+
+			if (response[0]) {
+				print(`Successfully added ${amt} ${stat} to ${Players.GetNameFromUserIdAsync(userId)}'s data entry!`);
+			} else {
+				print(`Error adding ${amt} ${stat} to ${Players.GetNameFromUserIdAsync(userId)}'s data entry!`);
+			}
 		}
 	},
 
 	AppendPendingEntry(userId: number, stat: string, amount: number) {
 		if (!this.FindExistingEntry(userId, stat)) {
+			print(`Appending entry for ${Players.GetNameFromUserIdAsync(userId)}, ${amount} ${stat}`);
 			this.PendingEntries.push({ UserId: userId, Stat: stat, Amount: amount });
 		} else {
 			this.IncrementEntry(userId, stat, amount);

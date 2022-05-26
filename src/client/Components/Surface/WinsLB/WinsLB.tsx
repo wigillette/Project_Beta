@@ -1,9 +1,9 @@
 import Roact from "@rbxts/roact";
 import RoactRodux from "@rbxts/roact-rodux";
 import { RectContainer } from "client/UIProperties/RectUI";
-import RectButton from "../Material/RectButton";
+import RectButton from "../../Material/RectButton";
 import Object from "@rbxts/object-utils";
-import LBEntry from "./LBEntry";
+import LBEntry from "../LBEntry";
 import { ODSState } from "client/Rodux/Reducers/ODSReducer";
 import { Workspace } from "@rbxts/services";
 import ODSClient from "client/Services/ODSService";
@@ -18,9 +18,9 @@ interface UIProps {
 }
 
 const leaderboards = Workspace.WaitForChild("Leaderboards");
-const mvpModel = leaderboards.WaitForChild("KillsMVP") as Model;
+const mvpModel = leaderboards.WaitForChild("WinsMVP") as Model;
 
-class KillsLB extends Roact.Component<UIProps> {
+class WinsLB extends Roact.Component<UIProps> {
 	constructor(props: UIProps) {
 		super(props);
 	}
@@ -61,7 +61,7 @@ class KillsLB extends Roact.Component<UIProps> {
 						Size={new UDim2(0.5, 0, 1, 0)}
 						TextColor3={Color3.fromRGB(88, 160, 198)}
 						Font={"GothamBold"}
-						Text={`12 Kills`}
+						Text={`12 Wins`}
 						ZIndex={2}
 						TextXAlignment={"Left"}
 						TextYAlignment={"Center"}
@@ -77,7 +77,7 @@ class KillsLB extends Roact.Component<UIProps> {
 					Font={"GothamSemibold"}
 					TextXAlignment={"Right"}
 					TextYAlignment={"Center"}
-					Text={"Kills"}
+					Text={"Wins"}
 					BackgroundTransparency={1}
 					TextColor3={Color3.fromRGB(255, 255, 255)}
 				></textlabel>
@@ -205,7 +205,7 @@ class KillsLB extends Roact.Component<UIProps> {
 	}
 
 	protected didUpdate(previousProps: UIProps, previousState: {}): void {
-		if (previousProps.category !== this.props.category) {
+		if (previousProps.category !== this.props.category || previousProps.GlobalData !== this.props.GlobalData) {
 			const entry = this.props[`${this.props.category}Data` as keyof typeof this.props] as (
 				| string
 				| number
@@ -233,12 +233,13 @@ export = RoactRodux.connect(
 		// Create clusters for the data..
 		const globalData = [] as (number | string)[][][];
 		let globalDataPage = [] as (number | string)[][];
-		state.fetchODSData.globalKillData.forEach((data, index) => {
-			if (index % 6 === 0) {
+		state.fetchODSData.globalWinsData.forEach((data, index) => {
+			if (index !== 0 && index % 6 === 0) {
 				globalData.push(globalDataPage);
 				globalDataPage = [];
+			} else {
+				globalDataPage.push(data);
 			}
-			globalDataPage.push(data);
 		});
 
 		if (globalData.size() < 6) {
@@ -250,12 +251,13 @@ export = RoactRodux.connect(
 
 		const monthlyData = [] as (number | string)[][][];
 		let monthlyDataPage = [] as (number | string)[][];
-		state.fetchODSData.monthlyKillData.forEach((data, index) => {
-			if (index % 6 === 0) {
+		state.fetchODSData.monthlyWinsData.forEach((data, index) => {
+			if (index !== 0 && index % 6 === 0) {
 				monthlyData.push(monthlyDataPage);
 				monthlyDataPage = [];
+			} else {
+				monthlyDataPage.push(data);
 			}
-			monthlyDataPage.push(data);
 		});
 
 		if (monthlyData.size() < 6) {
@@ -268,8 +270,8 @@ export = RoactRodux.connect(
 		return {
 			GlobalData: globalData,
 			MonthlyData: monthlyData,
-			pageNumber: state.switchODSPage.killsPageNumber,
-			category: state.switchODSCategory.killsCategory,
+			pageNumber: state.switchODSPage.winsPageNumber,
+			category: state.switchODSCategory.winsCategory,
 		};
 	},
 	(dispatch) => {
@@ -277,15 +279,15 @@ export = RoactRodux.connect(
 			switchPage: (pageNumber: number) => {
 				dispatch({
 					type: "switchODSPage",
-					payload: { killsPageNumber: pageNumber },
+					payload: { winsPageNumber: pageNumber },
 				});
 			},
 			switchCategory: (category: string) => {
 				dispatch({
 					type: "switchODSCategory",
-					payload: { killsCategory: category },
+					payload: { winsCategory: category },
 				});
 			},
 		};
 	},
-)(KillsLB);
+)(WinsLB);

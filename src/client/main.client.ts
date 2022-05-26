@@ -15,9 +15,13 @@ import ODSService from "./Services/ODSService";
 import { Players } from "@rbxts/services";
 import Roact from "@rbxts/roact";
 import Main from "./Components/Main";
-import KillsContainer from "./Components/Surface/KillsContainer";
-import WinsContainer from "./Components/Surface/WinsContainer";
-import DonationsContainer from "./Components/Surface/DonationsContainer";
+import KillsContainer from "./Components/Surface/KillsLB/KillsContainer";
+import DonationsShop from "./Components/Surface/DonationsShop/ShopContainer";
+import WinsContainer from "./Components/Surface/WinsLB/WinsContainer";
+import DonationsContainer from "./Components/Surface/DonationsLB/DonationsContainer";
+import MapsContainer from "./Components/Surface/MapsList/MapsContainer";
+import ModesContainer from "./Components/Surface/ModesList/ModesContainer";
+
 import RoactRodux from "@rbxts/roact-rodux";
 import store from "./Rodux/Store";
 
@@ -63,10 +67,44 @@ const killsBoard = Roact.createElement(
 	},
 );
 
+const donationsShop = Roact.createElement(
+	RoactRodux.StoreProvider,
+	{
+		store: store,
+	},
+	{
+		DonationsShop: Roact.createElement(DonationsShop),
+	},
+);
+
+const mapsList = Roact.createElement(
+	RoactRodux.StoreProvider,
+	{
+		store: store,
+	},
+	{
+		MapsList: Roact.createElement(MapsContainer),
+	},
+);
+
+const modesList = Roact.createElement(
+	RoactRodux.StoreProvider,
+	{
+		store: store,
+	},
+	{
+		ModesList: Roact.createElement(ModesContainer),
+	},
+);
+
 Roact.mount(app, playerGui, "Main");
 Roact.mount(donationsBoard, playerGui, "DonationsLB");
 Roact.mount(winsBoard, playerGui, "WinsLB");
 Roact.mount(killsBoard, playerGui, "KillsLB");
+Roact.mount(donationsShop, playerGui, "DonationsShop");
+Roact.mount(mapsList, playerGui, "MapsList");
+Roact.mount(modesList, playerGui, "ModesList");
+
 TouchService();
 SnackbarService();
 InteractionService();

@@ -29,7 +29,7 @@ class DonationsLB extends Roact.Component<UIProps> {
 				Position={new UDim2(0, 0, 0, 0)}
 				{...RectContainer}
 			>
-				<imagelabel {...RectBG} ImageColor3={darkMaterial.outerBG}>
+				<imagelabel {...RectBG} ImageColor3={darkMaterial.cardBG}>
 					<frame
 						Size={new UDim2(0.125, 0, 0.85, 0)}
 						Position={new UDim2(0.025, 0, 0.5, 0)}
@@ -37,6 +37,7 @@ class DonationsLB extends Roact.Component<UIProps> {
 						ZIndex={1}
 						{...RectContainer}
 					>
+						<uiaspectratioconstraint {...SquareAspectRatio}></uiaspectratioconstraint>
 						<imagelabel
 							AnchorPoint={new Vector2(0.5, 0.5)}
 							Position={new UDim2(0.5, 0, 0.5, 0)}
