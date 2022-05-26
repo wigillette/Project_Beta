@@ -24,6 +24,7 @@ import ModesContainer from "./Components/Surface/ModesList/ModesContainer";
 
 import RoactRodux from "@rbxts/roact-rodux";
 import store from "./Rodux/Store";
+import ProfileBoardContainer from "./Components/Surface/ProfileBoard/ProfileBoardContainer";
 
 const playerGui = Players.LocalPlayer.WaitForChild("PlayerGui") as PlayerGui;
 
@@ -97,6 +98,16 @@ const modesList = Roact.createElement(
 	},
 );
 
+const profileBoard = Roact.createElement(
+	RoactRodux.StoreProvider,
+	{
+		store: store,
+	},
+	{
+		ProfileBoard: Roact.createElement(ProfileBoardContainer),
+	},
+);
+
 Roact.mount(app, playerGui, "Main");
 Roact.mount(donationsBoard, playerGui, "DonationsLB");
 Roact.mount(winsBoard, playerGui, "WinsLB");
@@ -104,6 +115,7 @@ Roact.mount(killsBoard, playerGui, "KillsLB");
 Roact.mount(donationsShop, playerGui, "DonationsShop");
 Roact.mount(mapsList, playerGui, "MapsList");
 Roact.mount(modesList, playerGui, "ModesList");
+Roact.mount(profileBoard, playerGui, "ProfileBoard");
 
 TouchService();
 SnackbarService();

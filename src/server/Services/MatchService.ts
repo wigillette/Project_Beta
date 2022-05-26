@@ -450,6 +450,7 @@ const MatchService = Knit.CreateService({
 				if (humanoid) {
 					humanoid.Died.Connect(() => {
 						deaths.Value += 1;
+						DatabaseService.AppendPendingEntry(player.UserId, "Deaths", 1);
 
 						if (!RESERVED_TEAMS.includes(player.TeamColor) && this.CurrentMode !== "None") {
 							const modeLibraries = this.ModeLibraries; // for some reason it was bugging when i put this.ModeLibraries below lol

@@ -17,8 +17,8 @@ export const ProfileService = Knit.CreateService({
 
 	Client: {
 		ProfileChanged: new RemoteSignal<(Profile: PROFILE_FORMAT) => void>(),
-		GetProfile(Player: Player) {
-			return this.Server.GetProfile(Player);
+		GetProfile(client: Player, player?: Player) {
+			return this.Server.GetProfile(client, player);
 		},
 	},
 
@@ -49,8 +49,11 @@ export const ProfileService = Knit.CreateService({
 		}
 	},
 
-	GetProfile(Player: Player) {
-		const profile = this.PlayerProfiles.get(Player);
+	GetProfile(client: Player, player?: Player) {
+		let profile = this.PlayerProfiles.get(client);
+		if (player) {
+			profile = this.PlayerProfiles.get(player);
+		}
 		return profile ?? INITIAL_STATS;
 	},
 

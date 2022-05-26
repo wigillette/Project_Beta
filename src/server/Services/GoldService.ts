@@ -5,7 +5,6 @@ import { PRODUCT_FUNCTIONS } from "server/Utils/DeveloperProducts";
 import { gamepassesOnJoin, gamepassEvents, gamepassInfo } from "../Utils/Gamepasses";
 import ObjectUtils from "@rbxts/object-utils";
 import { donationProducts } from "shared/DonationsInfo";
-import DatabaseService from "./DatabaseService";
 
 declare global {
 	interface KnitServices {
@@ -62,8 +61,8 @@ export const GoldService = Knit.CreateService({
 
 	Client: {
 		GoldChanged: new RemoteSignal<(Gold: number) => void>(),
-		GetGold(Player: Player) {
-			return this.Server.GetGold(Player);
+		GetGold(client: Player, player?: Player) {
+			return this.Server.GetGold(client, player);
 		},
 		GetProducts(Player: Player) {
 			return this.Server.GetProducts();
@@ -89,8 +88,11 @@ export const GoldService = Knit.CreateService({
 		};
 	},
 
-	GetGold(Player: Player) {
-		const gold = this.PlayerGold.get(Player);
+	GetGold(client: Player, player?: Player) {
+		let gold = this.PlayerGold.get(client);
+		if (player) {
+			gold = this.PlayerGold.get(player);
+		}
 		return gold ?? 0;
 	},
 

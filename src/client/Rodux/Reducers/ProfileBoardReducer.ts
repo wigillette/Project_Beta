@@ -1,6 +1,6 @@
 import Rodux from "@rbxts/rodux";
 import { Players } from "@rbxts/services";
-import { PROFILE_FORMAT, INITIAL_STATS } from "shared/LevelInfo";
+import { FetchBoardData } from "client/Services/ProfileBoardService";
 
 interface Action {
 	type: string;
@@ -11,6 +11,8 @@ interface Action {
 		playerKills: number;
 		playerWins: number;
 		playerLevel: number;
+		playerCoins: number;
+		playerExpCap: number;
 	};
 }
 
@@ -21,16 +23,22 @@ export interface profileBoardState {
 	playerKills: number;
 	playerWins: number;
 	playerLevel: number;
+	playerCoins: number;
+	playerExpCap: number;
 }
 
-export const profileReducer = Rodux.createReducer(
+const clientProfile = FetchBoardData(Players.LocalPlayer);
+
+export const profileBoardReducer = Rodux.createReducer(
 	{
 		playerViewing: Players.LocalPlayer,
-		playerExp: 0,
-		playerLevel: 1,
-		playerKills: 0,
-		playerDeaths: 0,
-		playerWins: 0,
+		playerExp: clientProfile.playerExp,
+		playerLevel: clientProfile.playerLevel,
+		playerKills: clientProfile.playerKills,
+		playerDeaths: clientProfile.playerDeaths,
+		playerWins: clientProfile.playerWins,
+		playerCoins: clientProfile.playerCoins,
+		playerExpCap: clientProfile.playerExpCap,
 	},
 	{
 		switchProfile: (state: profileBoardState, action: Action) => {
@@ -42,6 +50,8 @@ export const profileReducer = Rodux.createReducer(
 				newState.playerLevel = action.payload.playerLevel;
 				newState.playerExp = action.payload.playerExp;
 				newState.playerViewing = action.payload.playerViewing;
+				newState.playerCoins = action.payload.playerCoins;
+				newState.playerExpCap = action.payload.playerExpCap;
 			}
 			return newState;
 		},

@@ -137,7 +137,7 @@
 - [x] Playerlist UI
 
 > Surface Components
-- [ ] Profile Board
+- [x] Profile Board
 - [x] Maps Board
 - [x] Modes Board   
 - [x] Top Kills Board

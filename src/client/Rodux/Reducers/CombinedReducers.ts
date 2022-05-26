@@ -12,6 +12,7 @@ import { ResultsReducer } from "./ResultsReducer";
 import { votingReducer } from "./VotingReducer";
 import { playerListReducer } from "./PlayerListReducer";
 import { ODSReducer } from "./ODSReducer";
+import { profileBoardReducer } from "./ProfileBoardReducer";
 
 const reducer = Rodux.combineReducers({
 	toggleShop: shopReducer,
@@ -51,6 +52,7 @@ const reducer = Rodux.combineReducers({
 	fetchODSData: ODSReducer,
 	switchODSCategory: ODSReducer,
 	switchODSPage: ODSReducer,
+	switchProfile: profileBoardReducer,
 });
 
 export default reducer;

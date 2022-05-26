@@ -40,6 +40,9 @@ const DatabaseService = Knit.CreateService({
 		GetAllSortingData(Player: Player) {
 			return this.Server.GetAllSortingData();
 		},
+		GetUserData(client: Player, player: Player) {
+			return this.Server.GetData(client, player);
+		},
 	},
 
 	GlobalWins: DataStoreService.GetOrderedDataStore("GlobalWins"),
@@ -48,6 +51,7 @@ const DatabaseService = Knit.CreateService({
 	MonthlyDonations: DataStoreService.GetOrderedDataStore(`MonthlyDonations${math.floor(os.time() / 2629743) + 1}`),
 	GlobalKills: DataStoreService.GetOrderedDataStore("GlobalKills"),
 	MonthlyKills: DataStoreService.GetOrderedDataStore(`MonthlyKills${math.floor(os.time() / 2629743) + 1}`),
+	GlobalDeaths: DataStoreService.GetOrderedDataStore("GlobalDeaths"),
 	PendingEntries: [] as ODSEntryFormat[],
 	SortingTables: {
 		GlobalDonations: [],
@@ -245,6 +249,23 @@ const DatabaseService = Knit.CreateService({
 				print(`Failed to save ${Player.Name}'s Data`);
 				print(err);
 			});
+	},
+
+	GetData(client: Player, player: Player) {
+		const userKills =
+			(this.GlobalKills.GetAsync(tostring(player.UserId)) !== undefined &&
+				this.GlobalKills.GetAsync(tostring(player.UserId))) ||
+			0;
+		const userWins =
+			(this.GlobalWins.GetAsync(tostring(player.UserId)) !== undefined &&
+				this.GlobalWins.GetAsync(tostring(player.UserId))) ||
+			0;
+		const userDeaths =
+			(this.GlobalDeaths.GetAsync(tostring(player.UserId)) !== undefined &&
+				this.GlobalDeaths.GetAsync(tostring(player.UserId))) ||
+			0;
+
+		return [userKills, userWins, userDeaths];
 	},
 
 	KnitInit() {
