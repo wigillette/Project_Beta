@@ -161,3 +161,4 @@
 - [ ] Blocky head in viewport frames; meshes not loading
 - [x] No set state in render methods for Surface UIs
 - [x] MVPs at boards
+- [ ] Session stats for profile boards

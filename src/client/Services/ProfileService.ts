@@ -1,6 +1,5 @@
 import { KnitClient as Knit } from "@rbxts/knit";
 import { PROFILE_FORMAT } from "shared/LevelInfo";
-import { profileBoardState } from "client/Rodux/Reducers/ProfileBoardReducer";
 import Store from "../Rodux/Store";
 const ProfileService = Knit.GetService("ProfileService");
 const ProfileClient = {

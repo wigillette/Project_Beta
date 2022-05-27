@@ -1,8 +1,8 @@
 import Object from "@rbxts/object-utils";
 import Roact from "@rbxts/roact";
 import { Workspace } from "@rbxts/services";
-import { registerListDynamicScrolling } from "client/UIProperties/DynamicScrolling";
-import { RectContainer, RectText } from "client/UIProperties/RectUI";
+import { registerGridDynamicScrolling } from "client/UIProperties/DynamicScrolling";
+import { RectContainer, RectText, SquareAspectRatio } from "client/UIProperties/RectUI";
 import { maps } from "shared/GameInfo";
 import MapNameFrame from "./MapNameFrame";
 
@@ -18,7 +18,7 @@ class Main extends Roact.Component<UIProps> {
 	constructor(props: UIProps) {
 		super(props);
 		this.scrollRef = Roact.createRef<ScrollingFrame>();
-		this.gridRef = Roact.createRef<UIListLayout>();
+		this.gridRef = Roact.createRef<UIGridLayout>();
 		this.connections = [];
 	}
 
@@ -50,13 +50,16 @@ class Main extends Roact.Component<UIProps> {
 						BackgroundTransparency={1}
 						Ref={this.scrollRef}
 					>
-						<uilistlayout
+						<uigridlayout
 							Ref={this.gridRef}
-							FillDirection={"Vertical"}
+							FillDirection={"Horizontal"}
+							StartCorner={"TopLeft"}
+							CellSize={new UDim2(0, 300, 0, 200)}
 							HorizontalAlignment={"Center"}
 							VerticalAlignment={"Top"}
-							Padding={new UDim(0.015, 0)}
-						></uilistlayout>
+							CellPadding={new UDim2(0.015, 0, 0.01, 0)}
+							FillDirectionMaxCells={2}
+						></uigridlayout>
 						{Object.values(maps).map((map) => {
 							return <MapNameFrame mapName={map.Name} />;
 						})}
@@ -71,7 +74,7 @@ class Main extends Roact.Component<UIProps> {
 		const scroll = this.scrollRef.getValue();
 		// Make the scroll frame change size depending on number of items
 		if (grid && scroll) {
-			const connection = registerListDynamicScrolling(scroll, grid);
+			const connection = registerGridDynamicScrolling(scroll, grid);
 			this.connections.push(connection);
 		}
 	}
