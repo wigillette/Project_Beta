@@ -25,6 +25,7 @@ import ModesContainer from "./Components/Surface/ModesList/ModesContainer";
 import RoactRodux from "@rbxts/roact-rodux";
 import store from "./Rodux/Store";
 import ProfileBoardContainer from "./Components/Surface/ProfileBoard/ProfileBoardContainer";
+import AdvertisementContainer from "./Components/Surface/GroupAdvertisement/AdvertisementContainer";
 
 const playerGui = Players.LocalPlayer.WaitForChild("PlayerGui") as PlayerGui;
 
@@ -108,6 +109,66 @@ const profileBoard = Roact.createElement(
 	},
 );
 
+const advertisementBoard1 = Roact.createElement(
+	RoactRodux.StoreProvider,
+	{
+		store: store,
+	},
+	{
+		AdvertisementBoard: Roact.createElement(AdvertisementContainer, { boardKey: 1 }),
+	},
+);
+
+const advertisementBoard2 = Roact.createElement(
+	RoactRodux.StoreProvider,
+	{
+		store: store,
+	},
+	{
+		AdvertisementBoard: Roact.createElement(AdvertisementContainer, { boardKey: 2 }),
+	},
+);
+
+const advertisementBoard3 = Roact.createElement(
+	RoactRodux.StoreProvider,
+	{
+		store: store,
+	},
+	{
+		AdvertisementBoard: Roact.createElement(AdvertisementContainer, { boardKey: 3 }),
+	},
+);
+
+const advertisementBoard4 = Roact.createElement(
+	RoactRodux.StoreProvider,
+	{
+		store: store,
+	},
+	{
+		AdvertisementBoard: Roact.createElement(AdvertisementContainer, { boardKey: 4 }),
+	},
+);
+
+const advertisementBoard5 = Roact.createElement(
+	RoactRodux.StoreProvider,
+	{
+		store: store,
+	},
+	{
+		AdvertisementBoard: Roact.createElement(AdvertisementContainer, { boardKey: 5 }),
+	},
+);
+
+const advertisementBoard6 = Roact.createElement(
+	RoactRodux.StoreProvider,
+	{
+		store: store,
+	},
+	{
+		AdvertisementBoard: Roact.createElement(AdvertisementContainer, { boardKey: 6 }),
+	},
+);
+
 Roact.mount(app, playerGui, "Main");
 Roact.mount(donationsBoard, playerGui, "DonationsLB");
 Roact.mount(winsBoard, playerGui, "WinsLB");
@@ -116,6 +177,12 @@ Roact.mount(donationsShop, playerGui, "DonationsShop");
 Roact.mount(mapsList, playerGui, "MapsList");
 Roact.mount(modesList, playerGui, "ModesList");
 Roact.mount(profileBoard, playerGui, "ProfileBoard");
+Roact.mount(advertisementBoard1, playerGui, "AdvertisementBoard1");
+Roact.mount(advertisementBoard2, playerGui, "AdvertisementBoard2");
+Roact.mount(advertisementBoard3, playerGui, "AdvertisementBoard3");
+Roact.mount(advertisementBoard4, playerGui, "AdvertisementBoard4");
+Roact.mount(advertisementBoard5, playerGui, "AdvertisementBoard5");
+Roact.mount(advertisementBoard6, playerGui, "AdvertisementBoard6");
 
 TouchService();
 SnackbarService();
