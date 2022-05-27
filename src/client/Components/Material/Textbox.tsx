@@ -9,6 +9,7 @@ interface UIProps {
 	Size: UDim2;
 	Position: UDim2;
 	AnchorPoint: Vector2;
+	AspectRatio?: number;
 }
 
 class Textbox extends Roact.Component<UIProps> {
@@ -32,7 +33,7 @@ class Textbox extends Roact.Component<UIProps> {
 				AnchorPoint={this.props.AnchorPoint}
 			>
 				<uiaspectratioconstraint
-					AspectRatio={8}
+					AspectRatio={(this.props.AspectRatio !== undefined && this.props.AspectRatio) || 8}
 					DominantAxis={Enum.DominantAxis.Width}
 					AspectType={Enum.AspectType.ScaleWithParentSize}
 				></uiaspectratioconstraint>

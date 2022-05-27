@@ -144,7 +144,7 @@
 - [x] Top Donors Board
 - [x] Top Wins Board
 - [x] Donations Board
-- [ ] Group Advertisement Board
+- [x] Group Advertisement Board
 
 > Bug/Revamp List
 - [x] TouchService UIs overlaying on betting/voting/results UIs
@@ -164,3 +164,4 @@
 - [ ] Session stats for profile boards
 - [ ] Donation particles
 - [ ] Level up particles/SFX
+- [ ] Get Name from UserId attempt to yield error

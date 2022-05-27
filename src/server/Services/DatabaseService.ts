@@ -123,7 +123,6 @@ const DatabaseService = Knit.CreateService({
 
 	AppendPendingEntry(userId: number, stat: string, amount: number) {
 		if (!this.FindExistingEntry(userId, stat)) {
-			print(`Appending entry for ${Players.GetNameFromUserIdAsync(userId)}, ${amount} ${stat}`);
 			this.PendingEntries.push({ UserId: userId, Stat: stat, Amount: amount });
 		} else {
 			this.IncrementEntry(userId, stat, amount);

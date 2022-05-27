@@ -39,12 +39,11 @@ export const advertisementReducer = Rodux.createReducer(
 	{
 		updateGroupInfo: (state: advertisementBoardState, action: Action) => {
 			const newState = { ...state };
-			if (action.payload && action.payload.boardKey in state) {
-				const boardEntry = state[action.payload.boardKey as keyof typeof state];
-				if (boardEntry) {
-					boardEntry.groupInfo = action.payload.groupInfo;
-					boardEntry.isClaimed = action.payload.isClaimed;
-				}
+			if (action.payload && action.payload.boardKey in newState) {
+				newState[action.payload.boardKey as keyof typeof state] = {
+					groupInfo: action.payload.groupInfo,
+					isClaimed: action.payload.isClaimed,
+				};
 			}
 			return newState;
 		},

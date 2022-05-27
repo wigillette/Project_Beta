@@ -5,6 +5,7 @@ import { PRODUCT_FUNCTIONS } from "server/Utils/DeveloperProducts";
 import { gamepassesOnJoin, gamepassEvents, gamepassInfo } from "../Utils/Gamepasses";
 import ObjectUtils from "@rbxts/object-utils";
 import { donationProducts } from "shared/DonationsInfo";
+import advertisementService from "./AdvertisementService";
 
 declare global {
 	interface KnitServices {
@@ -21,7 +22,7 @@ const purchaseGamepass = (client: Player, gamePassId: number) => {
 	}
 };
 
-const ProcessReceipt = (receiptInfo: ReceiptInfo) => {
+const ProcessReceipt = (receiptInfo: ReceiptInfo, groupId?: number, boardKey?: number) => {
 	const player = Players.GetPlayerByUserId(receiptInfo.PlayerId);
 
 	if (!player) {

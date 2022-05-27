@@ -1,7 +1,7 @@
-import Object from "@rbxts/object-utils";
+import { KnitClient } from "@rbxts/knit";
 import Roact from "@rbxts/roact";
 import RoactRodux from "@rbxts/roact-rodux";
-import { GroupService, Workspace } from "@rbxts/services";
+import { GroupService, MarketplaceService, Players, Workspace } from "@rbxts/services";
 import RectButton from "client/Components/Material/RectButton";
 import Textbox from "client/Components/Material/Textbox";
 import { advertisementBoardState } from "client/Rodux/Reducers/AdvertisementReducer";
@@ -16,6 +16,8 @@ interface UIProps {
 	previewGroup: (groupId: number, boardKey: number) => void;
 }
 
+const advertisementService = KnitClient.GetService("AdvertisementService");
+
 class Main extends Roact.Component<UIProps> {
 	leaderImageRef;
 	groupImageRef;
@@ -26,7 +28,7 @@ class Main extends Roact.Component<UIProps> {
 	}
 
 	render() {
-		const advertisementBoard = leaderboards.WaitForChild(`Advertisement${this.props.boardKey}`, 10) as Part;
+		const advertisementBoard = leaderboards.FindFirstChild(`Advertisement${this.props.boardKey}`) as Part;
 		return (
 			<surfacegui
 				ResetOnSpawn={true}
@@ -70,12 +72,15 @@ class Main extends Roact.Component<UIProps> {
 									<imagelabel {...RectBG} ImageColor3={darkMaterial.innerBG}>
 										<imagelabel
 											{...RectBG}
-											Size={new UDim2(0.1, 0, 0.1, 0)}
+											Size={new UDim2(0.3, 0, 0.3, 0)}
 											Position={new UDim2(0.265, 0, 0.03, 0)}
 											AnchorPoint={new Vector2(0.5, 0)}
 											ImageColor3={darkMaterial.cardBG}
 										>
-											<uiaspectratioconstraint {...SquareAspectRatio}></uiaspectratioconstraint>
+											<uiaspectratioconstraint
+												{...SquareAspectRatio}
+												AspectRatio={1.6}
+											></uiaspectratioconstraint>
 											<imagelabel
 												BackgroundTransparency={1}
 												Size={new UDim2(0.8, 0, 0.8, 0)}
@@ -94,18 +99,22 @@ class Main extends Roact.Component<UIProps> {
 											>
 												<uiaspectratioconstraint
 													{...SquareAspectRatio}
+													AspectRatio={1.6}
 												></uiaspectratioconstraint>
 											</imagelabel>
 										</imagelabel>
 										<imagelabel
 											{...RectBG}
 											BackgroundTransparency={1}
-											Size={new UDim2(0.1, 0, 0.1, 0)}
+											Size={new UDim2(0.3, 0, 0.1, 0)}
 											Position={new UDim2(0.72, 0, 0.03, 0)}
 											AnchorPoint={new Vector2(0.5, 0)}
 											ImageColor3={darkMaterial.cardBG}
 										>
-											<uiaspectratioconstraint {...SquareAspectRatio}></uiaspectratioconstraint>
+											<uiaspectratioconstraint
+												{...SquareAspectRatio}
+												AspectRatio={1.6}
+											></uiaspectratioconstraint>
 											<imagelabel
 												Size={new UDim2(0.8, 0, 0.8, 0)}
 												Position={new UDim2(0.5, 0, 0.5, 0)}
@@ -120,57 +129,72 @@ class Main extends Roact.Component<UIProps> {
 											>
 												<uiaspectratioconstraint
 													{...SquareAspectRatio}
+													AspectRatio={1.6}
 												></uiaspectratioconstraint>
 											</imagelabel>
 										</imagelabel>
-										<imagelabel
-											{...RectBG}
-											BackgroundTransparency={1}
-											Size={new UDim2(0.45, 0, 0.12, 0)}
-											Position={new UDim2(0.26, 0, 0.4, 0)}
+										<frame
+											{...RectContainer}
+											Size={new UDim2(0.9, 0, 0.12, 0)}
 											AnchorPoint={new Vector2(0.5, 0)}
-											ImageColor3={darkMaterial.cardBG}
+											Position={new UDim2(0.5, 0, 0.4, 0)}
 										>
-											<textlabel
-												{...RectText}
-												AnchorPoint={new Vector2(0.5, 0.5)}
-												Position={new UDim2(0.5, 0, 0.5, 0)}
-												Size={new UDim2(0.8, 0, 0.8, 0)}
-												TextColor3={Color3.fromRGB(255, 255, 255)}
-												TextStrokeTransparency={0.8}
-												Text={
-													(this.props.allGroupInfo[
-														this.props.boardKey as keyof typeof this.props.allGroupInfo
-													].groupInfo.Owner &&
+											<uilistlayout
+												FillDirection={Enum.FillDirection.Horizontal}
+												Padding={new UDim(0.05)}
+												HorizontalAlignment={"Center"}
+												VerticalAlignment={"Center"}
+											></uilistlayout>
+											<imagelabel
+												{...RectBG}
+												BackgroundTransparency={1}
+												Size={new UDim2(0.45, 0, 1, 0)}
+												Position={new UDim2(0, 0, 0, 0)}
+												AnchorPoint={new Vector2(0.5, 0)}
+												ImageColor3={darkMaterial.cardBG}
+											>
+												<textlabel
+													{...RectText}
+													AnchorPoint={new Vector2(0.5, 0.5)}
+													Position={new UDim2(0.5, 0, 0.5, 0)}
+													Size={new UDim2(0.8, 0, 0.8, 0)}
+													TextColor3={Color3.fromRGB(255, 255, 255)}
+													TextStrokeTransparency={0.8}
+													Text={
+														(this.props.allGroupInfo[
+															this.props.boardKey as keyof typeof this.props.allGroupInfo
+														].groupInfo.Owner &&
+															this.props.allGroupInfo[
+																this.props
+																	.boardKey as keyof typeof this.props.allGroupInfo
+															].groupInfo.Owner.Name) ||
+														"UNDEFINED"
+													}
+												></textlabel>
+											</imagelabel>
+											<imagelabel
+												{...RectBG}
+												BackgroundTransparency={1}
+												Size={new UDim2(0.45, 0, 1, 0)}
+												Position={new UDim2(0, 0, 0, 0)}
+												AnchorPoint={new Vector2(0.5, 0)}
+												ImageColor3={darkMaterial.cardBG}
+											>
+												<textlabel
+													{...RectText}
+													AnchorPoint={new Vector2(0.5, 0.5)}
+													Position={new UDim2(0.5, 0, 0.5, 0)}
+													Size={new UDim2(0.8, 0, 0.8, 0)}
+													TextColor3={Color3.fromRGB(255, 255, 255)}
+													TextStrokeTransparency={0.8}
+													Text={
 														this.props.allGroupInfo[
 															this.props.boardKey as keyof typeof this.props.allGroupInfo
-														].groupInfo.Owner.Name) ||
-													"UNDEFINED"
-												}
-											></textlabel>
-										</imagelabel>
-										<imagelabel
-											{...RectBG}
-											BackgroundTransparency={1}
-											Size={new UDim2(0.45, 0, 0.12, 0)}
-											Position={new UDim2(0.72, 0, 0.4, 0)}
-											AnchorPoint={new Vector2(0.5, 0)}
-											ImageColor3={darkMaterial.cardBG}
-										>
-											<textlabel
-												{...RectText}
-												AnchorPoint={new Vector2(0.5, 0.5)}
-												Position={new UDim2(0.5, 0, 0.5, 0)}
-												Size={new UDim2(0.8, 0, 0.8, 0)}
-												TextColor3={Color3.fromRGB(255, 255, 255)}
-												TextStrokeTransparency={0.8}
-												Text={
-													this.props.allGroupInfo[
-														this.props.boardKey as keyof typeof this.props.allGroupInfo
-													].groupInfo.Name || "UNDEFINED"
-												}
-											></textlabel>
-										</imagelabel>
+														].groupInfo.Name || "UNDEFINED"
+													}
+												></textlabel>
+											</imagelabel>
+										</frame>
 										<imagelabel
 											{...RectBG}
 											BackgroundTransparency={1}
@@ -217,15 +241,16 @@ class Main extends Roact.Component<UIProps> {
 													}
 												}
 											}}
-											Size={new UDim2(0.9, 0, 0.42, 0)}
-											Position={new UDim2(0.5, 0, 0.1, 0)}
-											AnchorPoint={new Vector2(0.5, 0)}
+											Size={new UDim2(0.9, 0, 0.35, 0)}
+											Position={new UDim2(0.5, 0, 0.05, 0)}
+											AnchorPoint={new Vector2(0.5, 0.05)}
+											AspectRatio={12}
 										/>
 
 										<RectButton
-											Position={new UDim2(0.5, 0, 0.575, 0)}
-											Size={new UDim2(0.4, 0, 0.35, 0)}
-											AnchorPoint={new Vector2(0.5, 0)}
+											Position={new UDim2(0.5, 0, 0.8, 0)}
+											Size={new UDim2(0.25, 0, 0.2, 0)}
+											AnchorPoint={new Vector2(0.5, 0.8)}
 											ButtonText={"PURCHASE"}
 											Callback={() => {
 												// Prompt purchase on the server, pass in board key, update all clients by passing the board key as an argument to the client, update respective variables for the board in the rodux store
@@ -234,8 +259,11 @@ class Main extends Roact.Component<UIProps> {
 														this.props.allGroupInfo[
 															this.props.boardKey as keyof typeof this.props.allGroupInfo
 														];
-													if (!boardEntry.isClaimed) {
-														print("PROMPT MPS PURCHASE");
+													if (!boardEntry.isClaimed && boardEntry.groupInfo.Id !== 5255599) {
+														advertisementService.PurchaseBoard(
+															this.props.boardKey,
+															boardEntry.groupInfo.Id,
+														);
 													}
 												}
 											}}

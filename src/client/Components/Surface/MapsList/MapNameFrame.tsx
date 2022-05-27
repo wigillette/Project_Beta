@@ -50,15 +50,6 @@ class Main extends Roact.Component<UIProps> {
 						Font={"GothamSemibold"}
 						TextStrokeTransparency={0.8}
 					></textlabel>
-					<DynamicViewport
-						Model={mapModel}
-						Position={new UDim2(0.5, 0, 0.95, 0)}
-						AnchorPoint={new Vector2(0.5, 0.95)}
-						Size={new UDim2(0.9, 0, 0.7, 0)}
-						rotate={true}
-						Animation={undefined}
-						ZIndex={10}
-					/>
 				</imagelabel>
 			</frame>
 		);

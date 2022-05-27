@@ -241,7 +241,7 @@ const MatchService = Knit.CreateService({
 				leaders.Red &&
 				leaders.Red.TeamColor !== new BrickColor("White") &&
 				leaders.Blue.TeamColor !== new BrickColor("White")) ||
-				(!leaders && (playersAlive || aliveCounter > 1)))
+				(!leaders && playersAlive && aliveCounter > 1))
 		) {
 			aliveCounter = 0;
 			teams.forEach((team: Team) => {
@@ -510,51 +510,54 @@ const MatchService = Knit.CreateService({
 					this.DecrementTimer();
 					this.isIntermission = false;
 					const participants = this.GetParticipants();
-					VotingService.SelectChosen(participants);
-					// Display the voting page for all clients
-					status.Value = "Map/Mode Voting..";
-					timer.Value = this.VotingTime;
-					this.DecrementTimer();
-					// Close the voting page for all clients
-					VotingService.Client.CloseVoting.FireAll();
-					wait(1);
-
-					// Total up the votes to get the map and mode
-					const matchSelection = VotingService.TotalVotes();
-					this.CurrentMap = matchSelection[0] || this.ChooseMap();
-					this.CurrentMode = matchSelection[1] || this.ChooseMode();
-
-					// Change this to a get participants function soon
-					// Display the betting UI
-					const modeLibraries = this.ModeLibraries;
-					if (this.CurrentMode in modeLibraries) {
-						const library = modeLibraries[this.CurrentMode as keyof typeof modeLibraries];
-
-						BettingService.FetchBettingInfo(
-							participants,
-							((library.TEAMS.size() === 1 || this.CurrentMode === "SFT") && participants) ||
-								library.TEAM_NAMES,
-							this.CurrentMode,
-						);
-						// Update the panel for the betting time
-						status.Value = "Winner Predictions..";
-						timer.Value = this.BettingTime;
+					if (participants.size() >= 2) {
+						VotingService.SelectChosen(participants);
+						// Display the voting page for all clients
+						status.Value = "Map/Mode Voting..";
+						timer.Value = this.VotingTime;
 						this.DecrementTimer();
-						BettingService.Client.CloseBetting.FireAll();
+						// Close the voting page for all clients
+						VotingService.Client.CloseVoting.FireAll();
 						wait(1);
 
-						// Begin setting up the match
-						if (this.CurrentMode in modeObjectives) {
-							status.Value = modeObjectives[this.CurrentMode as keyof typeof modeObjectives];
+						// Total up the votes to get the map and mode
+						const matchSelection = VotingService.TotalVotes();
+						this.CurrentMap = matchSelection[0] || this.ChooseMap();
+						this.CurrentMode = matchSelection[1] || this.ChooseMode();
+
+						// Change this to a get participants function soon
+						// Display the betting UI
+						const modeLibraries = this.ModeLibraries;
+						if (this.CurrentMode in modeLibraries) {
+							const library = modeLibraries[this.CurrentMode as keyof typeof modeLibraries];
+
+							BettingService.FetchBettingInfo(
+								participants,
+								((library.TEAMS.size() === 1 || this.CurrentMode === "SFT") && participants) ||
+									library.TEAM_NAMES,
+								this.CurrentMode,
+							);
+							// Update the panel for the betting time
+							status.Value = "Winner Predictions..";
+							timer.Value = this.BettingTime;
+							this.DecrementTimer();
+							BettingService.Client.CloseBetting.FireAll();
+							wait(1);
+
+							// Begin setting up the match
+							if (this.CurrentMode in modeObjectives) {
+								status.Value = modeObjectives[this.CurrentMode as keyof typeof modeObjectives];
+							}
+							this.LoadMatch(participants);
+							spawn(() => {
+								wait(25);
+								this.Client.HideMatchResults.FireAll();
+							});
+						} else {
+							SnackbarService.PushAll(`Unable to locate ${this.CurrentMode} module..`);
 						}
-						this.LoadMatch(participants);
-						spawn(() => {
-							wait(25);
-							this.Client.HideMatchResults.FireAll();
-						});
-					} else {
-						SnackbarService.PushAll(`Unable to locate ${this.CurrentMode} module..`);
 					}
+					wait(1);
 				} else {
 					wait(0.5);
 					status.Value = "Need at least two players..";
