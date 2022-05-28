@@ -1,4 +1,5 @@
 import { KnitServer as Knit, RemoteSignal } from "@rbxts/knit";
+import Object from "@rbxts/object-utils";
 import { MarketplaceService, Players } from "@rbxts/services";
 
 declare global {
@@ -9,6 +10,8 @@ declare global {
 
 const AdvertisementService = Knit.CreateService({
 	Name: "AdvertisementService",
+
+	Boards: new Map<number, Player | undefined>(),
 
 	Client: {
 		UpdateBoards: new RemoteSignal<(groupId: number, isClaimed: boolean, boardKey: number) => void>(),
@@ -21,7 +24,7 @@ const AdvertisementService = Knit.CreateService({
 		const connection = MarketplaceService.PromptProductPurchaseFinished.Connect(
 			(userId: number, productId: number, isPurchased: boolean) => {
 				if (client.UserId === userId && isPurchased && productId === 934535878) {
-					this.ClaimBoard(groupId, boardKey);
+					this.ClaimBoard(client, groupId, boardKey);
 					connection.Disconnect();
 				} else if (client.UserId === userId && !isPurchased) {
 					connection.Disconnect();
@@ -31,7 +34,8 @@ const AdvertisementService = Knit.CreateService({
 		MarketplaceService.PromptProductPurchase(client, 934535878);
 	},
 
-	ClaimBoard(groupId: number, boardKey: number) {
+	ClaimBoard(client: Player, groupId: number, boardKey: number) {
+		this.Boards.set(boardKey, client);
 		this.Client.UpdateBoards.FireAll(groupId, true, boardKey);
 	},
 
@@ -41,6 +45,18 @@ const AdvertisementService = Knit.CreateService({
 
 	KnitInit() {
 		print("Advertisement Service Initialized | Server");
+		for (let i = 1; i < 7; i++) {
+			this.Boards.set(i, undefined);
+		}
+
+		Players.PlayerRemoving.Connect((plr) => {
+			Object.entries(this.Boards).forEach((board) => {
+				if (board[1] === plr) {
+					this.Boards.set(board[0], undefined);
+					this.FreeBoard(board[0]);
+				}
+			});
+		});
 	},
 });
 

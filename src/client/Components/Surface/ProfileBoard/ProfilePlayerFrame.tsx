@@ -88,6 +88,9 @@ export = RoactRodux.connect(undefined, (dispatch) => {
 					playerLevel: playerInfo.playerLevel,
 					playerCoins: playerInfo.playerCoins,
 					playerExpCap: playerInfo.playerExpCap,
+					sessionKills: playerInfo.sessionKills,
+					sessionDeaths: playerInfo.sessionDeaths,
+					sessionWins: playerInfo.sessionWins,
 				},
 			});
 		},

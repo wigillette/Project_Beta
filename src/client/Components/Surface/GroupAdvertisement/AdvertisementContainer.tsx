@@ -31,7 +31,7 @@ class Main extends Roact.Component<UIProps> {
 		const advertisementBoard = leaderboards.FindFirstChild(`Advertisement${this.props.boardKey}`) as Part;
 		return (
 			<surfacegui
-				ResetOnSpawn={true}
+				ResetOnSpawn={false}
 				Adornee={advertisementBoard}
 				Face={"Back"}
 				ClipsDescendants={true}

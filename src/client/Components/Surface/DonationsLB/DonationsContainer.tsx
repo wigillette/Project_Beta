@@ -7,7 +7,7 @@ const donationsBoard = leaderboards.WaitForChild("Donations", 10) as Part;
 
 const Main = () => {
 	return (
-		<surfacegui ResetOnSpawn={true} Adornee={donationsBoard} Face={"Back"} ClipsDescendants={true} Enabled={true}>
+		<surfacegui ResetOnSpawn={false} Adornee={donationsBoard} Face={"Back"} ClipsDescendants={true} Enabled={true}>
 			<DonationsLB />
 		</surfacegui>
 	);

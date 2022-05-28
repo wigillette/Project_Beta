@@ -251,18 +251,23 @@ const DatabaseService = Knit.CreateService({
 	},
 
 	GetData(client: Player, player: Player) {
-		const userKills =
-			(this.GlobalKills.GetAsync(tostring(player.UserId)) !== undefined &&
-				this.GlobalKills.GetAsync(tostring(player.UserId))) ||
-			0;
-		const userWins =
-			(this.GlobalWins.GetAsync(tostring(player.UserId)) !== undefined &&
-				this.GlobalWins.GetAsync(tostring(player.UserId))) ||
-			0;
-		const userDeaths =
-			(this.GlobalDeaths.GetAsync(tostring(player.UserId)) !== undefined &&
-				this.GlobalDeaths.GetAsync(tostring(player.UserId))) ||
-			0;
+		let userKills = 0;
+		const profileKills = this.GlobalKills.GetAsync(tostring(player.UserId));
+		if (profileKills !== undefined) {
+			userKills = profileKills;
+		}
+
+		let userWins = 0;
+		const profileWins = this.GlobalWins.GetAsync(tostring(player.UserId));
+		if (profileWins !== undefined) {
+			userWins = profileWins;
+		}
+
+		let userDeaths = 0;
+		const profileDeaths = this.GlobalDeaths.GetAsync(tostring(player.UserId));
+		if (profileDeaths !== undefined) {
+			userDeaths = profileDeaths;
+		}
 
 		return [userKills, userWins, userDeaths];
 	},

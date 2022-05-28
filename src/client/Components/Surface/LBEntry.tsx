@@ -16,10 +16,26 @@ const rankColors = {
 	3: Color3.fromRGB(235, 117, 0),
 };
 
-class DonationsLB extends Roact.Component<UIProps> {
+interface UIState {
+	name: string;
+}
+
+class DonationsLB extends Roact.Component<UIProps, UIState> {
 	constructor(props: UIProps) {
 		super(props);
+		spawn(() => {
+			const response = pcall(() => {
+				return Players.GetNameFromUserIdAsync(this.props.playerId);
+			});
+			if (response[0]) {
+				this.setState({ name: response[1] });
+			}
+		});
 	}
+
+	state = {
+		name: "None",
+	};
 
 	render() {
 		return (
@@ -78,7 +94,7 @@ class DonationsLB extends Roact.Component<UIProps> {
 							TextXAlignment={"Left"}
 							TextYAlignment={"Center"}
 							Font={"Gotham"}
-							Text={Players.GetNameFromUserIdAsync(this.props.playerId) || "None"}
+							Text={this.state.name}
 							TextScaled={true}
 							TextColor3={Color3.fromRGB(255, 255, 255)}
 							BackgroundTransparency={1}

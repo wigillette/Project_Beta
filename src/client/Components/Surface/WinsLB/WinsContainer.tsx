@@ -7,7 +7,7 @@ const winsBoard = leaderboards.WaitForChild("Wins", 10) as Part;
 
 const Main = () => {
 	return (
-		<surfacegui ResetOnSpawn={true} Adornee={winsBoard} Face={"Back"} ClipsDescendants={true} Enabled={true}>
+		<surfacegui ResetOnSpawn={false} Adornee={winsBoard} Face={"Back"} ClipsDescendants={true} Enabled={true}>
 			<WinsLB />
 		</surfacegui>
 	);

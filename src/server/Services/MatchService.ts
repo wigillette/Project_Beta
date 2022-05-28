@@ -14,6 +14,7 @@ import SFT from "server/GameModes/SFT";
 import { GoldService } from "./GoldService";
 import { ProfileService } from "./ProfileService";
 import { BettingService } from "./BettingService";
+import SessionService from "./SessionService";
 import { VotingService } from "./VotingService";
 import { EquippedFormat } from "shared/InventoryInfo";
 import { modeObjectives, modes } from "shared/GameInfo";
@@ -166,6 +167,8 @@ const MatchService = Knit.CreateService({
 						const ownsDoubleCoins = MarketplaceService.UserOwnsGamePassAsync(player.UserId, 8353972);
 						const isWinner = winner === player || winningTeam.includes(player);
 						if (isWinner) {
+							print(player.Name);
+							SessionService.IncrementStat(player, "Wins", 1);
 							DatabaseService.AppendPendingEntry(player.UserId, "Wins", 1);
 						}
 						let expEarned = math.max(kills.Value * 50 - deaths.Value * 25 + ((isWinner && 100) || 0), 0);
@@ -235,13 +238,14 @@ const MatchService = Knit.CreateService({
 		let aliveCounter = 0;
 
 		while (
+			participants.size() > 1 &&
 			timer.Value > 0 &&
 			((leaders &&
 				leaders.Blue &&
 				leaders.Red &&
 				leaders.Red.TeamColor !== new BrickColor("White") &&
 				leaders.Blue.TeamColor !== new BrickColor("White")) ||
-				(!leaders && playersAlive && aliveCounter > 1))
+				(!leaders && (playersAlive || aliveCounter > 1)))
 		) {
 			aliveCounter = 0;
 			teams.forEach((team: Team) => {
@@ -414,7 +418,9 @@ const MatchService = Knit.CreateService({
 			this.AddSword(player);
 			player.CharacterAdded.Connect((char: Model) => {
 				wait(0.5);
-				this.AddSword(player);
+				if (player.Team && player.Team.Name !== "Ghosts") {
+					this.AddSword(player);
+				}
 				const humanoid = char.FindFirstChildOfClass("Humanoid");
 
 				// Add Sword on Back
@@ -450,6 +456,7 @@ const MatchService = Knit.CreateService({
 				if (humanoid) {
 					humanoid.Died.Connect(() => {
 						deaths.Value += 1;
+						SessionService.IncrementStat(player, "Deaths", 1);
 						DatabaseService.AppendPendingEntry(player.UserId, "Deaths", 1);
 
 						if (!RESERVED_TEAMS.includes(player.TeamColor) && this.CurrentMode !== "None") {
@@ -482,6 +489,7 @@ const MatchService = Knit.CreateService({
 									if (killerKills) {
 										killerKills.Value += 1;
 										DatabaseService.AppendPendingEntry(killer.UserId, "Kills", 1);
+										SessionService.IncrementStat(killer, "Kills", 1);
 									}
 								}
 							}

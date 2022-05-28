@@ -7,7 +7,7 @@ const killsBoard = leaderboards.WaitForChild("Kills", 10) as Part;
 
 const Main = () => {
 	return (
-		<surfacegui ResetOnSpawn={true} Adornee={killsBoard} Face={"Back"} ClipsDescendants={true} Enabled={true}>
+		<surfacegui ResetOnSpawn={false} Adornee={killsBoard} Face={"Back"} ClipsDescendants={true} Enabled={true}>
 			<KillsLB />
 		</surfacegui>
 	);

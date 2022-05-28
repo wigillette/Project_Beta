@@ -21,6 +21,9 @@ interface UIProps {
 	playerLevel: number;
 	playerCoins: number;
 	playerExpCap: number;
+	playerSessionKills: number;
+	playerSessionDeaths: number;
+	playerSessionWins: number;
 }
 
 class ProfileBoardContainer extends Roact.Component<UIProps> {
@@ -36,7 +39,7 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 
 	render() {
 		return (
-			<surfacegui ResetOnSpawn={true} Adornee={mapsBoard} Face={"Back"} ClipsDescendants={true} Enabled={true}>
+			<surfacegui ResetOnSpawn={false} Adornee={mapsBoard} Face={"Back"} ClipsDescendants={true} Enabled={true}>
 				<frame
 					{...RectContainer}
 					AnchorPoint={new Vector2(0, 0)}
@@ -251,7 +254,9 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 												Font={"Gotham"}
 												TextColor3={Color3.fromRGB(255, 255, 255)}
 												TextStrokeTransparency={0.8}
-												Text={tostring(this.props.playerDeaths)}
+												Text={tostring(
+													this.props.playerDeaths + this.props.playerSessionDeaths,
+												)}
 											></textlabel>
 										</frame>
 										<frame
@@ -278,7 +283,7 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 												Font={"Gotham"}
 												TextColor3={Color3.fromRGB(255, 255, 255)}
 												TextStrokeTransparency={0.8}
-												Text={tostring(this.props.playerKills)}
+												Text={tostring(this.props.playerKills + this.props.playerSessionKills)}
 											></textlabel>
 										</frame>
 										<frame
@@ -305,7 +310,7 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 												Font={"Gotham"}
 												TextColor3={Color3.fromRGB(255, 255, 255)}
 												TextStrokeTransparency={0.8}
-												Text={tostring(this.props.playerWins)}
+												Text={tostring(this.props.playerWins + this.props.playerSessionWins)}
 											></textlabel>
 										</frame>
 									</imagelabel>
@@ -399,7 +404,10 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 												TextColor3={Color3.fromRGB(255, 255, 255)}
 												TextStrokeTransparency={0.8}
 												Text={tostring(
-													ComputeKDR(this.props.playerKills, this.props.playerDeaths),
+													ComputeKDR(
+														this.props.playerKills + this.props.playerSessionKills,
+														this.props.playerDeaths + this.props.playerSessionDeaths,
+													),
 												)}
 												TextXAlignment={"Center"}
 											></textlabel>
@@ -456,13 +464,13 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 											></textlabel>
 											<textlabel
 												{...RectText}
-												AnchorPoint={new Vector2(0, 0.5)}
-												Position={new UDim2(0.42, 0, 0.5, 0)}
+												AnchorPoint={new Vector2(0.9, 0.5)}
+												Position={new UDim2(0.9, 0, 0.5, 0)}
 												Size={new UDim2(0.5, 0, 0.85, 0)}
 												Font={"Gotham"}
 												TextColor3={Color3.fromRGB(255, 255, 255)}
 												TextStrokeTransparency={0.8}
-												Text={tostring(this.props.playerDeaths)}
+												Text={tostring(this.props.playerSessionDeaths)}
 											></textlabel>
 										</frame>
 										<frame
@@ -483,13 +491,13 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 											></textlabel>
 											<textlabel
 												{...RectText}
-												AnchorPoint={new Vector2(0, 0.5)}
-												Position={new UDim2(0.42, 0, 0.5, 0)}
+												AnchorPoint={new Vector2(0.9, 0.5)}
+												Position={new UDim2(0.9, 0, 0.5, 0)}
 												Size={new UDim2(0.5, 0, 0.85, 0)}
 												Font={"Gotham"}
 												TextColor3={Color3.fromRGB(255, 255, 255)}
 												TextStrokeTransparency={0.8}
-												Text={tostring(this.props.playerKills)}
+												Text={tostring(this.props.playerSessionKills)}
 											></textlabel>
 										</frame>
 										<frame
@@ -510,13 +518,13 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 											></textlabel>
 											<textlabel
 												{...RectText}
-												AnchorPoint={new Vector2(0, 0.5)}
-												Position={new UDim2(0.42, 0, 0.5, 0)}
+												AnchorPoint={new Vector2(0.9, 0.5)}
+												Position={new UDim2(0.9, 0, 0.5, 0)}
 												Size={new UDim2(0.5, 0, 0.85, 0)}
 												Font={"Gotham"}
 												TextColor3={Color3.fromRGB(255, 255, 255)}
 												TextStrokeTransparency={0.8}
-												Text={tostring(this.props.playerWins)}
+												Text={tostring(this.props.playerSessionWins)}
 											></textlabel>
 										</frame>
 									</imagelabel>
@@ -562,5 +570,8 @@ export = RoactRodux.connect(function (state: storeState) {
 		playerLevel: state.switchProfile.playerLevel,
 		playerCoins: state.switchProfile.playerCoins,
 		playerExpCap: state.switchProfile.playerExpCap,
+		playerSessionKills: state.switchProfile.sessionKills,
+		playerSessionDeaths: state.switchProfile.sessionDeaths,
+		playerSessionWins: state.switchProfile.sessionWins,
 	};
 })(ProfileBoardContainer);

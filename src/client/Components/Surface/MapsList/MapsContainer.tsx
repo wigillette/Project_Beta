@@ -24,7 +24,7 @@ class Main extends Roact.Component<UIProps> {
 
 	render() {
 		return (
-			<surfacegui ResetOnSpawn={true} Adornee={mapsBoard} Face={"Back"} ClipsDescendants={true} Enabled={true}>
+			<surfacegui ResetOnSpawn={false} Adornee={mapsBoard} Face={"Back"} ClipsDescendants={true} Enabled={true}>
 				<frame
 					{...RectContainer}
 					AnchorPoint={new Vector2(0, 0)}
@@ -54,7 +54,7 @@ class Main extends Roact.Component<UIProps> {
 							Ref={this.gridRef}
 							FillDirection={"Horizontal"}
 							StartCorner={"TopLeft"}
-							CellSize={new UDim2(0, 300, 0, 200)}
+							CellSize={new UDim2(0, 300, 0, 75)}
 							HorizontalAlignment={"Center"}
 							VerticalAlignment={"Top"}
 							CellPadding={new UDim2(0.015, 0, 0.01, 0)}

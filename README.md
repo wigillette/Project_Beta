@@ -161,7 +161,7 @@
 - [ ] Blocky head in viewport frames; meshes not loading
 - [x] No set state in render methods for Surface UIs
 - [x] MVPs at boards
-- [ ] Session stats for profile boards
+- [x] Session stats for profile boards
 - [ ] Donation particles
 - [ ] Level up particles/SFX
-- [ ] Get Name from UserId attempt to yield error
+- [x] Get Name from UserId attempt to yield error

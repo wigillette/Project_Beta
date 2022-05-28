@@ -43,9 +43,9 @@ class Main extends Roact.Component<UIProps> {
 					<textlabel
 						{...RectText}
 						Text={this.props.mapName}
-						Position={new UDim2(0.5, 0, 0.05, 0)}
-						Size={new UDim2(0.9, 0, 0.2, 0)}
-						AnchorPoint={new Vector2(0.5, 0.05)}
+						Position={new UDim2(0.5, 0, 0.5, 0)}
+						Size={new UDim2(0.75, 0, 0.75, 0)}
+						AnchorPoint={new Vector2(0.5, 0.5)}
 						TextColor3={Color3.fromRGB(255, 255, 255)}
 						Font={"GothamSemibold"}
 						TextStrokeTransparency={0.8}

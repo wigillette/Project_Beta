@@ -24,7 +24,7 @@ class Main extends Roact.Component<UIProps> {
 
 	render() {
 		return (
-			<surfacegui ResetOnSpawn={true} Adornee={modesBoard} Face={"Back"} ClipsDescendants={true} Enabled={true}>
+			<surfacegui ResetOnSpawn={false} Adornee={modesBoard} Face={"Back"} ClipsDescendants={true} Enabled={true}>
 				<frame
 					{...RectContainer}
 					AnchorPoint={new Vector2(0, 0)}
