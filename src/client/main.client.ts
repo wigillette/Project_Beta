@@ -26,6 +26,7 @@ import RoactRodux from "@rbxts/roact-rodux";
 import store from "./Rodux/Store";
 import ProfileBoardContainer from "./Components/Surface/ProfileBoard/ProfileBoardContainer";
 import AdvertisementContainer from "./Components/Surface/GroupAdvertisement/AdvertisementContainer";
+import ObbyChestService from "./Services/ObbyChestService";
 
 const playerGui = Players.LocalPlayer.WaitForChild("PlayerGui") as PlayerGui;
 
@@ -199,3 +200,4 @@ MusicService.init();
 GoldService.init();
 ODSService.init();
 AdvertisementService.init();
+ObbyChestService.init();

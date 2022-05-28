@@ -17,8 +17,8 @@ export default function init() {
 
 	locations.forEach((trigger) => {
 		// Initialize each trigger
-		const triggerPart = trigger[0] as BasePart;
-		const action = trigger[1] as string;
+		const triggerPart = trigger[0] as BasePart | undefined;
+		const action = trigger[1] as string | [() => void, () => void];
 		if (triggerPart && action) {
 			const triggerHook = new TouchManager(triggerPart, action);
 			triggerHooks.push(triggerHook);

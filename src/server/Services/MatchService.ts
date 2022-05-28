@@ -245,7 +245,7 @@ const MatchService = Knit.CreateService({
 				leaders.Red &&
 				leaders.Red.TeamColor !== new BrickColor("White") &&
 				leaders.Blue.TeamColor !== new BrickColor("White")) ||
-				(!leaders && (playersAlive || aliveCounter > 1)))
+				(!leaders && playersAlive && aliveCounter > 1))
 		) {
 			aliveCounter = 0;
 			teams.forEach((team: Team) => {

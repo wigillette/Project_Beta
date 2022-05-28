@@ -11,6 +11,7 @@ import { TwitterService } from "./TwitterService";
 import { SettingsService } from "./SettingsService";
 import { DailyRewardService } from "./DailyRewardService";
 import { INITIAL_DR, DR_FORMAT } from "../../shared/DailyRewardInfo";
+import ObbyChestService, { chestInfo, INITIAL_CHEST } from "./ObbyChestService";
 
 declare global {
 	interface KnitServices {
@@ -236,6 +237,17 @@ const DatabaseService = Knit.CreateService({
 				print(err);
 				print(`Failed to load ${Player.Name}'s Daily Reward Info.`);
 			});
+
+		const OCStore = Database("ObbyChest", Player);
+		const OC = OCStore.GetAsync(INITIAL_CHEST)
+			.then((ocInfo) => {
+				print(ocInfo);
+				ObbyChestService.SetChest(Player, ocInfo as chestInfo);
+			})
+			.catch((err) => {
+				print(err);
+				print(`Failed to load ${Player.Name}'s Obby Chest Info`);
+			});
 	},
 
 	SaveData(Player: Player) {
@@ -282,6 +294,9 @@ const DatabaseService = Knit.CreateService({
 			"RedeemedCodes",
 			"Settings",
 			"DailyReward",
+			"ObbyChest",
+			"ArenaTickets",
+			"Guild",
 		);
 		Players.PlayerAdded.Connect((player) => {
 			this.LoadData(player);

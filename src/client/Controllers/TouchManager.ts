@@ -4,27 +4,35 @@ import Store from "client/Rodux/Store";
 
 // Touch Manager Class
 class TouchManager {
-	action: string;
+	action: string | [() => void, () => void];
 	trigger: BasePart;
 	open: boolean;
 
 	public displayUI() {
 		// Display the UI when the player is in range
 		if (!this.open) {
-			Store.dispatch({
-				type: this.action,
-			});
 			this.open = true;
+			if (typeIs(this.action, "string")) {
+				Store.dispatch({
+					type: this.action as string,
+				});
+			} else {
+				(this.action[0] as () => void)();
+			}
 		}
 	}
 
 	public hideUI() {
 		// Hide the UI when the player is no longer in range
 		if (this.open) {
-			Store.dispatch({
-				type: this.action,
-			});
 			this.open = false;
+			if (typeIs(this.action, "string")) {
+				Store.dispatch({
+					type: this.action as string,
+				});
+			} else {
+				(this.action[1] as () => void)();
+			}
 		}
 	}
 
@@ -57,7 +65,7 @@ class TouchManager {
 		return distance;
 	}
 
-	constructor(trigger: BasePart, action: string) {
+	constructor(trigger: BasePart, action: string | [() => void, () => void]) {
 		// Linking a part to a UI; display the UI on close proximity to the part
 		this.trigger = trigger;
 		this.action = action;

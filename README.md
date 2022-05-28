@@ -58,7 +58,7 @@
 > Miscellaneous
 - [ ] Name Tags
 - [x] Sword on Back
-- [ ] Obby Chest
+- [x] Obby Chest
 - [ ] Spinning coins in lobby
 - [x] Lobby/Match Music
 
@@ -165,3 +165,5 @@
 - [ ] Donation particles
 - [ ] Level up particles/SFX
 - [x] Get Name from UserId attempt to yield error
+- [ ] Equipping items during rounds
+- [ ] Gamepass items on respawn (signs, hot cocoa, etc.)
