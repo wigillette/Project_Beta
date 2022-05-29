@@ -135,6 +135,7 @@
 - [x] Match Results UI
 - [x] Gamepass UI
 - [x] Playerlist UI
+- [ ] Spectate Component
 
 > Surface Components
 - [x] Profile Board
@@ -163,7 +164,7 @@
 - [x] MVPs at boards
 - [x] Session stats for profile boards
 - [ ] Donation particles
-- [ ] Level up particles/SFX
+- [x] Level up particles/SFX
 - [x] Get Name from UserId attempt to yield error
 - [ ] Equipping items during rounds
 - [x] Gamepass items on respawn (signs, hot cocoa, etc.)

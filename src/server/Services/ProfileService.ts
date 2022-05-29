@@ -1,5 +1,5 @@
 import { KnitServer as Knit, Signal, RemoteSignal } from "@rbxts/knit";
-import { Players } from "@rbxts/services";
+import { Players, ServerStorage } from "@rbxts/services";
 import Database from "@rbxts/datastore2";
 import { CAP_FORMULA, INITIAL_STATS, PROFILE_FORMAT } from "shared/LevelInfo";
 
@@ -8,6 +8,9 @@ declare global {
 		ProfileService: typeof ProfileService;
 	}
 }
+
+const particlesFolder = ServerStorage.WaitForChild("Particles", 10);
+const levelParticles = particlesFolder?.WaitForChild("Level", 10);
 
 export const ProfileService = Knit.CreateService({
 	Name: "ProfileService",
@@ -35,6 +38,26 @@ export const ProfileService = Knit.CreateService({
 				newLevel += 1;
 				newExp -= currentCap;
 				currentCap = CAP_FORMULA(newLevel);
+			}
+
+			if (newLevel !== profile.Level) {
+				const character = Player.Character;
+				if (levelParticles && character) {
+					const hrp = character.FindFirstChild("HumanoidRootPart");
+					if (hrp) {
+						levelParticles.GetChildren().forEach((particle) => {
+							if (particle.IsA("ParticleEmitter")) {
+								spawn(() => {
+									const newParticle = particle.Clone();
+									newParticle.Parent = hrp;
+									newParticle.Enabled = true;
+									wait(2);
+									newParticle.Destroy();
+								});
+							}
+						});
+					}
+				}
 			}
 
 			const newProfile: PROFILE_FORMAT = {
