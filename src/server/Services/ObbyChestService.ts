@@ -2,6 +2,7 @@ import { KnitServer as Knit, RemoteSignal } from "@rbxts/knit";
 import Object from "@rbxts/object-utils";
 import { Players, TweenService, Workspace } from "@rbxts/services";
 import Database from "@rbxts/datastore2";
+import SnackbarService from "./SnackbarService";
 
 declare global {
 	interface KnitServices {
@@ -55,6 +56,10 @@ const ObbyChestService = Knit.CreateService({
 				chestStore.Set(newInfo);
 
 				goldService.AddGold(client, goldValue);
+				SnackbarService.PushPlayer(
+					client,
+					`You have earned ${goldValue} gold for reaching the ${chestType} chest!`,
+				);
 			}
 		}
 	},

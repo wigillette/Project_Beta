@@ -7,6 +7,8 @@ const InventoryService = KnitServer.GetService("InventoryService");
 const snackbarService = KnitServer.GetService("SnackbarService");
 export const gamepassesOnJoin = [8444469, 8353921, 8444470, 8353962, 8353933];
 
+export const recurringGamepasses = [8353933, 8444469, 8353962];
+
 export const gamepassEvents = {
 	8444469: (client: Player) => {
 		// Hot Cocoa

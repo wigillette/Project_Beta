@@ -18,7 +18,6 @@ const Main = () => {
 	return (
 		<screengui ResetOnSpawn={false}>
 			<IntroScreen />
-
 			<Profile />
 			<Shop />
 			<Inventory />

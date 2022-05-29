@@ -1,13 +1,15 @@
 import Object from "@rbxts/object-utils";
 import Roact from "@rbxts/roact";
 import RoactRodux from "@rbxts/roact-rodux";
-import { Players, Workspace } from "@rbxts/services";
+import { Players, TweenService, Workspace } from "@rbxts/services";
 import { registerListDynamicScrolling } from "client/UIProperties/DynamicScrolling";
 import { RectBG, RectContainer, RectText, SquareAspectRatio } from "client/UIProperties/RectUI";
 import { profileBoardState } from "client/Rodux/Reducers/ProfileBoardReducer";
 import { darkMaterial, googleMaterial, mediumGradientProperties } from "client/UIProperties/ColorSchemes";
 import ComputeKDR from "shared/ComputeKDR";
 import ProfilePlayerFrame from "./ProfilePlayerFrame";
+import { FetchBoardData } from "client/Services/ProfileBoardService";
+import { tweenColor } from "client/UIProperties/ButtonEffects";
 
 const leaderboards = Workspace.WaitForChild("ProfileBoard", 10) as Folder;
 const mapsBoard = leaderboards.WaitForChild("ProfileBoard", 10) as Part;
@@ -24,16 +26,19 @@ interface UIProps {
 	playerSessionKills: number;
 	playerSessionDeaths: number;
 	playerSessionWins: number;
+	switchProfile: (playerInfo: profileBoardState) => void;
 }
 
 class ProfileBoardContainer extends Roact.Component<UIProps> {
 	scrollRef;
 	gridRef;
+	refreshButtonRef;
 	connections: RBXScriptConnection[];
 	constructor(props: UIProps) {
 		super(props);
 		this.scrollRef = Roact.createRef<ScrollingFrame>();
 		this.gridRef = Roact.createRef<UIListLayout>();
+		this.refreshButtonRef = Roact.createRef<ImageButton>();
 		this.connections = [];
 	}
 
@@ -113,6 +118,47 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 									TextStrokeTransparency={0.8}
 									Text={`Playercard`}
 								></textlabel>
+								<imagebutton
+									{...RectBG}
+									Image={"rbxassetid://4745659516"}
+									ImageColor3={googleMaterial.buttonColor}
+									Size={new UDim2(0, 70, 0, 70)}
+									Position={new UDim2(0.9, 0, 0, 0)}
+									AnchorPoint={new Vector2(0.9, 0)}
+									Ref={this.refreshButtonRef}
+									Event={{
+										MouseButton1Click: (rbx) => {
+											const refreshButton = this.refreshButtonRef.getValue();
+											if (refreshButton) {
+												TweenService.Create(
+													refreshButton,
+													new TweenInfo(
+														0.4,
+														Enum.EasingStyle.Quad,
+														Enum.EasingDirection.Out,
+														0,
+														false,
+														0,
+													),
+													{ Rotation: refreshButton.Rotation + 360 },
+												).Play();
+											}
+
+											const userProfile = FetchBoardData(this.props.playerViewing);
+											if (userProfile) {
+												this.props.switchProfile(userProfile);
+											}
+										},
+										MouseEnter: (rbx) => {
+											tweenColor(rbx, googleMaterial.buttonHover);
+										},
+										MouseLeave: (rbx) => {
+											tweenColor(rbx, googleMaterial.buttonColor);
+										},
+									}}
+								>
+									<uiaspectratioconstraint {...SquareAspectRatio}></uiaspectratioconstraint>
+								</imagebutton>
 								<frame
 									{...RectContainer}
 									AnchorPoint={new Vector2(0.5, 0)}
@@ -560,18 +606,42 @@ interface storeState {
 	switchProfile: profileBoardState;
 }
 
-export = RoactRodux.connect(function (state: storeState) {
-	return {
-		playerViewing: state.switchProfile.playerViewing,
-		playerKills: state.switchProfile.playerKills,
-		playerDeaths: state.switchProfile.playerDeaths,
-		playerWins: state.switchProfile.playerWins,
-		playerExp: state.switchProfile.playerExp,
-		playerLevel: state.switchProfile.playerLevel,
-		playerCoins: state.switchProfile.playerCoins,
-		playerExpCap: state.switchProfile.playerExpCap,
-		playerSessionKills: state.switchProfile.sessionKills,
-		playerSessionDeaths: state.switchProfile.sessionDeaths,
-		playerSessionWins: state.switchProfile.sessionWins,
-	};
-})(ProfileBoardContainer);
+export = RoactRodux.connect(
+	function (state: storeState) {
+		return {
+			playerViewing: state.switchProfile.playerViewing,
+			playerKills: state.switchProfile.playerKills,
+			playerDeaths: state.switchProfile.playerDeaths,
+			playerWins: state.switchProfile.playerWins,
+			playerExp: state.switchProfile.playerExp,
+			playerLevel: state.switchProfile.playerLevel,
+			playerCoins: state.switchProfile.playerCoins,
+			playerExpCap: state.switchProfile.playerExpCap,
+			playerSessionKills: state.switchProfile.sessionKills,
+			playerSessionDeaths: state.switchProfile.sessionDeaths,
+			playerSessionWins: state.switchProfile.sessionWins,
+		};
+	},
+	(dispatch) => {
+		return {
+			switchProfile: (playerInfo: profileBoardState) => {
+				dispatch({
+					type: "switchProfile",
+					payload: {
+						playerViewing: playerInfo.playerViewing,
+						playerExp: playerInfo.playerExp,
+						playerDeaths: playerInfo.playerDeaths,
+						playerKills: playerInfo.playerKills,
+						playerWins: playerInfo.playerWins,
+						playerLevel: playerInfo.playerLevel,
+						playerCoins: playerInfo.playerCoins,
+						playerExpCap: playerInfo.playerExpCap,
+						sessionKills: playerInfo.sessionKills,
+						sessionDeaths: playerInfo.sessionDeaths,
+						sessionWins: playerInfo.sessionWins,
+					},
+				});
+			},
+		};
+	},
+)(ProfileBoardContainer);

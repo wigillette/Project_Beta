@@ -166,4 +166,4 @@
 - [ ] Level up particles/SFX
 - [x] Get Name from UserId attempt to yield error
 - [ ] Equipping items during rounds
-- [ ] Gamepass items on respawn (signs, hot cocoa, etc.)
+- [x] Gamepass items on respawn (signs, hot cocoa, etc.)
