@@ -13,6 +13,8 @@ import IntroScreen from "./IntroScreen";
 import MatchResults from "./Results/MatchResults";
 import VotingContainer from "./Voting/VotingContainer";
 import PlayerList from "./PlayerList/PlayerList";
+import SpectateButton from "./Spectate/SpectateButton";
+import SpectateContainer from "./Spectate/SpectateContainer";
 
 const Main = () => {
 	return (
@@ -31,6 +33,8 @@ const Main = () => {
 			<PlayerList />
 			<Gold />
 			<GoldContainer />
+			<SpectateButton />
+			<SpectateContainer />
 		</screengui>
 	);
 };

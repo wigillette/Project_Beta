@@ -135,7 +135,7 @@
 - [x] Match Results UI
 - [x] Gamepass UI
 - [x] Playerlist UI
-- [ ] Spectate Component
+- [x] Spectate UI
 
 > Surface Components
 - [x] Profile Board

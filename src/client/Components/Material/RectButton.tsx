@@ -10,6 +10,7 @@ interface UIProps {
 	Size: UDim2;
 	ButtonText: string;
 	UseShadow?: boolean;
+	AspectRatio?: number;
 	Callback: () => void;
 }
 
@@ -46,7 +47,7 @@ class RectButton extends Roact.Component<UIProps, UIState> {
 				ZIndex={5}
 			>
 				<uiaspectratioconstraint
-					AspectRatio={3}
+					AspectRatio={(this.props.AspectRatio !== undefined && this.props.AspectRatio) || 3}
 					DominantAxis={Enum.DominantAxis.Width}
 					AspectType={Enum.AspectType.ScaleWithParentSize}
 				></uiaspectratioconstraint>

@@ -67,11 +67,15 @@ const MatchService = Knit.CreateService({
 		HideMatchResults: new RemoteSignal<() => void>(),
 		UpdateAliveCounter: new RemoteSignal<(aliveCounter: number) => void>(),
 		PlayClientSound: new RemoteSignal<(swordName: string) => void>(),
+		GetParticipants: new RemoteSignal<(participants: Player[]) => void>(),
 		UpdateMatchResults: new RemoteSignal<
 			(goldEarned: number, playerResults: playerResult[], winner: string) => void
 		>(),
 		CanAccess(Player: Player) {
 			return this.Server.CanAccess(Player);
+		},
+		CanSpectate(Player: Player) {
+			return !this.Server.Participants.get(Player) && Player.TeamColor !== new BrickColor("White");
 		},
 	},
 
@@ -132,6 +136,7 @@ const MatchService = Knit.CreateService({
 		if (mapHolder) {
 			mapHolder.ClearAllChildren();
 		}
+
 		// Restart the lobby stuff
 		MusicService.ChangeMusic(participants, "Lobby");
 		this.Client.InitialMatchPanel.FireAll(this.CurrentMode, this.CurrentMap, 0);
@@ -237,21 +242,25 @@ const MatchService = Knit.CreateService({
 		let formerAliveCounter = 0;
 		let aliveCounter = 0;
 
-		while (
-			participants.size() > 1 &&
-			timer.Value > 0 &&
-			((leaders &&
-				leaders.Blue &&
-				leaders.Red &&
-				leaders.Red.TeamColor !== new BrickColor("White") &&
-				leaders.Blue.TeamColor !== new BrickColor("White")) ||
-				(!leaders && playersAlive && aliveCounter > 1))
-		) {
+		const participantsAlive = participants.size() > 1;
+		const timerRunning = timer.Value > 0;
+		const leadersExist =
+			leaders !== undefined &&
+			leaders.Blue !== undefined &&
+			leaders.Red !== undefined &&
+			leaders.Blue.TeamColor !== new BrickColor("White") &&
+			leaders.Red.TeamColor !== new BrickColor("White");
+
+		const singleTeam = teams.size() === 1;
+		let teamCondition = !singleTeam && playersAlive;
+		let singleCondition = singleTeam && aliveCounter > 1;
+
+		while (participantsAlive && timerRunning && (leadersExist || teamCondition || singleCondition)) {
 			aliveCounter = 0;
 			teams.forEach((team: Team) => {
 				if (playersAlive && team) {
 					aliveCounter += team.GetPlayers().size();
-					playersAlive = team.GetPlayers().size() > 0;
+					playersAlive = playersAlive && team.GetPlayers().size() > 0;
 				}
 			});
 			if (formerAliveCounter !== aliveCounter) {
@@ -259,6 +268,8 @@ const MatchService = Knit.CreateService({
 				formerAliveCounter = aliveCounter;
 				this.Client.UpdateAliveCounter.FireAll(aliveCounter);
 			}
+			teamCondition = !singleTeam && playersAlive;
+			singleCondition = singleTeam && aliveCounter > 1;
 			timer.Value -= 1;
 			wait(1);
 		}
@@ -300,6 +311,7 @@ const MatchService = Knit.CreateService({
 					const library = modeLibraries[this.CurrentMode as keyof typeof modeLibraries];
 					const teams = this.CreateTeams(library.TEAMS, library.TEAM_NAMES); // Create the teams
 					this.Client.InitialMatchPanel.FireAll(this.CurrentMode, this.CurrentMap, participants.size());
+					this.Client.GetParticipants.FireAll(participants);
 					MusicService.ChangeMusic(participants, "Match");
 					library.init(teams, participants); // execute the init function of the mode
 				} else {

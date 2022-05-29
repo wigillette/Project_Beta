@@ -14,6 +14,7 @@ import { playerListReducer } from "./PlayerListReducer";
 import { ODSReducer } from "./ODSReducer";
 import { profileBoardReducer } from "./ProfileBoardReducer";
 import { advertisementReducer } from "./AdvertisementReducer";
+import { spectateReducer } from "./SpectateReducer";
 
 const reducer = Rodux.combineReducers({
 	toggleShop: shopReducer,
@@ -55,6 +56,9 @@ const reducer = Rodux.combineReducers({
 	switchODSPage: ODSReducer,
 	switchProfile: profileBoardReducer,
 	updateGroupInfo: advertisementReducer,
+	toggleSpectate: spectateReducer,
+	switchSpectating: spectateReducer,
+	updateParticipants: spectateReducer,
 });
 
 export default reducer;

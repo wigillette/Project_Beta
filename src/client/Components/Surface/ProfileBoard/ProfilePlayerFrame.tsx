@@ -64,8 +64,6 @@ class Main extends Roact.Component<UIProps> {
 							if (userProfile) {
 								this.props.switchProfile(userProfile);
 							}
-							// TO-DO: Call to the server to fetch the player's profile info
-							//this.props.switchProfile();
 						}}
 					/>
 				</imagelabel>

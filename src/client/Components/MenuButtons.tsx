@@ -8,7 +8,6 @@ interface UIState {
 	currentMenu: string;
 }
 
-
 class MenuButtons extends Roact.Component<UIProps, UIState> {
 	state = {
 		currentMenu: "",

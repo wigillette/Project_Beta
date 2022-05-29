@@ -27,6 +27,7 @@ import store from "./Rodux/Store";
 import ProfileBoardContainer from "./Components/Surface/ProfileBoard/ProfileBoardContainer";
 import AdvertisementContainer from "./Components/Surface/GroupAdvertisement/AdvertisementContainer";
 import ObbyChestService from "./Services/ObbyChestService";
+import SpectateService from "./Services/SpectateService";
 
 const playerGui = Players.LocalPlayer.WaitForChild("PlayerGui") as PlayerGui;
 
@@ -201,3 +202,4 @@ GoldService.init();
 ODSService.init();
 AdvertisementService.init();
 ObbyChestService.init();
+SpectateService.init();
