@@ -34,6 +34,7 @@ export const DailyRewardService = Knit.CreateService({
 			// Add the reward
 			let day = math.min(DRInfo.Streak, 4);
 			day = math.max(day, 1);
+
 			const reward = REWARD_VALUES[day as keyof typeof REWARD_VALUES];
 			GoldService.AddGold(Player, reward);
 
@@ -54,6 +55,10 @@ export const DailyRewardService = Knit.CreateService({
 
 	GetDRInfo(Player: Player) {
 		const DailyReward = this.PlayerDailyReward.get(Player);
+		if (DailyReward && DailyReward.TimeRemaining <= -86400) {
+			DailyReward.Streak = 1;
+		}
+
 		return DailyReward ?? INITIAL_DR;
 	},
 

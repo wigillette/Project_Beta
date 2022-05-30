@@ -75,7 +75,7 @@ const MatchService = Knit.CreateService({
 			return this.Server.CanAccess(Player);
 		},
 		CanSpectate(Player: Player) {
-			return !this.Server.Participants.get(Player) && Player.TeamColor !== new BrickColor("White");
+			return !this.Server.Participants.get(Player);
 		},
 	},
 
@@ -94,7 +94,7 @@ const MatchService = Knit.CreateService({
 	},
 
 	SetPlaying(player: Player, isPlaying: boolean) {
-		if (this.Participants.get(player)) {
+		if (this.Participants.has(player)) {
 			this.Participants.set(player, isPlaying);
 		}
 	},
@@ -243,8 +243,8 @@ const MatchService = Knit.CreateService({
 		let aliveCounter = 0;
 
 		const participantsAlive = participants.size() > 1;
-		const timerRunning = timer.Value > 0;
-		const leadersExist =
+		let timerRunning = timer.Value > 0;
+		let leadersExist =
 			leaders !== undefined &&
 			leaders.Blue !== undefined &&
 			leaders.Red !== undefined &&
@@ -253,7 +253,7 @@ const MatchService = Knit.CreateService({
 
 		const singleTeam = teams.size() === 1;
 		let teamCondition = !singleTeam && playersAlive;
-		let singleCondition = singleTeam && aliveCounter > 1;
+		let singleCondition = singleTeam && playersAlive;
 
 		while (participantsAlive && timerRunning && (leadersExist || teamCondition || singleCondition)) {
 			aliveCounter = 0;
@@ -270,6 +270,13 @@ const MatchService = Knit.CreateService({
 			}
 			teamCondition = !singleTeam && playersAlive;
 			singleCondition = singleTeam && aliveCounter > 1;
+			timerRunning = timer.Value > 0;
+			leadersExist =
+				leaders !== undefined &&
+				leaders.Blue !== undefined &&
+				leaders.Red !== undefined &&
+				leaders.Blue.TeamColor !== new BrickColor("White") &&
+				leaders.Red.TeamColor !== new BrickColor("White");
 			timer.Value -= 1;
 			wait(1);
 		}
