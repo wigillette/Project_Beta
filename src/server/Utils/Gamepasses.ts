@@ -16,7 +16,6 @@ export const gamepassEvents = {
 		if (hotCocoa) {
 			hotCocoa.Clone().Parent = client.WaitForChild("Backpack", 10);
 		}
-		snackbarService.PushPlayer(client, "Successfully purchased Hot Cocoa!");
 	},
 	8270062: (client: Player) => {
 		// Double EXP
@@ -28,7 +27,6 @@ export const gamepassEvents = {
 		if (boombox) {
 			boombox.Clone().Parent = client.WaitForChild("Backpack", 10);
 		}
-		snackbarService.PushPlayer(client, "Successfully purchased Image Sign!");
 	},
 	8353982: (client: Player) => {
 		// Golden Katana
@@ -40,7 +38,6 @@ export const gamepassEvents = {
 		if (imageSign) {
 			imageSign.Clone().Parent = client.WaitForChild("Backpack", 10);
 		}
-		snackbarService.PushPlayer(client, "Successfully purchased Image Sign!");
 	},
 	8353921: (client: Player) => {
 		// Custom Chat Tag
@@ -73,7 +70,6 @@ export const gamepassEvents = {
 		if (textSign) {
 			textSign.Clone().Parent = client.WaitForChild("Backpack", 10);
 		}
-		snackbarService.PushPlayer(client, "Successfully purchased Text Sign!");
 	},
 	8444456: (client: Player) => {
 		// Starter Up

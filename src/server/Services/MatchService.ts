@@ -252,8 +252,8 @@ const MatchService = Knit.CreateService({
 			leaders.Red.TeamColor !== new BrickColor("White");
 
 		const singleTeam = teams.size() === 1;
-		let teamCondition = !singleTeam && playersAlive;
-		let singleCondition = singleTeam && playersAlive;
+		let teamCondition = !leadersExist && !singleTeam && playersAlive;
+		let singleCondition = !leadersExist && singleTeam && playersAlive;
 
 		while (participantsAlive && timerRunning && (leadersExist || teamCondition || singleCondition)) {
 			aliveCounter = 0;

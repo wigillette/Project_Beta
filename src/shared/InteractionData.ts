@@ -22,7 +22,7 @@ export const NPCInteractions = [
 		Animation: "rbxassetid://9606255387",
 	},
 	{
-		Name: "Contestant Stephen",
+		Name: "Moderator Honcho",
 		Message: "All this practice is really paying off! Step through here to enter the practice arena!",
 		Model: interactionsFolder.WaitForChild("Practice") as Model,
 		Animation: "rbxassetid://9606255387",
@@ -74,7 +74,7 @@ export const NPCInteractions = [
 		Animation: "rbxassetid://9606255387",
 	},
 	{
-		Name: "Lounge Bouncer Mike",
+		Name: "Lounge Bouncer Amir",
 		Message:
 			"Hold up! Only the most esteemed individuals are allowed inside the Iceberg Lounge. To enter, you must own the VIP gamepass.",
 		Model: interactionsFolder.WaitForChild("Iceberg") as Model,

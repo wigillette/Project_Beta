@@ -33,7 +33,6 @@ const LobbyAnimationsClient = {
 				spawn(() => {
 					let posCounter = 0;
 					let direction = true;
-					let rot = 0;
 					while (Players.LocalPlayer) {
 						if (chest.PrimaryPart) {
 							if (direction && posCounter >= 0.2) {
@@ -43,12 +42,10 @@ const LobbyAnimationsClient = {
 							}
 
 							posCounter += (direction && 0.02) || -0.02;
-							rot += 0.005;
-							rot = rot % 360;
 
 							const oldCFrame = chest.GetPrimaryPartCFrame();
 							chest.SetPrimaryPartCFrame(
-								oldCFrame.add(new Vector3(0, posCounter, 0)).mul(CFrame.Angles(0, math.rad(rot), 0)),
+								oldCFrame.add(new Vector3(0, posCounter, 0)).mul(CFrame.Angles(0, 0.1, 0)),
 							);
 							wait(0.03);
 						}
@@ -77,6 +74,7 @@ const LobbyAnimationsClient = {
 		LobbyAnimationsClient.RunBookListener(character);
 
 		Players.LocalPlayer.CharacterAdded.Connect((char) => {
+			wait(0.5);
 			LobbyAnimationsClient.RunBookListener(char);
 		});
 

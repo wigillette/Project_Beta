@@ -1,5 +1,5 @@
 export const CAP_FORMULA = (level: number) => {
-	return (level * 2 - 1) * 75;
+	return (level * 3 - 2) * 75;
 };
 
 export const INITIAL_STATS = {

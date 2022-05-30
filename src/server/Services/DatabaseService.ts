@@ -301,6 +301,10 @@ const DatabaseService = Knit.CreateService({
 		Players.PlayerAdded.Connect((player) => {
 			this.LoadData(player);
 		});
+
+		Players.PlayerRemoving.Connect((player) => {
+			this.SaveData(player);
+		});
 		coroutine.wrap(() => {
 			this.InitSortingTables();
 		})();

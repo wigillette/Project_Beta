@@ -61,6 +61,8 @@
 - [x] Obby Chest
 - [ ] Spinning coins in lobby
 - [x] Lobby/Match Music
+- [x] Lobby Animations
+- [ ] Practice Arena
 
 > Game Modes
 - [x] FFA
@@ -169,3 +171,7 @@
 - [x] Gamepass items on respawn (signs, hot cocoa, etc.)
 - [x] Add players prop to profile board
 - [x] Get rid of touch service for chest after it is gone
+- [ ] Iceberg Lounge VIP listener/shop
+- [ ] PTL didn't end when leader died
+- [ ] Package setting not working correctly
+- [ ] Revamp lower left corner

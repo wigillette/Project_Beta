@@ -7,7 +7,7 @@ export const INITIAL_SETTINGS = {
 	Hitbox: false,
 	Material: false,
 	Playing: true,
-	Packages: true,
+	Packages: false,
 };
 
 export interface SETTINGS_FORMAT {

@@ -17,6 +17,7 @@ const JuggernautProperties = {
 		pcall(() => {
 			randomJuggernaut.TeamColor = JuggernautProperties.TEAMS[0];
 			const charLoadedConnection = randomJuggernaut.CharacterAdded.Connect((char) => {
+				wait(0.5);
 				if (char) {
 					const humanoid = char.FindFirstChildOfClass("Humanoid");
 
