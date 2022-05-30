@@ -24,12 +24,14 @@ export default function init() {
 		interactionObjects.forEach((interaction: InteractionField) => {
 			const head = interaction.Model.WaitForChild("Head", 10);
 			if (head) {
+				const attachment = new Instance("Attachment", head);
 				// Setting up the proximity prompt
 				const proximityPrompt =
-					head.FindFirstChildOfClass("ProximityPrompt") || new Instance("ProximityPrompt", head);
+					attachment.FindFirstChildOfClass("ProximityPrompt") || new Instance("ProximityPrompt", attachment);
 				proximityPrompt.ObjectText = interaction.Name;
 				proximityPrompt.KeyboardKeyCode = Enum.KeyCode.E;
 				proximityPrompt.HoldDuration = 0.5;
+				proximityPrompt.RequiresLineOfSight = false;
 				proximityPrompt.UIOffset = new Vector2(0, 80);
 
 				// Play the animation and display the interaction UI when finished holding

@@ -62,7 +62,7 @@ class Twitter extends Roact.Component<UIProps> {
 					</frame>
 					<uigradient {...mediumGradientProperties}></uigradient>
 				</imagelabel>
-				<imagelabel {...RectShadow} ImageColor3={Color3.fromRGB(79, 79, 112)}></imagelabel>
+				<imagelabel {...RectShadow} ImageColor3={Color3.fromRGB(38, 38, 54)}></imagelabel>
 			</frame>
 		);
 	}

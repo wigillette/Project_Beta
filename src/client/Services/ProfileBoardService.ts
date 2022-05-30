@@ -1,4 +1,5 @@
 import { KnitClient as Knit } from "@rbxts/knit";
+import { Players } from "@rbxts/services";
 import { profileBoardState } from "client/Rodux/Reducers/ProfileBoardReducer";
 
 export const FetchBoardData = (player: Player) => {
@@ -30,6 +31,7 @@ export const FetchBoardData = (player: Player) => {
 		sessionKills: sessionKills,
 		sessionDeaths: sessionDeaths,
 		sessionWins: sessionWins,
+		players: Players.GetPlayers(),
 	};
 
 	return userInfo;

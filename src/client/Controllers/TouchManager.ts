@@ -4,7 +4,7 @@ import Store from "client/Rodux/Store";
 
 // Touch Manager Class
 class TouchManager {
-	action: string | [() => void, () => void];
+	action: string | (() => void);
 	trigger: BasePart;
 	open: boolean;
 
@@ -17,7 +17,7 @@ class TouchManager {
 					type: this.action as string,
 				});
 			} else {
-				(this.action[0] as () => void)();
+				(this.action as () => void)();
 			}
 		}
 	}
@@ -30,8 +30,6 @@ class TouchManager {
 				Store.dispatch({
 					type: this.action as string,
 				});
-			} else {
-				(this.action[1] as () => void)();
 			}
 		}
 	}
@@ -65,7 +63,7 @@ class TouchManager {
 		return distance;
 	}
 
-	constructor(trigger: BasePart, action: string | [() => void, () => void]) {
+	constructor(trigger: BasePart, action: string | (() => void)) {
 		// Linking a part to a UI; display the UI on close proximity to the part
 		this.trigger = trigger;
 		this.action = action;

@@ -5,9 +5,9 @@ import { PACK_INFO } from "shared/ShopData";
 const tools = ServerStorage.WaitForChild("Tools");
 const InventoryService = KnitServer.GetService("InventoryService");
 const snackbarService = KnitServer.GetService("SnackbarService");
-export const gamepassesOnJoin = [8444469, 8353921, 8444470, 8353962, 8353933];
+export const gamepassesOnJoin = [8444469, 8353921, 8444470, 8353962, 8353933, 8353914];
 
-export const recurringGamepasses = [8353933, 8444469, 8353962];
+export const recurringGamepasses = [8353933, 8444469, 8353962, 8353914];
 
 export const gamepassEvents = {
 	8444469: (client: Player) => {
@@ -15,7 +15,6 @@ export const gamepassEvents = {
 		const hotCocoa = tools.FindFirstChild("HotCocoa") as Tool;
 		if (hotCocoa) {
 			hotCocoa.Clone().Parent = client.WaitForChild("Backpack", 10);
-			hotCocoa.Clone().Parent = client.WaitForChild("Starterpack", 10);
 		}
 		snackbarService.PushPlayer(client, "Successfully purchased Hot Cocoa!");
 	},
@@ -24,9 +23,12 @@ export const gamepassEvents = {
 		snackbarService.PushPlayer(client, "Successfully purchased Double Experience!");
 	},
 	8353914: (client: Player) => {
-		// Katana
-		InventoryService.AddToInventory(client, "Katana", "Swords");
-		snackbarService.PushPlayer(client, "Successfully purchased Katana! Check your inventory!");
+		// Boombox
+		const boombox = tools.FindFirstChild("BoomBox") as Tool;
+		if (boombox) {
+			boombox.Clone().Parent = client.WaitForChild("Backpack", 10);
+		}
+		snackbarService.PushPlayer(client, "Successfully purchased Image Sign!");
 	},
 	8353982: (client: Player) => {
 		// Golden Katana
@@ -37,7 +39,6 @@ export const gamepassEvents = {
 		const imageSign = tools.FindFirstChild("ImageSign") as Tool;
 		if (imageSign) {
 			imageSign.Clone().Parent = client.WaitForChild("Backpack", 10);
-			imageSign.Clone().Parent = client.WaitForChild("Starterpack", 10);
 		}
 		snackbarService.PushPlayer(client, "Successfully purchased Image Sign!");
 	},
@@ -71,7 +72,6 @@ export const gamepassEvents = {
 		const textSign = tools.FindFirstChild("TextSign") as Tool;
 		if (textSign) {
 			textSign.Clone().Parent = client.WaitForChild("Backpack", 10);
-			textSign.Clone().Parent = client.WaitForChild("Starterpack", 10);
 		}
 		snackbarService.PushPlayer(client, "Successfully purchased Text Sign!");
 	},

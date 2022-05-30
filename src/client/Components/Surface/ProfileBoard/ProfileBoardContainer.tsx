@@ -15,6 +15,7 @@ const leaderboards = Workspace.WaitForChild("ProfileBoard", 10) as Folder;
 const mapsBoard = leaderboards.WaitForChild("ProfileBoard", 10) as Part;
 
 interface UIProps {
+	players: Player[];
 	playerViewing: Player;
 	playerExp: number;
 	playerDeaths: number;
@@ -27,6 +28,7 @@ interface UIProps {
 	playerSessionDeaths: number;
 	playerSessionWins: number;
 	switchProfile: (playerInfo: profileBoardState) => void;
+	updatePlayers: (players: Player[]) => void;
 }
 
 class ProfileBoardContainer extends Roact.Component<UIProps> {
@@ -88,7 +90,7 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 										VerticalAlignment={"Top"}
 										Padding={new UDim(0.015, 0)}
 									></uilistlayout>
-									{Players.GetPlayers().map((player) => {
+									{this.props.players.map((player) => {
 										return <ProfilePlayerFrame player={player} />;
 									})}
 								</scrollingframe>
@@ -298,7 +300,7 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 												Position={new UDim2(0.42, 0, 0.5, 0)}
 												Size={new UDim2(0.5, 0, 0.85, 0)}
 												Font={"Gotham"}
-												TextColor3={Color3.fromRGB(255, 255, 255)}
+												TextColor3={googleMaterial.buttonColor}
 												TextStrokeTransparency={0.8}
 												Text={tostring(
 													this.props.playerDeaths + this.props.playerSessionDeaths,
@@ -327,7 +329,7 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 												Position={new UDim2(0.42, 0, 0.5, 0)}
 												Size={new UDim2(0.5, 0, 0.85, 0)}
 												Font={"Gotham"}
-												TextColor3={Color3.fromRGB(255, 255, 255)}
+												TextColor3={googleMaterial.buttonColor}
 												TextStrokeTransparency={0.8}
 												Text={tostring(this.props.playerKills + this.props.playerSessionKills)}
 											></textlabel>
@@ -354,7 +356,7 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 												Position={new UDim2(0.42, 0, 0.5, 0)}
 												Size={new UDim2(0.5, 0, 0.85, 0)}
 												Font={"Gotham"}
-												TextColor3={Color3.fromRGB(255, 255, 255)}
+												TextColor3={googleMaterial.buttonColor}
 												TextStrokeTransparency={0.8}
 												Text={tostring(this.props.playerWins + this.props.playerSessionWins)}
 											></textlabel>
@@ -391,7 +393,7 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 												Position={new UDim2(0.5, 0, 0.9, 0)}
 												Size={new UDim2(1, 0, 0.45, 0)}
 												Font={"GothamSemibold"}
-												TextColor3={Color3.fromRGB(255, 255, 255)}
+												TextColor3={googleMaterial.buttonColor}
 												TextStrokeTransparency={0.8}
 												Text={"0"}
 												TextXAlignment={"Center"}
@@ -419,7 +421,7 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 												Position={new UDim2(0.5, 0, 0.9, 0)}
 												Size={new UDim2(1, 0, 0.45, 0)}
 												Font={"GothamSemibold"}
-												TextColor3={Color3.fromRGB(255, 255, 255)}
+												TextColor3={googleMaterial.buttonColor}
 												TextStrokeTransparency={0.8}
 												Text={tostring(this.props.playerCoins)}
 												TextXAlignment={"Center"}
@@ -447,7 +449,7 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 												Position={new UDim2(0.5, 0, 0.9, 0)}
 												Size={new UDim2(1, 0, 0.45, 0)}
 												Font={"GothamSemibold"}
-												TextColor3={Color3.fromRGB(255, 255, 255)}
+												TextColor3={googleMaterial.buttonColor}
 												TextStrokeTransparency={0.8}
 												Text={tostring(
 													ComputeKDR(
@@ -514,7 +516,7 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 												Position={new UDim2(0.9, 0, 0.5, 0)}
 												Size={new UDim2(0.5, 0, 0.85, 0)}
 												Font={"Gotham"}
-												TextColor3={Color3.fromRGB(255, 255, 255)}
+												TextColor3={googleMaterial.buttonColor}
 												TextStrokeTransparency={0.8}
 												Text={tostring(this.props.playerSessionDeaths)}
 											></textlabel>
@@ -541,7 +543,7 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 												Position={new UDim2(0.9, 0, 0.5, 0)}
 												Size={new UDim2(0.5, 0, 0.85, 0)}
 												Font={"Gotham"}
-												TextColor3={Color3.fromRGB(255, 255, 255)}
+												TextColor3={googleMaterial.buttonColor}
 												TextStrokeTransparency={0.8}
 												Text={tostring(this.props.playerSessionKills)}
 											></textlabel>
@@ -568,7 +570,7 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 												Position={new UDim2(0.9, 0, 0.5, 0)}
 												Size={new UDim2(0.5, 0, 0.85, 0)}
 												Font={"Gotham"}
-												TextColor3={Color3.fromRGB(255, 255, 255)}
+												TextColor3={googleMaterial.buttonColor}
 												TextStrokeTransparency={0.8}
 												Text={tostring(this.props.playerSessionWins)}
 											></textlabel>
@@ -591,6 +593,13 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 			const connection = registerListDynamicScrolling(scroll, grid);
 			this.connections.push(connection);
 		}
+
+		Players.PlayerAdded.Connect(() => {
+			this.props.updatePlayers(Players.GetPlayers());
+		});
+		Players.PlayerRemoving.Connect(() => {
+			this.props.updatePlayers(Players.GetPlayers());
+		});
 	}
 
 	protected willUnmount(): void {
@@ -604,6 +613,7 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 
 interface storeState {
 	switchProfile: profileBoardState;
+	getPlayers: profileBoardState;
 }
 
 export = RoactRodux.connect(
@@ -620,6 +630,7 @@ export = RoactRodux.connect(
 			playerSessionKills: state.switchProfile.sessionKills,
 			playerSessionDeaths: state.switchProfile.sessionDeaths,
 			playerSessionWins: state.switchProfile.sessionWins,
+			players: state.getPlayers.players,
 		};
 	},
 	(dispatch) => {
@@ -639,6 +650,14 @@ export = RoactRodux.connect(
 						sessionKills: playerInfo.sessionKills,
 						sessionDeaths: playerInfo.sessionDeaths,
 						sessionWins: playerInfo.sessionWins,
+					},
+				});
+			},
+			updatePlayers: (players: Player[]) => {
+				dispatch({
+					type: "getPlayers",
+					payload: {
+						players: players,
 					},
 				});
 			},

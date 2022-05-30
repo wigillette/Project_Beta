@@ -9,25 +9,16 @@ export const locations = [
 	[
 		(Workspace.FindFirstChild("HalfWayChest") && (Workspace.WaitForChild("HalfWayChest") as Model).PrimaryPart) ||
 			undefined,
-		[
-			() => {
-				obbyChestService.ClaimChest("Halfway");
-			},
-			() => {
-				print("Left chest");
-			},
-		],
+		() => {
+			obbyChestService.ClaimChest("Halfway");
+		},
 	],
 	[
 		(Workspace.FindFirstChild("FullChest") && (Workspace.WaitForChild("FullChest") as Model).PrimaryPart) ||
 			undefined,
-		[
-			() => {
-				obbyChestService.ClaimChest("Full");
-			},
-			() => {
-				print("Left chest");
-			},
-		],
+
+		() => {
+			obbyChestService.ClaimChest("Full");
+		},
 	],
 ];

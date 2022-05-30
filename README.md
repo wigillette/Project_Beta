@@ -167,5 +167,5 @@
 - [x] Level up particles/SFX
 - [x] Get Name from UserId attempt to yield error
 - [x] Gamepass items on respawn (signs, hot cocoa, etc.)
-- [ ] Add players prop to profile board
-- [ ] Get rid of touch service for chest after it is gone
+- [x] Add players prop to profile board
+- [x] Get rid of touch service for chest after it is gone

@@ -28,6 +28,7 @@ import ProfileBoardContainer from "./Components/Surface/ProfileBoard/ProfileBoar
 import AdvertisementContainer from "./Components/Surface/GroupAdvertisement/AdvertisementContainer";
 import ObbyChestService from "./Services/ObbyChestService";
 import SpectateService from "./Services/SpectateService";
+import LobbyAnimationsClient from "./Services/LobbyAnimations";
 
 const playerGui = Players.LocalPlayer.WaitForChild("PlayerGui") as PlayerGui;
 
@@ -203,3 +204,4 @@ ODSService.init();
 AdvertisementService.init();
 ObbyChestService.init();
 SpectateService.init();
+LobbyAnimationsClient.init();

@@ -16,6 +16,7 @@ interface Action {
 		sessionKills: number;
 		sessionWins: number;
 		sessionDeaths: number;
+		players: Player[];
 	};
 }
 
@@ -31,6 +32,7 @@ export interface profileBoardState {
 	sessionKills: number;
 	sessionWins: number;
 	sessionDeaths: number;
+	players: Player[];
 }
 
 const clientProfile = FetchBoardData(Players.LocalPlayer);
@@ -48,6 +50,7 @@ export const profileBoardReducer = Rodux.createReducer(
 		sessionKills: clientProfile.sessionKills,
 		sessionWins: clientProfile.sessionWins,
 		sessionDeaths: clientProfile.sessionDeaths,
+		players: Players.GetPlayers(),
 	},
 	{
 		switchProfile: (state: profileBoardState, action: Action) => {
@@ -64,6 +67,13 @@ export const profileBoardReducer = Rodux.createReducer(
 				newState.sessionDeaths = action.payload.sessionDeaths;
 				newState.sessionKills = action.payload.sessionKills;
 				newState.sessionWins = action.payload.sessionWins;
+			}
+			return newState;
+		},
+		getPlayers: (state: profileBoardState, action: Action) => {
+			const newState: profileBoardState = { ...state };
+			if (action.payload) {
+				newState.players = action.payload.players;
 			}
 			return newState;
 		},

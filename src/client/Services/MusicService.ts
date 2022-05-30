@@ -43,7 +43,7 @@ const MusicClient = {
 					choices.remove(songIndex);
 					currentlyPlaying = randomSong;
 					randomSong.Play();
-					while (currentCategory === categoryName && randomSong.TimePosition < randomSong.TimeLength) {
+					while (currentCategory === categoryName && randomSong.IsPlaying) {
 						wait(1);
 					}
 				}
