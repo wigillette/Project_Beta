@@ -106,18 +106,34 @@ const DatabaseService = Knit.CreateService({
 	},
 
 	SaveODSStat(userId: number, stat: string, amt: number) {
-		if (`Global${stat}` in this && `Monthly${stat}` in this) {
+		if (`Global${stat}` in this) {
 			const globalItem = this[`Global${stat}` as keyof typeof this] as OrderedDataStore;
-			const monthlyItem = this[`Monthly${stat}` as keyof typeof this] as OrderedDataStore;
 			const response = pcall(() => {
 				globalItem.IncrementAsync(tostring(userId), amt);
+			});
+			if (response[0]) {
+				print(
+					`Successfully added ${amt} ${stat} to ${Players.GetNameFromUserIdAsync(
+						userId,
+					)}'s global data entry!`,
+				);
+			} else {
+				print(`Error adding ${amt} ${stat} to ${Players.GetNameFromUserIdAsync(userId)}'s global data entry!`);
+			}
+		}
+		if (`Monthly${stat}` in this) {
+			const monthlyItem = this[`Monthly${stat}` as keyof typeof this] as OrderedDataStore;
+			const response = pcall(() => {
 				monthlyItem.IncrementAsync(tostring(userId), amt);
 			});
-
 			if (response[0]) {
-				print(`Successfully added ${amt} ${stat} to ${Players.GetNameFromUserIdAsync(userId)}'s data entry!`);
+				print(
+					`Successfully added ${amt} ${stat} to ${Players.GetNameFromUserIdAsync(
+						userId,
+					)}'s monthly data entry!`,
+				);
 			} else {
-				print(`Error adding ${amt} ${stat} to ${Players.GetNameFromUserIdAsync(userId)}'s data entry!`);
+				print(`Error adding ${amt} ${stat} to ${Players.GetNameFromUserIdAsync(userId)}'s monthly data entry!`);
 			}
 		}
 	},

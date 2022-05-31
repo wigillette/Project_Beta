@@ -20,7 +20,7 @@ import ObjectUtils from "@rbxts/object-utils";
 import { registerGridDynamicScrolling } from "../../UIProperties/DynamicScrolling";
 import SwordShopItem from "./SwordShopItem";
 import { RARITIES, PACK_PRICES, PACK_INFO } from "shared/ShopData";
-import { ReplicatedStorage } from "@rbxts/services";
+import { MarketplaceService, ReplicatedStorage, Players } from "@rbxts/services";
 import RectButton from "../Material/RectButton";
 
 interface UIProps {
@@ -29,20 +29,38 @@ interface UIProps {
 	switchPack: (packName: string) => void;
 }
 
+interface UIState {
+	discount: boolean;
+}
+
 let oldFadeIn = true;
 const shopRef = Roact.createRef<Frame>();
-class Shop extends Roact.Component<UIProps> {
+class Shop extends Roact.Component<UIProps, UIState> {
 	containerRef;
 	gridRef;
 	scrollRef;
 	connections: RBXScriptConnection[];
 	modelsFolder = ReplicatedStorage.WaitForChild("ModelsFolder", 10);
+
+	state = {
+		discount: false,
+	};
+
 	constructor(props: UIProps) {
 		super(props);
 		this.containerRef = Roact.createRef<Frame>();
 		this.gridRef = Roact.createRef<UIGridLayout>();
 		this.scrollRef = Roact.createRef<ScrollingFrame>();
 		this.connections = [];
+		spawn(() => {
+			const response = pcall(() => {
+				return MarketplaceService.UserOwnsGamePassAsync(Players.LocalPlayer.UserId, 8453352);
+			});
+
+			if (response[0]) {
+				this.setState({ discount: response[1] });
+			}
+		});
 	}
 
 	render() {
@@ -161,7 +179,15 @@ class Shop extends Roact.Component<UIProps> {
 							Position={new UDim2(0.5, 0, 0.975, 0)}
 							AnchorPoint={new Vector2(0.5, 0.975)}
 							Size={new UDim2(0.25, 0, 0.2, 0)}
-							ButtonText={tostring(PACK_PRICES[this.props.currentPack as keyof typeof PACK_PRICES])}
+							ButtonText={
+								(this.state.discount === true &&
+									tostring(
+										math.floor(
+											PACK_PRICES[this.props.currentPack as keyof typeof PACK_PRICES] * 0.9,
+										),
+									)) ||
+								tostring(PACK_PRICES[this.props.currentPack as keyof typeof PACK_PRICES])
+							}
 							Callback={() => {
 								shopService.PurchasePack(this.props.currentPack);
 							}}
@@ -181,6 +207,20 @@ class Shop extends Roact.Component<UIProps> {
 		if (grid && scroll) {
 			const connection = registerGridDynamicScrolling(scroll, grid);
 			this.connections.push(connection);
+		}
+	}
+
+	protected didUpdate(previousProps: UIProps, previousState: UIState): void {
+		if (this.props.toggle === true && previousProps.toggle !== this.props.toggle) {
+			spawn(() => {
+				const response = pcall(() => {
+					return MarketplaceService.UserOwnsGamePassAsync(Players.LocalPlayer.UserId, 8453352);
+				});
+
+				if (response[0]) {
+					this.setState({ discount: response[1] });
+				}
+			});
 		}
 	}
 

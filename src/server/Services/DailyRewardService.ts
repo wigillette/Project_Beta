@@ -55,7 +55,7 @@ export const DailyRewardService = Knit.CreateService({
 
 	GetDRInfo(Player: Player) {
 		const DailyReward = this.PlayerDailyReward.get(Player);
-		if (DailyReward && DailyReward.TimeRemaining <= -86400) {
+		if (DailyReward && DailyReward.TimeRemaining <= -172800) {
 			DailyReward.Streak = 1;
 		}
 

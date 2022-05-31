@@ -3,6 +3,7 @@ import { PACK_INFO, RARITIES, PACK_PRICES } from "../../shared/ShopData";
 import { InventoryService } from "./InventoryService";
 import { GoldService } from "./GoldService";
 import SnackbarService from "./SnackbarService";
+import { MarketplaceService } from "@rbxts/services";
 
 declare global {
 	interface KnitServices {
@@ -30,9 +31,13 @@ const ShopService = Knit.CreateService({
 
 	PurchasePack(player: Player, packName: string) {
 		const rarities = RARITIES[packName as keyof typeof RARITIES];
-		const packPrice = PACK_PRICES[packName as keyof typeof PACK_PRICES];
+		let packPrice = PACK_PRICES[packName as keyof typeof PACK_PRICES];
 		const swords = PACK_INFO[packName as keyof typeof PACK_INFO];
 		const userGold = GoldService.GetGold(player);
+
+		if (MarketplaceService.UserOwnsGamePassAsync(player.UserId, 8453352)) {
+			packPrice -= 0.1 * packPrice;
+		}
 
 		if (userGold >= packPrice) {
 			// The random percentage choice

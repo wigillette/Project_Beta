@@ -1,11 +1,12 @@
 import { KnitServer as Knit, Signal, RemoteSignal } from "@rbxts/knit";
-import { MarketplaceService, Players } from "@rbxts/services";
+import { MarketplaceService, Players, Workspace } from "@rbxts/services";
 import Database from "@rbxts/datastore2";
 import { PRODUCT_FUNCTIONS } from "server/Utils/DeveloperProducts";
 import { gamepassesOnJoin, gamepassEvents, gamepassInfo, recurringGamepasses } from "../Utils/Gamepasses";
 import ObjectUtils from "@rbxts/object-utils";
 import { donationProducts } from "shared/DonationsInfo";
 import advertisementService from "./AdvertisementService";
+import SnackbarService from "./SnackbarService";
 
 declare global {
 	interface KnitServices {
@@ -59,6 +60,7 @@ export const GoldService = Knit.CreateService({
 
 	// Server-exposed Signals/Fields
 	PlayerGold: new Map<Player, number>(),
+	LoungeDetector: Workspace.WaitForChild("Location4") as Part,
 
 	Client: {
 		GoldChanged: new RemoteSignal<(Gold: number) => void>(),
@@ -107,8 +109,30 @@ export const GoldService = Knit.CreateService({
 		this.Client.GoldChanged.Fire(Player, Gold);
 	},
 
+	LoungeListener() {
+		this.LoungeDetector.Touched.Connect((hit) => {
+			const char = hit.Parent as Model;
+			if (char) {
+				const humanoid = char.FindFirstChildOfClass("Humanoid");
+				if (humanoid) {
+					const player = Players.GetPlayerFromCharacter(char);
+					if (player && char.PrimaryPart) {
+						if (!MarketplaceService.UserOwnsGamePassAsync(player.UserId, 8453352)) {
+							char.SetPrimaryPartCFrame(new CFrame(new Vector3(270.756, 75.248, -266.533)));
+							SnackbarService.PushPlayer(
+								player,
+								"You must own the VIP gamepass to access the Iceberg Lounge!",
+							);
+						}
+					}
+				}
+			}
+		});
+	},
+
 	KnitInit() {
 		print("Gold Service Initialized | Server");
+		this.LoungeListener();
 		MarketplaceService.PromptGamePassPurchaseFinished.Connect(
 			(player: Player, gamepassId: number, wasPurchased: boolean) => {
 				if (wasPurchased) {

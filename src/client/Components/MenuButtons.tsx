@@ -7,6 +7,7 @@ import { RectContainer, SquareAspectRatio } from "client/UIProperties/RectUI";
 import SquareButton from "../Components/Material/SquareButton";
 import RectButton from "./Material/RectButton";
 import { playSound, rippleEffect, tweenColor } from "client/UIProperties/ButtonEffects";
+import { whiteGradientProperties } from "client/UIProperties/ColorSchemes";
 interface UIProps {
 	visible: boolean;
 	toggleMenu: () => void;
@@ -120,6 +121,7 @@ class MenuButtons extends Roact.Component<UIProps, UIState> {
 					}}
 				>
 					<uiaspectratioconstraint {...SquareAspectRatio} AspectRatio={1.2}></uiaspectratioconstraint>
+					<uigradient {...whiteGradientProperties}></uigradient>
 				</imagebutton>
 			</frame>
 		);
@@ -137,7 +139,7 @@ export = RoactRodux.connect(
 			movingFadeAbsolute(
 				buttonContainer,
 				state.toggleMenu.Visible,
-				state.toggleMenu.Visible ? new UDim2(0.75, 0, 1, 0) : new UDim2(0, 0, 1, 0),
+				state.toggleMenu.Visible ? new UDim2(0.75, 0, 1, 0) : new UDim2(0.6, 0, 1, 0),
 				false,
 			);
 		}

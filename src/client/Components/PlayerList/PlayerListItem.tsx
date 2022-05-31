@@ -3,20 +3,37 @@ import { RectBG, RectContainer, RectShadow, RectText, SquareAspectRatio } from "
 import { googleMaterial, whiteGradientProperties } from "client/UIProperties/ColorSchemes";
 import { tweenTransparency } from "client/UIProperties/FrameEffects";
 import { CircContainer } from "client/UIProperties/CircularUI";
-import { TweenService } from "@rbxts/services";
+import { MarketplaceService, TweenService } from "@rbxts/services";
 
 interface UIProps {
 	player: Player;
 }
 
-class PlayerListItem extends Roact.Component<UIProps> {
+interface UIState {
+	addPrefix: boolean;
+}
+
+class PlayerListItem extends Roact.Component<UIProps, UIState> {
 	playerFrameRef;
 	textRef;
 	constructor(props: UIProps) {
 		super(props);
 		this.playerFrameRef = Roact.createRef<Frame>();
 		this.textRef = Roact.createRef<TextLabel>();
+		spawn(() => {
+			const response = pcall(() => {
+				return MarketplaceService.UserOwnsGamePassAsync(this.props.player.UserId, 8453352);
+			});
+
+			if (response[0]) {
+				this.setState({ addPrefix: response[1] });
+			}
+		});
 	}
+
+	state = {
+		addPrefix: false,
+	};
 
 	render() {
 		return (
@@ -56,7 +73,7 @@ class PlayerListItem extends Roact.Component<UIProps> {
 						AnchorPoint={new Vector2(0.85, 0.5)}
 						TextColor3={googleMaterial.cardFont}
 						Size={new UDim2(0.75, 0, 0.8, 0)}
-						Text={this.props.player.Name}
+						Text={`${(this.state.addPrefix && "[VIP] ") || ""}${this.props.player.Name}`}
 						Ref={this.textRef}
 						Font={Enum.Font.GothamBold}
 						TextXAlignment={Enum.TextXAlignment.Right}

@@ -94,6 +94,9 @@ export const gamepassEvents = {
 		// x2 Coins
 		snackbarService.PushPlayer(client, "Successfully purchased Double Coins!");
 	},
+	8453352: (client: Player) => {
+		snackbarService.PushPlayer(client, "Successfully purchased VIP!");
+	},
 };
 
 export const gamepassInfo = Object.keys(gamepassEvents).map((gamepassId) => {
