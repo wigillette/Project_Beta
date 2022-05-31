@@ -411,6 +411,57 @@ const MatchService = Knit.CreateService({
 		}
 	},
 
+	AddHealthBar(char: Model) {
+		const instances = ReplicatedStorage.WaitForChild("Instances");
+		const healthBarContainer = instances.FindFirstChild("HealthBar") as BillboardGui;
+		const humanoid = char.FindFirstChildOfClass("Humanoid");
+		const head = char.FindFirstChild("Head");
+
+		if (healthBarContainer && humanoid && head) {
+			const newHealthBarContainer = healthBarContainer.Clone();
+			const healthContainer = newHealthBarContainer.WaitForChild("MainFrame").WaitForChild("HealthContainer");
+			const healthBar = healthContainer.WaitForChild("HealthBar") as ImageLabel;
+			const healthLabel = healthContainer.WaitForChild("HealthLabel") as TextLabel;
+			const separators = healthContainer.WaitForChild("Separators");
+			const separator1 = separators.WaitForChild("1") as Frame;
+			const separator2 = separators.WaitForChild("2") as Frame;
+			const separator3 = separators.WaitForChild("3") as Frame;
+			const separator4 = separators.WaitForChild("4") as Frame;
+			const separator5 = separators.WaitForChild("5") as Frame;
+			const separator6 = separators.WaitForChild("6") as Frame;
+			healthLabel.Text = tostring(math.round(humanoid.Health));
+			healthBar.Size = new UDim2((humanoid.Health / humanoid.MaxHealth) * 0.98, 0, 0.92, 0);
+			newHealthBarContainer.Parent = char;
+			newHealthBarContainer.Adornee = head as PVInstance;
+			const humanoidConnection = humanoid.HealthChanged.Connect(() => {
+				pcall(() => {
+					const healthPercentage = math.clamp(humanoid.Health / humanoid.MaxHealth, 0, 1);
+					healthLabel.Text = tostring(math.round(math.clamp(humanoid.Health, 0, 100)));
+
+					healthBar.TweenSize(
+						new UDim2(healthPercentage * 0.98, 0, 0.92, 0),
+						"Out",
+						"Quad",
+						0.2,
+						true,
+						undefined,
+					);
+
+					separator6.Visible = healthPercentage >= 0.875;
+					separator5.Visible = healthPercentage >= 0.75;
+					separator4.Visible = healthPercentage >= 0.625;
+					separator3.Visible = healthPercentage >= 0.5;
+					separator2.Visible = healthPercentage >= 0.375;
+					separator1.Visible = healthPercentage >= 0.25;
+				});
+
+				if (humanoid.Health <= 0) {
+					humanoidConnection.Disconnect();
+				}
+			});
+		}
+	},
+
 	// Initialize on service startup
 	KnitInit() {
 		print("Match Service Initialized | Server");
@@ -439,6 +490,9 @@ const MatchService = Knit.CreateService({
 				wait(0.5);
 				if (player.Team && player.Team.Name !== "Ghosts") {
 					this.AddSword(player);
+					if (player.TeamColor !== new BrickColor("White")) {
+						this.AddHealthBar(char);
+					}
 				}
 				const humanoid = char.FindFirstChildOfClass("Humanoid");
 

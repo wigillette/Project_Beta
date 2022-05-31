@@ -63,6 +63,7 @@
 - [x] Lobby/Match Music
 - [x] Lobby Animations
 - [ ] Practice Arena
+- [x] Floating Health Bar
 
 > Game Modes
 - [x] FFA
