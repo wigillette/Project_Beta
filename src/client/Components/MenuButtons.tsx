@@ -1,11 +1,12 @@
 import Roact from "@rbxts/roact";
 import RoactRodux from "@rbxts/roact-rodux";
 import MenuService from "client/Services/MenuService";
-import { tweenPosAbsolute, tweenTransparency } from "client/UIProperties/FrameEffects";
+import { movingFadeAbsolute, tweenPosAbsolute, tweenTransparency } from "client/UIProperties/FrameEffects";
 import { profileState } from "client/Rodux/Reducers/ProfileReducer";
 import { RectContainer, SquareAspectRatio } from "client/UIProperties/RectUI";
 import SquareButton from "../Components/Material/SquareButton";
 import RectButton from "./Material/RectButton";
+import { playSound, rippleEffect, tweenColor } from "client/UIProperties/ButtonEffects";
 interface UIProps {
 	visible: boolean;
 	toggleMenu: () => void;
@@ -38,8 +39,8 @@ class MenuButtons extends Roact.Component<UIProps, UIState> {
 				<frame
 					{...RectContainer}
 					Size={new UDim2(0.75, 0, 0.75, 0)}
-					Position={new UDim2(0, 0, 1, 0)}
-					AnchorPoint={new Vector2(0, 1)}
+					Position={new UDim2(0.75, 0, 1, 0)}
+					AnchorPoint={new Vector2(1, 1)}
 					Ref={buttonContainerRef}
 				>
 					<SquareButton
@@ -80,9 +81,9 @@ class MenuButtons extends Roact.Component<UIProps, UIState> {
 					/>
 
 					<SquareButton
-						Position={new UDim2(0, 0, 1, 0)}
+						Position={new UDim2(1, 0, 0, 0)}
 						Size={new UDim2(0.47, 0, 0.47, 0)}
-						AnchorPoint={new Vector2(0, 1)}
+						AnchorPoint={new Vector2(1, 0)}
 						ButtonColor={Color3.fromRGB(190, 101, 0)}
 						HoverColor={Color3.fromRGB(235, 125, 0)}
 						ShadowColor={Color3.fromRGB(69, 36, 0)}
@@ -98,16 +99,28 @@ class MenuButtons extends Roact.Component<UIProps, UIState> {
 						}}
 					/>
 				</frame>
-				<RectButton
-					ButtonText=">"
-					Position={new UDim2(1, 0, 0.5, 0)}
-					Size={new UDim2(0.4, 0, 0.4, 0)}
-					AnchorPoint={new Vector2(1, 0.5)}
-					Callback={() => {
-						this.props.toggleMenu();
+				<imagebutton
+					BackgroundTransparency={1}
+					Size={new UDim2(0.325, 0, 0.325, 0)}
+					Position={new UDim2(0, 0, 1, 0)}
+					AnchorPoint={new Vector2(0, 1)}
+					Image={"rbxassetid://4974409019"}
+					Event={{
+						MouseButton1Click: () => {
+							playSound("Click");
+							this.props.toggleMenu();
+						},
+						MouseEnter: (rbx) => {
+							playSound("Hover");
+							tweenColor(rbx, Color3.fromRGB(200, 200, 200));
+						},
+						MouseLeave: (rbx) => {
+							tweenColor(rbx, Color3.fromRGB(255, 255, 255));
+						},
 					}}
-					UseShadow={false}
-				/>
+				>
+					<uiaspectratioconstraint {...SquareAspectRatio} AspectRatio={1.2}></uiaspectratioconstraint>
+				</imagebutton>
 			</frame>
 		);
 	}
@@ -119,13 +132,14 @@ interface storeState {
 
 export = RoactRodux.connect(
 	function (state: storeState) {
-		const menuContainer = containerRef.getValue();
-		if (menuContainer) {
-			tweenPosAbsolute(menuContainer, state.toggleMenu.Visible ? new UDim2(1, 0, 1, 0) : new UDim2(0.7, 0, 1, 0));
-		}
 		const buttonContainer = buttonContainerRef.getValue();
 		if (buttonContainer) {
-			tweenTransparency(buttonContainer, true, state.toggleMenu.Visible);
+			movingFadeAbsolute(
+				buttonContainer,
+				state.toggleMenu.Visible,
+				state.toggleMenu.Visible ? new UDim2(0.75, 0, 1, 0) : new UDim2(0, 0, 1, 0),
+				false,
+			);
 		}
 
 		return {

@@ -62,7 +62,7 @@
 - [ ] Spinning coins in lobby
 - [x] Lobby/Match Music
 - [x] Lobby Animations
-- [ ] Practice Arena
+- [x] Practice Arena
 - [x] Floating Health Bar
 
 > Game Modes
@@ -162,7 +162,7 @@
 - [x] Settings Packages Function
 - [x] Menu UIs overlaying on match UIs
 - [x] Use icons in Results UI
-- [ ] Blocky head in viewport frames; meshes not loading
+- [x] Blocky head in viewport frames; meshes not loading
 - [x] No set state in render methods for Surface UIs
 - [x] MVPs at boards
 - [x] Session stats for profile boards
@@ -172,7 +172,7 @@
 - [x] Gamepass items on respawn (signs, hot cocoa, etc.)
 - [x] Add players prop to profile board
 - [x] Get rid of touch service for chest after it is gone
-- [ ] Iceberg Lounge VIP listener/shop
-- [ ] PTL didn't end when leader died
-- [ ] Package setting not working correctly
-- [ ] Revamp lower left corner
+- [ ] VIP Gamepass: Iceberg lounge, shop discount, playerlist tag
+- [x] PTL didn't end when leader died
+- [x] Package setting not working correctly
+- [x] Revamp lower left corner
