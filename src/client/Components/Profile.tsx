@@ -15,20 +15,10 @@ interface UIProps {
 	Level: number;
 }
 
-interface UIState {
-	health: number;
-	maxHealth: number;
-}
-
-class Profile extends Roact.Component<UIProps, UIState> {
+class Profile extends Roact.Component<UIProps> {
 	constructor(props: UIProps) {
 		super(props);
 	}
-
-	state = {
-		health: 100,
-		maxHealth: 100,
-	};
 
 	render() {
 		return (
@@ -93,71 +83,8 @@ class Profile extends Roact.Component<UIProps, UIState> {
 					<imagelabel {...RectShadow} ImageColor3={googleMaterial.outerShadow}></imagelabel>
 				</frame>
 				<MenuButtons />
-				<frame
-					{...CircContainer}
-					Size={new UDim2(0.5, 0, 0.6, 0)}
-					Position={new UDim2(1, 0, 1, 0)}
-					AnchorPoint={new Vector2(1, 1)}
-				>
-					<uilistlayout
-						FillDirection={Enum.FillDirection.Vertical}
-						Padding={new UDim(0, 10)}
-						VerticalAlignment={Enum.VerticalAlignment.Bottom}
-						HorizontalAlignment={Enum.HorizontalAlignment.Left}
-					></uilistlayout>
-					<RectProgress
-						Icon={"rbxassetid://3260313832"}
-						IconColor={Color3.fromRGB(250, 128, 114)}
-						Size={new UDim2(1, 0, 0.25, 0)}
-						Position={new UDim2(0, 0, 0, 0)}
-						AnchorPoint={new Vector2(0, 0)}
-						percentage={this.state.health}
-						cap={this.state.maxHealth}
-						Color={Color3.fromRGB(170, 0, 0)}
-						SeparatorColor={Color3.fromRGB(60, 0, 0)}
-					></RectProgress>
-				</frame>
 			</frame>
 		);
-	}
-
-	getHumanoid(character: Model) {
-		let humanoid = character.FindFirstChildOfClass("Humanoid");
-		while (character && !humanoid) {
-			humanoid = character.FindFirstChildOfClass("Humanoid");
-			wait(0.05);
-		}
-
-		return humanoid;
-	}
-
-	setUpHealthConnections(humanoid: Humanoid) {
-		humanoid.GetPropertyChangedSignal("Health").Connect(() => {
-			this.setState({ health: humanoid?.Health, maxHealth: humanoid?.MaxHealth });
-		});
-		humanoid.GetPropertyChangedSignal("MaxHealth").Connect(() => {
-			this.setState({ health: humanoid?.Health, maxHealth: humanoid?.MaxHealth });
-		});
-	}
-
-	protected didMount(): void {
-		const client = Players.LocalPlayer;
-		const character = client.Character || client.CharacterAdded.Wait()[0];
-
-		if (character) {
-			const humanoid = this.getHumanoid(character);
-			if (humanoid) {
-				this.setState({ health: humanoid?.Health, maxHealth: humanoid.MaxHealth });
-				this.setUpHealthConnections(humanoid);
-			}
-		}
-		client.CharacterAdded.Connect((newCharacter) => {
-			const humanoid = this.getHumanoid(newCharacter);
-			if (humanoid) {
-				this.setState({ health: humanoid?.Health, maxHealth: humanoid.MaxHealth });
-				this.setUpHealthConnections(humanoid);
-			}
-		});
 	}
 }
 

@@ -60,6 +60,7 @@ const reducer = Rodux.combineReducers({
 	switchSpectating: spectateReducer,
 	updateParticipants: spectateReducer,
 	getPlayers: profileBoardReducer,
+	toggleMenu: profileReducer,
 });
 
 export default reducer;
