@@ -36,7 +36,7 @@ class KillsLB extends Roact.Component<UIProps> {
 								Size={new UDim2(0.6, 0, 0.1, 0)}
 								TextColor3={Color3.fromRGB(255, 255, 255)}
 								TextStrokeTransparency={0.8}
-								Text={"Donation Board"}
+								Text={"DONATIONS"}
 								TextXAlignment={"Center"}
 								TextYAlignment={"Bottom"}
 							></textlabel>

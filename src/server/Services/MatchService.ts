@@ -99,7 +99,7 @@ const MatchService = Knit.CreateService({
 	},
 
 	SetPlaying(player: Player, isPlaying: boolean) {
-		if (this.Participants.has(player) && player.TeamColor === new BrickColor("White")) {
+		if (player.TeamColor === new BrickColor("White")) {
 			this.Participants.set(player, isPlaying);
 		} else {
 			SnackbarService.PushPlayer(player, "Cannot change playing outside of lobby!");
@@ -481,6 +481,7 @@ const MatchService = Knit.CreateService({
 
 		Players.PlayerAdded.Connect((player: Player) => {
 			// Leaderstats Stuff Below
+			print("HERE");
 			this.Participants.set(player, true);
 
 			const leaderstats = new Instance("Folder");

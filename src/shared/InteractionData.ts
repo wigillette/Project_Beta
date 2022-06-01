@@ -80,4 +80,11 @@ export const NPCInteractions = [
 		Model: interactionsFolder.WaitForChild("Iceberg") as Model,
 		Animation: "rbxassetid://9606255387",
 	},
+	{
+		Name: "Lead Developer Lusconox",
+		Message:
+			"Hi, I'm Will! I am the head programmer of Swordlink and want to thank you for playing my game! I hope that you have lots of fun!",
+		Model: interactionsFolder.WaitForChild("Manager") as Model,
+		Animation: "rbxassetid://9606255387",
+	},
 ];

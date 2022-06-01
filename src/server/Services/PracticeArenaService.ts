@@ -25,7 +25,7 @@ const PracticeArenaService = Knit.CreateService({
 					if (player && player.TeamColor === new BrickColor("White")) {
 						const isPlaying = MatchService.CanAccess(player)[0];
 						if (isPlaying === false) {
-							const response = pcall(() => {
+							pcall(() => {
 								player.TeamColor = new BrickColor("Ghost grey");
 								player.LoadCharacter();
 							});

@@ -26,6 +26,7 @@ import RoactRodux from "@rbxts/roact-rodux";
 import store from "./Rodux/Store";
 import ProfileBoardContainer from "./Components/Surface/ProfileBoard/ProfileBoardContainer";
 import AdvertisementContainer from "./Components/Surface/GroupAdvertisement/AdvertisementContainer";
+import GamepassContainer from "./Components/Surface/Gamepasses/ShopContainer";
 import ObbyChestService from "./Services/ObbyChestService";
 import SpectateService from "./Services/SpectateService";
 import LobbyAnimationsClient from "./Services/LobbyAnimations";
@@ -112,6 +113,16 @@ const profileBoard = Roact.createElement(
 	},
 );
 
+const gamepassBoard = Roact.createElement(
+	RoactRodux.StoreProvider,
+	{
+		store: store,
+	},
+	{
+		ProfileBoard: Roact.createElement(GamepassContainer),
+	},
+);
+
 const advertisementBoard1 = Roact.createElement(
 	RoactRodux.StoreProvider,
 	{
@@ -180,6 +191,7 @@ Roact.mount(donationsShop, playerGui, "DonationsShop");
 Roact.mount(mapsList, playerGui, "MapsList");
 Roact.mount(modesList, playerGui, "ModesList");
 Roact.mount(profileBoard, playerGui, "ProfileBoard");
+Roact.mount(gamepassBoard, playerGui, "GamepassBoard");
 Roact.mount(advertisementBoard1, playerGui, "AdvertisementBoard1");
 Roact.mount(advertisementBoard2, playerGui, "AdvertisementBoard2");
 Roact.mount(advertisementBoard3, playerGui, "AdvertisementBoard3");

@@ -43,10 +43,6 @@ export const gamepassEvents = {
 			imageSign.Clone().Parent = client.WaitForChild("Backpack", 10);
 		}
 	},
-	8353921: (client: Player) => {
-		// Custom Chat Tag
-		snackbarService.PushPlayer(client, "Successfully purchased Custom Chat Tag!");
-	},
 	48719297: (client: Player) => {
 		// Random Hat
 		client.Chatted.Connect((msg) => {

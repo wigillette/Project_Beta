@@ -56,7 +56,6 @@
 - [x] Kills/Wins/Donations Ordered Datastores
 
 > Miscellaneous
-- [ ] Name Tags/VIP Name Tag
 - [x] Sword on Back
 - [x] Obby Chest
 - [x] Spinning coins in lobby
@@ -94,6 +93,7 @@
 - [x] Chat Service
 - [x] Friend Service
 - [ ] Badge Service
+- [ ] Arena Ticket Service
 
 > Shared
 - [x] Sword Data
@@ -147,7 +147,7 @@
 - [x] Top Wins Board
 - [x] Donations Board
 - [x] Group Advertisement Board
-- [ ] Gamepass Board
+- [x] Gamepass Board
 
 > Bug/Revamp List
 - [x] TouchService UIs overlaying on betting/voting/results UIs

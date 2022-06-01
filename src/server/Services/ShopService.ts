@@ -36,7 +36,7 @@ const ShopService = Knit.CreateService({
 		const userGold = GoldService.GetGold(player);
 
 		if (MarketplaceService.UserOwnsGamePassAsync(player.UserId, 8453352)) {
-			packPrice -= 0.1 * packPrice;
+			packPrice -= math.floor(0.1 * packPrice);
 		}
 
 		if (userGold >= packPrice) {

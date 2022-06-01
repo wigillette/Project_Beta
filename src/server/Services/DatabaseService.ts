@@ -170,6 +170,9 @@ const DatabaseService = Knit.CreateService({
 	},
 
 	InitializePendingListener() {
+		while (Players.GetPlayers().size() <= 0) {
+			wait(0.05);
+		}
 		while (Players.GetPlayers().size() > 0) {
 			if (this.PendingEntries.size() > 0) {
 				this.PendingEntries.forEach((entry, index) => {
@@ -181,7 +184,7 @@ const DatabaseService = Knit.CreateService({
 				});
 			}
 
-			wait(30);
+			wait(20);
 		}
 	},
 

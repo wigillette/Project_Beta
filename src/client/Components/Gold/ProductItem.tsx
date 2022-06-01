@@ -1,6 +1,6 @@
 import Roact from "@rbxts/roact";
 import { RectBG, RectContainer, RectShadow, RectText, SquareAspectRatio } from "client/UIProperties/RectUI";
-import { googleMaterial, whiteGradientProperties } from "client/UIProperties/ColorSchemes";
+import { googleMaterial, whiteGradientProperties, darkMaterial } from "client/UIProperties/ColorSchemes";
 import RectButton from "../Material/RectButton";
 import { MarketplaceService, Players } from "@rbxts/services";
 
@@ -10,6 +10,7 @@ interface UIProps {
 	description: string;
 	productId: number;
 	isGamePass: boolean;
+	darkMaterial?: boolean;
 }
 
 class MatchItem extends Roact.Component<UIProps> {
@@ -20,31 +21,47 @@ class MatchItem extends Roact.Component<UIProps> {
 	render() {
 		return (
 			<frame {...RectContainer} Size={new UDim2(0.5, 0, 1, 0)} ZIndex={-1}>
-				<uiaspectratioconstraint
-					AspectRatio={2}
-					DominantAxis={"Width"}
-					AspectType={"ScaleWithParentSize"}
-				></uiaspectratioconstraint>
-				<imagelabel {...RectBG} ImageColor3={googleMaterial.cardBG}>
+				{!this.props.darkMaterial && (
+					<uiaspectratioconstraint
+						AspectRatio={2}
+						DominantAxis={"Width"}
+						AspectType={"ScaleWithParentSize"}
+					></uiaspectratioconstraint>
+				)}
+				<imagelabel
+					{...RectBG}
+					ImageColor3={(this.props.darkMaterial && darkMaterial.cardBG) || googleMaterial.cardBG}
+				>
 					<textlabel
 						{...RectText}
 						Position={new UDim2(0.95, 0, 0, 0)}
 						AnchorPoint={new Vector2(0.95, 0)}
-						TextColor3={googleMaterial.cardFont}
+						TextColor3={Color3.fromRGB(255, 255, 255)}
+						TextStrokeTransparency={0.8}
 						Size={new UDim2(0.65, 0, 0.25, 0)}
 						Text={`${tostring(this.props.title)}`}
 						Font={Enum.Font.GothamBold}
 						TextXAlignment={Enum.TextXAlignment.Center}
 					></textlabel>
-					<imagelabel
-						{...RectContainer}
-						Image={this.props.icon}
-						Size={new UDim2(0.25, 0, 1, 0)}
-						Position={new UDim2(0.05, 0, 0.05, 0)}
-						AnchorPoint={new Vector2(0.05, 0.05)}
-					>
-						<uiaspectratioconstraint {...SquareAspectRatio}></uiaspectratioconstraint>
-					</imagelabel>
+					{this.props.darkMaterial ? (
+						<imagelabel
+							{...RectContainer}
+							Image={this.props.icon}
+							Size={new UDim2(0, 85, 0, 65)}
+							Position={new UDim2(0.05, 0, 0.05, 0)}
+							AnchorPoint={new Vector2(0.05, 0.05)}
+						></imagelabel>
+					) : (
+						<imagelabel
+							{...RectContainer}
+							Image={this.props.icon}
+							Size={new UDim2(0.25, 0, 1, 0)}
+							Position={new UDim2(0.05, 0, 0.05, 0)}
+							AnchorPoint={new Vector2(0.05, 0.05)}
+						>
+							<uiaspectratioconstraint {...SquareAspectRatio}></uiaspectratioconstraint>
+						</imagelabel>
+					)}
 					<textlabel
 						{...RectText}
 						Position={new UDim2(0.95, 0, 0.375, 0)}
@@ -53,6 +70,7 @@ class MatchItem extends Roact.Component<UIProps> {
 						Text={this.props.description || "No description."}
 						TextXAlignment={Enum.TextXAlignment.Left}
 						TextYAlignment={Enum.TextYAlignment.Center}
+						TextColor3={(this.props.darkMaterial && darkMaterial.cardFont) || googleMaterial.cardFont}
 					></textlabel>
 					<RectButton
 						ButtonText="PURCHASE"
@@ -70,7 +88,10 @@ class MatchItem extends Roact.Component<UIProps> {
 					/>
 					<uigradient {...whiteGradientProperties}></uigradient>
 				</imagelabel>
-				<imagelabel {...RectShadow} ImageColor3={googleMaterial.cardShadow}></imagelabel>
+				<imagelabel
+					{...RectShadow}
+					ImageColor3={(this.props.darkMaterial && darkMaterial.cardShadow) || googleMaterial.cardShadow}
+				></imagelabel>
 			</frame>
 		);
 	}
