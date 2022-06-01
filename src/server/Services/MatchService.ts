@@ -58,6 +58,11 @@ const MatchService = Knit.CreateService({
 	IntermissionTime: 45,
 	VotingTime: 20,
 	BettingTime: 20,
+	WinnerGold: 25,
+	LoserGold: 10,
+	WinnerExp: 50,
+	ExpKills: 15,
+	ExpDeaths: 10,
 	Participants: new Map<Player, boolean>(),
 	isIntermission: true,
 
@@ -178,9 +183,14 @@ const MatchService = Knit.CreateService({
 							SessionService.IncrementStat(player, "Wins", 1);
 							DatabaseService.AppendPendingEntry(player.UserId, "Wins", 1);
 						}
-						let expEarned = math.max(kills.Value * 50 - deaths.Value * 25 + ((isWinner && 100) || 0), 0);
+						let expEarned = math.max(
+							kills.Value * this.ExpKills -
+								deaths.Value * this.ExpDeaths +
+								((isWinner && this.WinnerExp) || 0),
+							0,
+						);
 						expEarned = (ownsDoubleExp && expEarned * 2) || expEarned;
-						let goldEarned = (isWinner && 50) || 10;
+						let goldEarned = (isWinner && this.WinnerGold) || this.LoserGold;
 						goldEarned = (ownsDoubleCoins && goldEarned * 2) || goldEarned;
 						GoldService.AddGold(player, goldEarned);
 						ProfileService.IncrementExp(player, expEarned);

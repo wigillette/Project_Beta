@@ -2,7 +2,7 @@ import { KnitServer as Knit } from "@rbxts/knit";
 import { DataStoreService, Players } from "@rbxts/services";
 import Database from "@rbxts/datastore2";
 import { InventoryService } from "./InventoryService";
-import { GoldService } from "./GoldService";
+import { gamepassesAwarded, GoldService } from "./GoldService";
 import { InventoryFormat, INITIAL_INVENTORY, INITIAL_EQUIPPED, EquippedFormat } from "../../shared/InventoryInfo";
 import { INITIAL_STATS, PROFILE_FORMAT } from "../../shared/LevelInfo";
 import { INITIAL_SETTINGS, SETTINGS_FORMAT } from "../../shared/SettingsInfo";
@@ -106,6 +106,7 @@ const DatabaseService = Knit.CreateService({
 	},
 
 	SaveODSStat(userId: number, stat: string, amt: number) {
+		print(`Attempting to push pending entry | ${userId} | ${stat} | ${amt}`);
 		if (`Global${stat}` in this) {
 			const globalItem = this[`Global${stat}` as keyof typeof this] as OrderedDataStore;
 			const response = pcall(() => {
@@ -140,6 +141,7 @@ const DatabaseService = Knit.CreateService({
 
 	AppendPendingEntry(userId: number, stat: string, amount: number) {
 		if (!this.FindExistingEntry(userId, stat)) {
+			print(`Pending Entry | ${userId} | ${stat} | ${amount}`);
 			this.PendingEntries.push({ UserId: userId, Stat: stat, Amount: amount });
 		} else {
 			this.IncrementEntry(userId, stat, amount);
@@ -206,7 +208,7 @@ const DatabaseService = Knit.CreateService({
 			});
 
 		const GoldStore = Database("Gold", Player);
-		const Gold = GoldStore.GetAsync(500)
+		const Gold = GoldStore.GetAsync(0)
 			.then((gold) => {
 				GoldService.InitData(Player, gold as number);
 				print(`Successfully loaded ${Player.Name}'s Gold`);
@@ -257,12 +259,21 @@ const DatabaseService = Knit.CreateService({
 		const OCStore = Database("ObbyChest", Player);
 		const OC = OCStore.GetAsync(INITIAL_CHEST)
 			.then((ocInfo) => {
-				print(ocInfo);
 				ObbyChestService.SetChest(Player, ocInfo as chestInfo);
 			})
 			.catch((err) => {
 				print(err);
 				print(`Failed to load ${Player.Name}'s Obby Chest Info`);
+			});
+
+		const GAStore = Database("GamepassesAwarded", Player);
+		const GA = GAStore.GetAsync({ StarterUp: false })
+			.then((gaInfo) => {
+				GoldService.UpdateGamepassesAwarded(Player, gaInfo as gamepassesAwarded);
+			})
+			.catch((err) => {
+				print(err);
+				print(`Failed to load ${Player.Name}'s Gamepasses Awarded Info`);
 			});
 	},
 
@@ -313,6 +324,7 @@ const DatabaseService = Knit.CreateService({
 			"ObbyChest",
 			"ArenaTickets",
 			"Guild",
+			"GamepassesAwarded",
 		);
 		Players.PlayerAdded.Connect((player) => {
 			this.LoadData(player);

@@ -5,34 +5,38 @@ import { PACK_INFO } from "shared/ShopData";
 const tools = ServerStorage.WaitForChild("Tools");
 const InventoryService = KnitServer.GetService("InventoryService");
 const snackbarService = KnitServer.GetService("SnackbarService");
-export const gamepassesOnJoin = [8444469, 8353921, 8444470, 8353962, 8353933, 8353914];
+export const gamepassesOnJoin = [48718165, 48718024, 48718409, 48719124, 48719297];
 
-export const recurringGamepasses = [8353933, 8444469, 8353962, 8353914];
+export const recurringGamepasses = [48718165, 48718024, 48718409, 48719124];
 
 export const gamepassEvents = {
-	8444469: (client: Player) => {
+	48719124: (client: Player) => {
 		// Hot Cocoa
 		const hotCocoa = tools.FindFirstChild("HotCocoa") as Tool;
 		if (hotCocoa) {
 			hotCocoa.Clone().Parent = client.WaitForChild("Backpack", 10);
 		}
 	},
-	8270062: (client: Player) => {
+	48718649: (client: Player) => {
 		// Double EXP
 		snackbarService.PushPlayer(client, "Successfully purchased Double Experience!");
 	},
-	8353914: (client: Player) => {
+	48718024: (client: Player) => {
 		// Boombox
 		const boombox = tools.FindFirstChild("BoomBox") as Tool;
 		if (boombox) {
 			boombox.Clone().Parent = client.WaitForChild("Backpack", 10);
 		}
 	},
-	8353982: (client: Player) => {
+	48718806: (client: Player) => {
 		// Golden Katana
 		InventoryService.AddToInventory(client, "Golden Katana", "Swords");
 	},
-	8353933: (client: Player) => {
+	48718240: (client: Player) => {
+		// Katana
+		InventoryService.AddToInventory(client, "Katana", "Swords");
+	},
+	48718165: (client: Player) => {
 		// Image Sign
 		const imageSign = tools.FindFirstChild("ImageSign") as Tool;
 		if (imageSign) {
@@ -43,7 +47,7 @@ export const gamepassEvents = {
 		// Custom Chat Tag
 		snackbarService.PushPlayer(client, "Successfully purchased Custom Chat Tag!");
 	},
-	8444470: (client: Player) => {
+	48719297: (client: Player) => {
 		// Random Hat
 		client.Chatted.Connect((msg) => {
 			if (client && client.Character) {
@@ -64,14 +68,14 @@ export const gamepassEvents = {
 		});
 		snackbarService.PushPlayer(client, "Successfully purchased Hat Generator!");
 	},
-	8353962: (client: Player) => {
+	48718409: (client: Player) => {
 		// Text Sign
 		const textSign = tools.FindFirstChild("TextSign") as Tool;
 		if (textSign) {
 			textSign.Clone().Parent = client.WaitForChild("Backpack", 10);
 		}
 	},
-	8444456: (client: Player) => {
+	48718895: (client: Player) => {
 		// Starter Up
 		const goldService = KnitServer.GetService("GoldService");
 		if (goldService) {
@@ -90,11 +94,11 @@ export const gamepassEvents = {
 		InventoryService.AddToInventory(client, randomSword, "Swords");
 		snackbarService.PushPlayer(client, "Successfully purchased Starter Up. Check your inventory!");
 	},
-	8353972: (client: Player) => {
+	48718513: (client: Player) => {
 		// x2 Coins
 		snackbarService.PushPlayer(client, "Successfully purchased Double Coins!");
 	},
-	8453352: (client: Player) => {
+	48719460: (client: Player) => {
 		snackbarService.PushPlayer(client, "Successfully purchased VIP!");
 	},
 };

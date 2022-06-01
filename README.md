@@ -56,10 +56,10 @@
 - [x] Kills/Wins/Donations Ordered Datastores
 
 > Miscellaneous
-- [ ] Name Tags
+- [ ] Name Tags/VIP Name Tag
 - [x] Sword on Back
 - [x] Obby Chest
-- [ ] Spinning coins in lobby
+- [x] Spinning coins in lobby
 - [x] Lobby/Match Music
 - [x] Lobby Animations
 - [x] Practice Arena
@@ -78,8 +78,6 @@
 > Services
 - [x] Voting Service
 - [x] Gold Service
-- [ ] Trading Service
-- [ ] Crafting Service
 - [x] Interaction Service
 - [x] Touch Service
 - [x] Developer Product Service
@@ -95,6 +93,7 @@
 - [x] Match Service
 - [x] Chat Service
 - [x] Friend Service
+- [ ] Badge Service
 
 > Shared
 - [x] Sword Data
@@ -121,8 +120,6 @@
 > Advanced Components
 - [x] Intro UI
 - [x] Shop UI
-- [ ] Crafting UI
-- [ ] Trading UI
 - [x] Interaction UI
 - [x] Settings UI
 - [x] Gamepass UI
@@ -139,6 +136,7 @@
 - [x] Gamepass UI
 - [x] Playerlist UI
 - [x] Spectate UI
+- [ ] VIP Shop UI
 
 > Surface Components
 - [x] Profile Board
@@ -149,6 +147,7 @@
 - [x] Top Wins Board
 - [x] Donations Board
 - [x] Group Advertisement Board
+- [ ] Gamepass Board
 
 > Bug/Revamp List
 - [x] TouchService UIs overlaying on betting/voting/results UIs
@@ -166,13 +165,26 @@
 - [x] No set state in render methods for Surface UIs
 - [x] MVPs at boards
 - [x] Session stats for profile boards
-- [ ] Donation particles
+- [x] Donation particles
 - [x] Level up particles/SFX
 - [x] Get Name from UserId attempt to yield error
 - [x] Gamepass items on respawn (signs, hot cocoa, etc.)
 - [x] Add players prop to profile board
 - [x] Get rid of touch service for chest after it is gone
-- [ ] VIP Gamepass: Iceberg lounge, shop discount, playerlist tag
+- [x] VIP Gamepass: Iceberg lounge, shop discount, playerlist tag
 - [x] PTL didn't end when leader died
 - [x] Package setting not working correctly
 - [x] Revamp lower left corner
+- [x] Certain gamepasses need to award perks on join (i.e. starter up, katana, golden katana)
+- [x] Helpful Tips in Chat
+- [x] Revamp Snackbar using queue
+
+> Future Updates
+- [ ] Crafting
+- [ ] Trading
+- [ ] Guilds
+- [ ] Pets?
+- [ ] Elixirs?
+- [ ] Timed Perks
+- [ ] Old Animations
+- [ ] New Game Modes: KOTH, Power Ups, Golden One, Soccer, CTF

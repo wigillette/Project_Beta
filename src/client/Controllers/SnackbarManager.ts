@@ -7,15 +7,24 @@ import SnackbarItem from "client/Components/Snackbar/SnackbarItem";
 class SnackbarManager {
 	currentTree: Roact.Tree | undefined;
 	snackbarContainer: Frame;
+	isActive: boolean;
 
 	public pushNotification(alert: string) {
-		const newItem = Roact.createElement(SnackbarItem, { Alert: alert });
-		if (this.currentTree) {
-			// Unmount the previous tree
-			Roact.unmount(this.currentTree as Roact.Tree);
-		}
-		// Mount the new tree
-		this.currentTree = Roact.mount(newItem, this.snackbarContainer);
+		spawn(() => {
+			while (this.isActive) {
+				wait(2);
+			}
+			this.isActive = true;
+			const newItem = Roact.createElement(SnackbarItem, { Alert: alert });
+			if (this.currentTree) {
+				// Unmount the previous tree
+				Roact.unmount(this.currentTree as Roact.Tree);
+			}
+			// Mount the new tree
+			this.currentTree = Roact.mount(newItem, this.snackbarContainer);
+			wait(3);
+			this.isActive = false;
+		});
 	}
 
 	constructor() {
@@ -33,6 +42,7 @@ class SnackbarManager {
 		// Setting up object variables
 		this.snackbarContainer = main.WaitForChild("Snackbar") as Frame;
 		this.currentTree = undefined;
+		this.isActive = false;
 	}
 }
 

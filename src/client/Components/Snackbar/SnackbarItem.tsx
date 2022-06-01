@@ -46,6 +46,8 @@ class SnackbarItem extends Roact.Component<UIProps> {
 
 		if (container) {
 			movingFade(container, false, -0.5, false);
+			wait(0.5);
+			container.Destroy();
 		}
 	}
 

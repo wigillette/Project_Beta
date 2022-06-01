@@ -54,9 +54,9 @@ export const NPCInteractions = [
 		Animation: "rbxassetid://9606255387",
 	},
 	{
-		Name: "Contestant Jamille",
+		Name: "Trader Kyle",
 		Message:
-			"I have purchased so many swords from the blacksmith that my backpack is starting to overflow.. if only there were a way to donate my swords..",
+			"I was once a formidable contestant here and accumulated a bucket load of gold from victories. After purchasing a collection of swords from the merchant, I traded them all to receive my presigious Ghosdeeri hat.",
 		Model: interactionsFolder.WaitForChild("Trading1") as Model,
 		Animation: "rbxassetid://9606255387",
 	},
