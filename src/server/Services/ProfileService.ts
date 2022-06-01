@@ -2,6 +2,7 @@ import { KnitServer as Knit, Signal, RemoteSignal } from "@rbxts/knit";
 import { Players, ServerStorage } from "@rbxts/services";
 import Database from "@rbxts/datastore2";
 import { CAP_FORMULA, INITIAL_STATS, PROFILE_FORMAT } from "shared/LevelInfo";
+import { BADGE_FUNCTIONS } from "shared/Badges";
 
 declare global {
 	interface KnitServices {
@@ -38,6 +39,7 @@ export const ProfileService = Knit.CreateService({
 				newLevel += 1;
 				newExp -= currentCap;
 				currentCap = CAP_FORMULA(newLevel);
+				BADGE_FUNCTIONS.CheckForLevelBadges(Player, newLevel);
 			}
 
 			if (newLevel !== profile.Level) {

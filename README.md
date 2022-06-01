@@ -92,8 +92,8 @@
 - [x] Match Service
 - [x] Chat Service
 - [x] Friend Service
-- [ ] Badge Service
-- [ ] Arena Ticket Service
+- [x] Badge Service
+- [x] Arena Ticket Service
 
 > Shared
 - [x] Sword Data
@@ -137,6 +137,7 @@
 - [x] Playerlist UI
 - [x] Spectate UI
 - [ ] VIP Shop UI
+- [ ] Arena Tickets UI
 
 > Surface Components
 - [x] Profile Board
@@ -148,6 +149,7 @@
 - [x] Donations Board
 - [x] Group Advertisement Board
 - [x] Gamepass Board
+- [ ] Profile Board Badge Container + Reset Stats
 
 > Bug/Revamp List
 - [x] TouchService UIs overlaying on betting/voting/results UIs

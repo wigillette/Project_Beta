@@ -22,6 +22,7 @@ export const locations = [
 			obbyChestService.ClaimChest("Full");
 		},
 	],
+	/*
 	[
 		Workspace.WaitForChild("Location2", 10),
 		() => {
@@ -58,4 +59,5 @@ export const locations = [
 			}
 		},
 	],
+	*/
 ];

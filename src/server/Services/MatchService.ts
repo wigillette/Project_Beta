@@ -22,6 +22,7 @@ import ObjectUtils from "@rbxts/object-utils";
 import { leaderFormat } from "server/GameModes/PTL";
 import { InventoryService } from "./InventoryService";
 import { DEATH_FUNCTIONS } from "../Utils/DeathEffects";
+import ArenaTicketService from "./ArenaTicketService";
 
 interface playerResult {
 	Player: Player;
@@ -179,7 +180,6 @@ const MatchService = Knit.CreateService({
 						const ownsDoubleCoins = MarketplaceService.UserOwnsGamePassAsync(player.UserId, 8353972);
 						const isWinner = winner === player || winningTeam.includes(player);
 						if (isWinner) {
-							print(player.Name);
 							SessionService.IncrementStat(player, "Wins", 1);
 							DatabaseService.AppendPendingEntry(player.UserId, "Wins", 1);
 						}
@@ -202,6 +202,7 @@ const MatchService = Knit.CreateService({
 							winnerName = winner as string;
 						}
 						this.PushResult(player, goldEarned, playerResults, winnerName);
+						ArenaTicketService.RollForTicket(player);
 						// Reset kills and deaths
 						kills.Value = 0;
 						deaths.Value = 0;
