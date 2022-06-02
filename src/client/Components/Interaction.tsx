@@ -125,9 +125,10 @@ class Interaction extends Roact.Component<UIProps> {
 				movingFadeAbsolute(container, true, new UDim2(0.5, 0, 0.85, 0), false);
 
 				for (let i = 0; i < this.props.Body.size(); i++) {
-					body.Text += this.props.Body.sub(i, i + 1);
+					body.Text += this.props.Body.sub(i, i);
 					wait(0.03);
 				}
+				body.Text += this.props.Body.sub(this.props.Body.size());
 			})();
 		}
 	}

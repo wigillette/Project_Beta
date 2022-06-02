@@ -95,6 +95,7 @@ export const gamepassEvents = {
 		snackbarService.PushPlayer(client, "Successfully purchased Double Coins!");
 	},
 	48719460: (client: Player) => {
+		// VIP
 		snackbarService.PushPlayer(client, "Successfully purchased VIP!");
 	},
 };

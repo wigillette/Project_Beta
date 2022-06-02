@@ -21,6 +21,7 @@ const ChatService = Knit.CreateService({
 		"If you encounter any bugs, please contact a Swordlink moderator or owner.",
 		"Want to spice up your Swordlink experience? Take a look at our gamepasses by clicking on the book icon at the bottom right corner of the screen.",
 	],
+	TipIndex: 0,
 
 	Client: {
 		PostFeedback: new RemoteSignal<(Message: string, Color?: Color3) => void>(),
@@ -34,21 +35,24 @@ const ChatService = Knit.CreateService({
 		this.Client.PostFeedback.FireAll(msg, color);
 	},
 
-	KnitInit() {
-		Players.PlayerAdded.Connect((player) => this.PostAllFeedback(`${player.Name} has joined the server!`));
-		Players.PlayerRemoving.Connect((player) => this.PostAllFeedback(`${player.Name} has left the server!`));
-
+	DisplayTips() {
 		spawn(() => {
 			while (Players.GetPlayers().size() <= 0) {
 				wait(0.05);
 			}
 			while (Players.GetPlayers().size() > 0) {
-				const randomTip = this.HelpfulTips[math.floor(math.random() * this.HelpfulTips.size())];
+				const randomTip = this.HelpfulTips[this.TipIndex % this.HelpfulTips.size()];
 				this.PostAllFeedback(randomTip, Color3.fromRGB(185, 196, 177));
-				wait(45);
+				this.TipIndex += 1;
+				wait(90);
 			}
 		});
+	},
 
+	KnitInit() {
+		Players.PlayerAdded.Connect((player) => this.PostAllFeedback(`${player.Name} has joined the server!`));
+		Players.PlayerRemoving.Connect((player) => this.PostAllFeedback(`${player.Name} has left the server!`));
+		this.DisplayTips();
 		print("Chat Service Initialized | Server");
 	},
 });
