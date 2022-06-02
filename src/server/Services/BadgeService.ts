@@ -12,7 +12,7 @@ const badgeService = Knit.CreateService({
 	Name: "badgeService",
 
 	Client: {
-		GetBadges(player: Player) {
+		GetBadges(client: Player, player: Player) {
 			return this.Server.GetOwnedBadges(player);
 		},
 	},
@@ -43,7 +43,15 @@ const badgeService = Knit.CreateService({
 				ownedBadges.push(badge);
 			}
 		});
-		return [badges, ownedBadges];
+
+		const badgesInfo = badges.map((badge) => {
+			return BadgeService.GetBadgeInfoAsync(badge);
+		});
+		const ownedBadgesInfo = ownedBadges.map((badge) => {
+			return BadgeService.GetBadgeInfoAsync(badge);
+		});
+
+		return [badgesInfo, ownedBadgesInfo];
 	},
 
 	KnitInit() {

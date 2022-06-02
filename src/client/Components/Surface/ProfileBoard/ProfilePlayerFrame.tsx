@@ -1,3 +1,4 @@
+import { KnitClient } from "@rbxts/knit";
 import Roact from "@rbxts/roact";
 import RoactRodux from "@rbxts/roact-rodux";
 import { Workspace } from "@rbxts/services";
@@ -9,10 +10,12 @@ import { RectBG, RectContainer, RectText, SquareAspectRatio } from "client/UIPro
 
 const leaderboards = Workspace.WaitForChild("MapsBoard", 10) as Folder;
 const mapsBoard = leaderboards.WaitForChild("Maps", 10) as Part;
+const badgeService = KnitClient.GetService("badgeService");
 
 interface UIProps {
 	player: Player;
 	switchProfile: (playerInfo: profileBoardState) => void;
+	getBadges: (badges: BadgeInfo[][]) => void;
 }
 
 class Main extends Roact.Component<UIProps> {
@@ -61,8 +64,10 @@ class Main extends Roact.Component<UIProps> {
 						Callback={() => {
 							print(`Viewing ${this.props.player.Name}'s profile!`);
 							const userProfile = FetchBoardData(this.props.player);
+							const badges = badgeService.GetBadges(this.props.player);
 							if (userProfile) {
 								this.props.switchProfile(userProfile);
+								this.props.getBadges(badges);
 							}
 						}}
 					/>
@@ -89,6 +94,15 @@ export = RoactRodux.connect(undefined, (dispatch) => {
 					sessionKills: playerInfo.sessionKills,
 					sessionDeaths: playerInfo.sessionDeaths,
 					sessionWins: playerInfo.sessionWins,
+				},
+			});
+		},
+		getBadges: (badges: BadgeInfo[][]) => {
+			dispatch({
+				type: "getBadges",
+				payload: {
+					allBadges: badges[0],
+					ownedBadges: badges[1],
 				},
 			});
 		},

@@ -1,4 +1,5 @@
 import Rodux from "@rbxts/rodux";
+import { KnitClient } from "@rbxts/knit";
 import { Players } from "@rbxts/services";
 import { FetchBoardData } from "client/Services/ProfileBoardService";
 
@@ -17,8 +18,8 @@ interface Action {
 		sessionWins: number;
 		sessionDeaths: number;
 		players: Player[];
-		ownedBadges: number[];
-		allBadges: number[];
+		ownedBadges: BadgeInfo[];
+		allBadges: BadgeInfo[];
 	};
 }
 
@@ -35,11 +36,14 @@ export interface profileBoardState {
 	sessionWins: number;
 	sessionDeaths: number;
 	players: Player[];
-	ownedBadges: number[];
-	allBadges: number[];
+	ownedBadges: BadgeInfo[];
+	allBadges: BadgeInfo[];
+	viewingBadges: boolean;
 }
 
+const badgeService = KnitClient.GetService("badgeService");
 const clientProfile = FetchBoardData(Players.LocalPlayer);
+const badgeInfo = badgeService.GetBadges(Players.LocalPlayer);
 
 export const profileBoardReducer = Rodux.createReducer(
 	{
@@ -55,8 +59,9 @@ export const profileBoardReducer = Rodux.createReducer(
 		sessionWins: clientProfile.sessionWins,
 		sessionDeaths: clientProfile.sessionDeaths,
 		players: Players.GetPlayers(),
-		ownedBadges: [] as number[],
-		allBadges: [] as number[],
+		ownedBadges: badgeInfo[1] as BadgeInfo[],
+		allBadges: badgeInfo[0] as BadgeInfo[],
+		viewingBadges: false,
 	},
 	{
 		switchProfile: (state: profileBoardState, action: Action) => {
@@ -89,6 +94,12 @@ export const profileBoardReducer = Rodux.createReducer(
 				newState.allBadges = action.payload.allBadges;
 				newState.ownedBadges = action.payload.ownedBadges;
 			}
+
+			return newState;
+		},
+		viewBadges: (state: profileBoardState, action: Action) => {
+			const newState = { ...state };
+			newState.viewingBadges = !newState.viewingBadges;
 
 			return newState;
 		},

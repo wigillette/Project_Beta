@@ -1,7 +1,6 @@
 import { KnitClient as Knit, KnitClient } from "@rbxts/knit";
 import { Players } from "@rbxts/services";
 import { profileBoardState } from "client/Rodux/Reducers/ProfileBoardReducer";
-import store from "client/Rodux/Store";
 
 export const FetchBoardData = (player: Player) => {
 	const ProfileService = Knit.GetService("ProfileService");
@@ -35,14 +34,8 @@ export const FetchBoardData = (player: Player) => {
 		players: Players.GetPlayers(),
 		ownedBadges: [],
 		allBadges: [],
+		viewingBadges: false,
 	};
 
 	return userInfo;
-};
-
-export const getBadges = (player: Player) => {
-	const badgeService = KnitClient.GetService("badgeService");
-	const badges = badgeService.GetBadges();
-
-	store.dispatch({ type: "getBadges", payload: { allBadges: badges[0], ownedBadges: badges[1] } });
 };

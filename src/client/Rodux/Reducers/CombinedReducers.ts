@@ -62,6 +62,7 @@ const reducer = Rodux.combineReducers({
 	getPlayers: profileBoardReducer,
 	toggleMenu: profileReducer,
 	getBadges: profileBoardReducer,
+	viewBadges: profileBoardReducer,
 });
 
 export default reducer;

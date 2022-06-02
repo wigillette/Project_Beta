@@ -24,12 +24,12 @@ class Main extends Roact.Component<UIProps> {
 				Size={new UDim2(0, 100, 0, 100)}
 				Position={new UDim2(0, 0, 0, 0)}
 			>
-				<imagelabel {...RectBG} ImageColor3={darkMaterial.cardBG}>
+				<imagelabel {...RectBG} ImageColor3={Color3.fromRGB(65, 66, 68)}>
 					<textlabel
 						{...RectText}
 						Text={this.props.badgeInfo.Name}
 						Position={new UDim2(0.5, 0, 0.05, 0)}
-						Size={new UDim2(0.95, 0, 0.3, 0)}
+						Size={new UDim2(0.9, 0, 0.3, 0)}
 						AnchorPoint={new Vector2(0.5, 0.05)}
 						TextColor3={Color3.fromRGB(255, 255, 255)}
 						Font={"GothamSemibold"}
@@ -37,11 +37,12 @@ class Main extends Roact.Component<UIProps> {
 					></textlabel>
 					<imagelabel
 						{...RectContainer}
-						Size={new UDim2(0.95, 0, 0.6, 0)}
-						Position={new UDim2(0.5, 0, 0.4, 0)}
-						AnchorPoint={new Vector2(0.5, 0.4)}
+						Key={"Badge"}
+						Size={new UDim2(0, 45, 0, 45)}
+						Position={new UDim2(0.5, 0, 0.9, 0)}
+						AnchorPoint={new Vector2(0.5, 0.9)}
 						Image={`rbxassetid://${this.props.badgeInfo.IconImageId}`}
-						ImageTransparency={(this.props.isOwned && 0) || 0.5}
+						ImageTransparency={this.props.isOwned ? 0 : 0.8}
 					></imagelabel>
 				</imagelabel>
 			</frame>

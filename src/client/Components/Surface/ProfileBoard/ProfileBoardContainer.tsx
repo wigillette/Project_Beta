@@ -2,7 +2,7 @@ import Object from "@rbxts/object-utils";
 import Roact from "@rbxts/roact";
 import RoactRodux from "@rbxts/roact-rodux";
 import { Players, TweenService, Workspace, BadgeService } from "@rbxts/services";
-import { registerListDynamicScrolling } from "client/UIProperties/DynamicScrolling";
+import { registerListDynamicScrolling, registerGridDynamicScrolling } from "client/UIProperties/DynamicScrolling";
 import { RectBG, RectContainer, RectText, SquareAspectRatio } from "client/UIProperties/RectUI";
 import { profileBoardState } from "client/Rodux/Reducers/ProfileBoardReducer";
 import { darkMaterial, googleMaterial, mediumGradientProperties } from "client/UIProperties/ColorSchemes";
@@ -11,6 +11,9 @@ import ProfilePlayerFrame from "./ProfilePlayerFrame";
 import { FetchBoardData } from "client/Services/ProfileBoardService";
 import { tweenColor } from "client/UIProperties/ButtonEffects";
 import BadgeItem from "./BadgeItem";
+import { movingFadeAbsolute } from "client/UIProperties/FrameEffects";
+import RectButton from "client/Components/Material/RectButton";
+import { KnitClient } from "@rbxts/knit";
 const leaderboards = Workspace.WaitForChild("ProfileBoard", 10) as Folder;
 const mapsBoard = leaderboards.WaitForChild("ProfileBoard", 10) as Part;
 
@@ -27,22 +30,34 @@ interface UIProps {
 	playerSessionKills: number;
 	playerSessionDeaths: number;
 	playerSessionWins: number;
-	ownedBadges: number[];
-	allBadges: number[];
+	ownedBadges: BadgeInfo[];
+	allBadges: BadgeInfo[];
+	viewingBadges: boolean;
 	switchProfile: (playerInfo: profileBoardState) => void;
 	updatePlayers: (players: Player[]) => void;
+	viewBadges: () => void;
+	getBadges: (badges: BadgeInfo[][]) => void;
 }
+
+const badgeContainer = Roact.createRef<Frame>();
+const globalContainer = Roact.createRef<Frame>();
+const sessionContainer = Roact.createRef<Frame>();
+const badgeService = KnitClient.GetService("badgeService");
 
 class ProfileBoardContainer extends Roact.Component<UIProps> {
 	scrollRef;
 	gridRef;
 	refreshButtonRef;
+	badgeScrollRef;
+	badgeGridRef;
 	connections: RBXScriptConnection[];
 	constructor(props: UIProps) {
 		super(props);
 		this.scrollRef = Roact.createRef<ScrollingFrame>();
 		this.gridRef = Roact.createRef<UIListLayout>();
 		this.refreshButtonRef = Roact.createRef<ImageButton>();
+		this.badgeGridRef = Roact.createRef<UIGridLayout>();
+		this.badgeScrollRef = Roact.createRef<ScrollingFrame>();
 		this.connections = [];
 	}
 
@@ -149,8 +164,10 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 											}
 
 											const userProfile = FetchBoardData(this.props.playerViewing);
+											const badges = badgeService.GetBadges(this.props.playerViewing);
 											if (userProfile) {
 												this.props.switchProfile(userProfile);
+												this.props.getBadges(badges);
 											}
 										},
 										MouseEnter: (rbx) => {
@@ -254,6 +271,7 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 									AnchorPoint={new Vector2(0, 0)}
 									Position={new UDim2(0.03, 0, 0.575, 0)}
 									Size={new UDim2(0.3, 0, 0.4, 0)}
+									Ref={globalContainer}
 								>
 									<imagelabel
 										{...RectBG}
@@ -468,9 +486,10 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 								<frame
 									{...RectContainer}
 									AnchorPoint={new Vector2(0, 0)}
-									Position={new UDim2(0.03, 0, 0, 0)}
+									Position={new UDim2(0.03, 0, 0.575, 0)}
 									Size={new UDim2(0.6, 0, 0.4, 0)}
 									Visible={false}
+									Ref={badgeContainer}
 								>
 									<imagelabel {...RectBG} ImageColor3={darkMaterial.cardBG}>
 										<scrollingframe
@@ -479,19 +498,21 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 											AnchorPoint={new Vector2(0.5, 0.5)}
 											BackgroundTransparency={1}
 											BorderSizePixel={0}
+											Ref={this.badgeScrollRef}
 										>
 											<uigridlayout
-												CellSize={new UDim2(0, 100, 0, 100)}
+												CellSize={new UDim2(0, 80, 0, 80)}
 												CellPadding={new UDim2(0, 10, 0, 10)}
 												FillDirection={"Horizontal"}
 												FillDirectionMaxCells={6}
 												HorizontalAlignment={"Center"}
 												VerticalAlignment={"Top"}
+												Ref={this.badgeGridRef}
 											></uigridlayout>
 											{Object.values(this.props.allBadges).map((badge) => {
 												return (
 													<BadgeItem
-														badgeInfo={BadgeService.GetBadgeInfoAsync(badge)}
+														badgeInfo={badge}
 														isOwned={this.props.ownedBadges.includes(badge)}
 													></BadgeItem>
 												);
@@ -504,6 +525,7 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 									AnchorPoint={new Vector2(0, 0)}
 									Position={new UDim2(0.35, 0, 0.575, 0)}
 									Size={new UDim2(0.3, 0, 0.4, 0)}
+									Ref={sessionContainer}
 								>
 									<imagelabel
 										{...RectBG}
@@ -613,6 +635,47 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 										</frame>
 									</imagelabel>
 								</frame>
+								<frame
+									{...RectContainer}
+									AnchorPoint={new Vector2(0, 0)}
+									Position={new UDim2(0.67, 0, 0.575, 0)}
+									Size={new UDim2(0.3, 0, 0.4, 0)}
+								>
+									<imagelabel {...RectBG} ImageColor3={darkMaterial.cardBG}>
+										<frame
+											{...RectContainer}
+											AnchorPoint={new Vector2(0.5, 0.5)}
+											Position={new UDim2(0.5, 0, 0.5, 0)}
+											Size={new UDim2(0.95, 0, 0.9, 0)}
+										>
+											<uilistlayout
+												Padding={new UDim(0.1, 0)}
+												VerticalAlignment={"Top"}
+												HorizontalAlignment={"Center"}
+												FillDirection={"Vertical"}
+											></uilistlayout>
+											<RectButton
+												Position={new UDim2(0.5, 0, 0.2, 0)}
+												AnchorPoint={new Vector2(0.5, 0.2)}
+												Size={new UDim2(0.75, 0, 0.25, 0)}
+												ButtonText={"TOGGLE BADGES"}
+												Callback={() => {
+													this.props.viewBadges();
+												}}
+											/>
+											<RectButton
+												Position={new UDim2(0.5, 0, 0.2, 0)}
+												AnchorPoint={new Vector2(0.5, 0.2)}
+												Size={new UDim2(0.75, 0, 0.25, 0)}
+												ButtonText={"RESET STATS"}
+												Callback={() => {
+													// Reset the stats
+													print("Resetting Stats..");
+												}}
+											/>
+										</frame>
+									</imagelabel>
+								</frame>
 							</imagelabel>
 						</imagelabel>
 					</frame>
@@ -624,9 +687,16 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 	protected didMount(): void {
 		const grid = this.gridRef.getValue();
 		const scroll = this.scrollRef.getValue();
+		const badgeGrid = this.badgeGridRef.getValue();
+		const badgeScroll = this.badgeScrollRef.getValue();
 		// Make the scroll frame change size depending on number of items
 		if (grid && scroll) {
 			const connection = registerListDynamicScrolling(scroll, grid);
+			this.connections.push(connection);
+		}
+
+		if (badgeGrid && badgeScroll) {
+			const connection = registerGridDynamicScrolling(badgeScroll, badgeGrid);
 			this.connections.push(connection);
 		}
 
@@ -651,10 +721,26 @@ interface storeState {
 	switchProfile: profileBoardState;
 	getPlayers: profileBoardState;
 	getBadges: profileBoardState;
+	viewBadges: profileBoardState;
 }
 
 export = RoactRodux.connect(
 	function (state: storeState) {
+		const badges = badgeContainer.getValue();
+		const session = sessionContainer.getValue();
+		const global = globalContainer.getValue();
+		if (badges && session && global) {
+			if (state.viewBadges.viewingBadges) {
+				movingFadeAbsolute(session, false, new UDim2(0.35, 0, 0.75, 0), false);
+				movingFadeAbsolute(global, false, new UDim2(0.03, 0, 0.75, 0), false);
+				movingFadeAbsolute(badges, true, new UDim2(0.03, 0, 0.575, 0), false);
+			} else {
+				movingFadeAbsolute(badges, false, new UDim2(0.03, 0, 0.75, 0), false);
+				movingFadeAbsolute(session, true, new UDim2(0.35, 0, 0.575, 0), false);
+				movingFadeAbsolute(global, true, new UDim2(0.03, 0, 0.575, 0), false);
+			}
+		}
+
 		return {
 			playerViewing: state.switchProfile.playerViewing,
 			playerKills: state.switchProfile.playerKills,
@@ -670,6 +756,7 @@ export = RoactRodux.connect(
 			players: state.getPlayers.players,
 			ownedBadges: state.getBadges.ownedBadges,
 			allBadges: state.getBadges.allBadges,
+			viewingBadges: state.viewBadges.viewingBadges,
 		};
 	},
 	(dispatch) => {
@@ -698,6 +785,20 @@ export = RoactRodux.connect(
 					payload: {
 						players: players,
 					},
+				});
+			},
+			getBadges: (badges: BadgeInfo[][]) => {
+				dispatch({
+					type: "getBadges",
+					payload: {
+						allBadges: badges[0],
+						ownedBadges: badges[1],
+					},
+				});
+			},
+			viewBadges: () => {
+				dispatch({
+					type: "viewBadges",
 				});
 			},
 		};
