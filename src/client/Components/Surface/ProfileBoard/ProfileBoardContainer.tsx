@@ -1,7 +1,7 @@
 import Object from "@rbxts/object-utils";
 import Roact from "@rbxts/roact";
 import RoactRodux from "@rbxts/roact-rodux";
-import { Players, TweenService, Workspace } from "@rbxts/services";
+import { Players, TweenService, Workspace, BadgeService } from "@rbxts/services";
 import { registerListDynamicScrolling } from "client/UIProperties/DynamicScrolling";
 import { RectBG, RectContainer, RectText, SquareAspectRatio } from "client/UIProperties/RectUI";
 import { profileBoardState } from "client/Rodux/Reducers/ProfileBoardReducer";
@@ -10,7 +10,7 @@ import ComputeKDR from "shared/ComputeKDR";
 import ProfilePlayerFrame from "./ProfilePlayerFrame";
 import { FetchBoardData } from "client/Services/ProfileBoardService";
 import { tweenColor } from "client/UIProperties/ButtonEffects";
-
+import BadgeItem from "./BadgeItem";
 const leaderboards = Workspace.WaitForChild("ProfileBoard", 10) as Folder;
 const mapsBoard = leaderboards.WaitForChild("ProfileBoard", 10) as Part;
 
@@ -27,6 +27,8 @@ interface UIProps {
 	playerSessionKills: number;
 	playerSessionDeaths: number;
 	playerSessionWins: number;
+	ownedBadges: number[];
+	allBadges: number[];
 	switchProfile: (playerInfo: profileBoardState) => void;
 	updatePlayers: (players: Player[]) => void;
 }
@@ -466,6 +468,40 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 								<frame
 									{...RectContainer}
 									AnchorPoint={new Vector2(0, 0)}
+									Position={new UDim2(0.03, 0, 0, 0)}
+									Size={new UDim2(0.6, 0, 0.4, 0)}
+									Visible={false}
+								>
+									<imagelabel {...RectBG} ImageColor3={darkMaterial.cardBG}>
+										<scrollingframe
+											Size={new UDim2(0.95, 0, 0.95, 0)}
+											Position={new UDim2(0.5, 0, 0.5, 0)}
+											AnchorPoint={new Vector2(0.5, 0.5)}
+											BackgroundTransparency={1}
+											BorderSizePixel={0}
+										>
+											<uigridlayout
+												CellSize={new UDim2(0, 100, 0, 100)}
+												CellPadding={new UDim2(0, 10, 0, 10)}
+												FillDirection={"Horizontal"}
+												FillDirectionMaxCells={6}
+												HorizontalAlignment={"Center"}
+												VerticalAlignment={"Top"}
+											></uigridlayout>
+											{Object.values(this.props.allBadges).map((badge) => {
+												return (
+													<BadgeItem
+														badgeInfo={BadgeService.GetBadgeInfoAsync(badge)}
+														isOwned={this.props.ownedBadges.includes(badge)}
+													></BadgeItem>
+												);
+											})}
+										</scrollingframe>
+									</imagelabel>
+								</frame>
+								<frame
+									{...RectContainer}
+									AnchorPoint={new Vector2(0, 0)}
 									Position={new UDim2(0.35, 0, 0.575, 0)}
 									Size={new UDim2(0.3, 0, 0.4, 0)}
 								>
@@ -614,6 +650,7 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 interface storeState {
 	switchProfile: profileBoardState;
 	getPlayers: profileBoardState;
+	getBadges: profileBoardState;
 }
 
 export = RoactRodux.connect(
@@ -631,6 +668,8 @@ export = RoactRodux.connect(
 			playerSessionDeaths: state.switchProfile.sessionDeaths,
 			playerSessionWins: state.switchProfile.sessionWins,
 			players: state.getPlayers.players,
+			ownedBadges: state.getBadges.ownedBadges,
+			allBadges: state.getBadges.allBadges,
 		};
 	},
 	(dispatch) => {

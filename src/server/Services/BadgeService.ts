@@ -4,15 +4,17 @@ import { badges, BADGE_FUNCTIONS } from "../../shared/Badges";
 
 declare global {
 	interface KnitServices {
-		BadgeService: typeof BadgeService;
+		badgeService: typeof badgeService;
 	}
 }
 
 const badgeService = Knit.CreateService({
-	Name: "BadgeService",
+	Name: "badgeService",
 
 	Client: {
-		ChangeMusic: new RemoteSignal<(songName: string) => void>(),
+		GetBadges(player: Player) {
+			return this.Server.GetOwnedBadges(player);
+		},
 	},
 
 	GetBadges(player: Player) {
@@ -30,6 +32,18 @@ const badgeService = Knit.CreateService({
 	UserHasBadge(player: Player, badge: number) {
 		const userBadges = this.GetBadges(player);
 		return userBadges.includes(badge);
+	},
+
+	GetOwnedBadges(player: Player) {
+		const badges = this.GetBadges(player);
+		const ownedBadges = [] as number[];
+
+		badges.forEach((badge) => {
+			if (BadgeService.UserHasBadgeAsync(player.UserId, badge)) {
+				ownedBadges.push(badge);
+			}
+		});
+		return [badges, ownedBadges];
 	},
 
 	KnitInit() {

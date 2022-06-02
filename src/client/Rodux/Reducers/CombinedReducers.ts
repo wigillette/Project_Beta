@@ -61,6 +61,7 @@ const reducer = Rodux.combineReducers({
 	updateParticipants: spectateReducer,
 	getPlayers: profileBoardReducer,
 	toggleMenu: profileReducer,
+	getBadges: profileBoardReducer,
 });
 
 export default reducer;
