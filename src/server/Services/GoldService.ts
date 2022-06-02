@@ -5,7 +5,6 @@ import { PRODUCT_FUNCTIONS } from "server/Utils/DeveloperProducts";
 import { gamepassesOnJoin, gamepassEvents, gamepassInfo, recurringGamepasses } from "../Utils/Gamepasses";
 import ObjectUtils from "@rbxts/object-utils";
 import { donationProducts } from "shared/DonationsInfo";
-import advertisementService from "./AdvertisementService";
 import SnackbarService from "./SnackbarService";
 import { InventoryService } from "./InventoryService";
 import ChatService from "./ChatService";
@@ -40,6 +39,10 @@ const ProcessReceipt = (receiptInfo: ReceiptInfo, groupId?: number, boardKey?: n
 		} else {
 			GoldService.AddGold(player, response[1]);
 		}
+	} else if (receiptInfo.ProductId === 1269577740) {
+		// Reset stats
+		const databaseService = Knit.GetService("DatabaseService");
+		databaseService.ResetStats(player);
 	} else {
 		let donationAmount: number | undefined = undefined;
 		ObjectUtils.entries(donationProducts).forEach((donationProduct) => {

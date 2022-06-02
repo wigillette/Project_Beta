@@ -1,7 +1,7 @@
 import Object from "@rbxts/object-utils";
 import Roact from "@rbxts/roact";
 import RoactRodux from "@rbxts/roact-rodux";
-import { Players, TweenService, Workspace, BadgeService } from "@rbxts/services";
+import { Players, TweenService, Workspace, BadgeService, MarketplaceService } from "@rbxts/services";
 import { registerListDynamicScrolling, registerGridDynamicScrolling } from "client/UIProperties/DynamicScrolling";
 import { RectBG, RectContainer, RectText, SquareAspectRatio } from "client/UIProperties/RectUI";
 import { profileBoardState } from "client/Rodux/Reducers/ProfileBoardReducer";
@@ -670,7 +670,10 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 												ButtonText={"RESET STATS"}
 												Callback={() => {
 													// Reset the stats
-													print("Resetting Stats..");
+													MarketplaceService.PromptProductPurchase(
+														Players.LocalPlayer,
+														1269577740,
+													);
 												}}
 											/>
 										</frame>

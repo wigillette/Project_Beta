@@ -6,6 +6,10 @@ export const badges = [
 	2124512466, 2124512892, 2124512471, 2124512463, 2124512472, 2124512893, 2124512461, 2124512473, 2124512916,
 ];
 
+export const badgeInformation = badges.map((badgeId) => {
+	return BadgeService.GetBadgeInfoAsync(badgeId);
+});
+
 export const BADGE_GOLD = {
 	2124512916: 50,
 	2124512464: 5,

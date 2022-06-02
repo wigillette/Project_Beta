@@ -149,7 +149,7 @@
 - [x] Donations Board
 - [x] Group Advertisement Board
 - [x] Gamepass Board
-- [/] Profile Board Badge Container + Reset Stats
+- [x] Profile Board Badge Container + Reset Stats
 
 > Bug/Revamp List
 - [x] TouchService UIs overlaying on betting/voting/results UIs
@@ -180,7 +180,8 @@
 - [x] Certain gamepasses need to award perks on join (i.e. starter up, katana, golden katana)
 - [x] Helpful Tips in Chat
 - [x] Revamp Snackbar using queue
-- [ ] Better way of collecting badge info on server
+- [x] Better way of collecting badge info on server
+- [ ] Update profile service to contain user KDR stats
 
 > Future Updates
 - [ ] Crafting
@@ -190,4 +191,5 @@
 - [ ] Elixirs?
 - [ ] Timed Perks
 - [ ] Old Animations
+- [ ] Premium Daily Reward Chest
 - [ ] New Game Modes: KOTH, Power Ups, Golden One, Soccer, CTF

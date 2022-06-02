@@ -105,6 +105,15 @@ const DatabaseService = Knit.CreateService({
 		this.SortingTables.MonthlyKills = this.CreateSortingTable(this.MonthlyKills.GetSortedAsync(false, 6));
 	},
 
+	ResetStats(player: Player) {
+		// CHANGE THIS TO STOP 4 CALLS AT ONCE
+		print(`Resetting ${player.Name}'s stats!`);
+		this.GlobalKills.SetAsync(tostring(player.UserId), 0);
+		this.GlobalWins.SetAsync(tostring(player.UserId), 0);
+		this.MonthlyKills.SetAsync(tostring(player.UserId), 0);
+		this.MonthlyWins.SetAsync(tostring(player.UserId), 0);
+	},
+
 	SaveODSStat(userId: number, stat: string, amt: number) {
 		print(`Attempting to push pending entry | ${userId} | ${stat} | ${amt}`);
 		if (`Global${stat}` in this) {

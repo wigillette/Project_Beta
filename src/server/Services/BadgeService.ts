@@ -1,6 +1,6 @@
 import { KnitServer as Knit, RemoteSignal } from "@rbxts/knit";
 import { Players, BadgeService } from "@rbxts/services";
-import { badges, BADGE_FUNCTIONS } from "../../shared/Badges";
+import { badges, BADGE_FUNCTIONS, badgeInformation } from "../../shared/Badges";
 
 declare global {
 	interface KnitServices {
@@ -44,14 +44,11 @@ const badgeService = Knit.CreateService({
 			}
 		});
 
-		const badgesInfo = badges.map((badge) => {
-			return BadgeService.GetBadgeInfoAsync(badge);
-		});
 		const ownedBadgesInfo = ownedBadges.map((badge) => {
 			return BadgeService.GetBadgeInfoAsync(badge);
 		});
 
-		return [badgesInfo, ownedBadgesInfo];
+		return [badgeInformation, ownedBadgesInfo];
 	},
 
 	KnitInit() {
