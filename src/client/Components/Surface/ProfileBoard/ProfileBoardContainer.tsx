@@ -317,15 +317,13 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 											></textlabel>
 											<textlabel
 												{...RectText}
-												AnchorPoint={new Vector2(0, 0.5)}
-												Position={new UDim2(0.42, 0, 0.5, 0)}
-												Size={new UDim2(0.5, 0, 0.85, 0)}
+												AnchorPoint={new Vector2(1, 0.5)}
+												Position={new UDim2(1, 0, 0.5, 0)}
+												Size={new UDim2(0.4, 0, 0.85, 0)}
 												Font={"Gotham"}
 												TextColor3={googleMaterial.buttonColor}
 												TextStrokeTransparency={0.8}
-												Text={tostring(
-													this.props.playerDeaths + this.props.playerSessionDeaths,
-												)}
+												Text={tostring(this.props.playerDeaths)}
 											></textlabel>
 										</frame>
 										<frame
@@ -346,13 +344,13 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 											></textlabel>
 											<textlabel
 												{...RectText}
-												AnchorPoint={new Vector2(0, 0.5)}
-												Position={new UDim2(0.42, 0, 0.5, 0)}
-												Size={new UDim2(0.5, 0, 0.85, 0)}
+												AnchorPoint={new Vector2(1, 0.5)}
+												Position={new UDim2(1, 0, 0.5, 0)}
+												Size={new UDim2(0.4, 0, 0.85, 0)}
 												Font={"Gotham"}
 												TextColor3={googleMaterial.buttonColor}
 												TextStrokeTransparency={0.8}
-												Text={tostring(this.props.playerKills + this.props.playerSessionKills)}
+												Text={tostring(this.props.playerKills)}
 											></textlabel>
 										</frame>
 										<frame
@@ -373,13 +371,13 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 											></textlabel>
 											<textlabel
 												{...RectText}
-												AnchorPoint={new Vector2(0, 0.5)}
-												Position={new UDim2(0.42, 0, 0.5, 0)}
-												Size={new UDim2(0.5, 0, 0.85, 0)}
+												AnchorPoint={new Vector2(1, 0.5)}
+												Position={new UDim2(1, 0, 0.5, 0)}
+												Size={new UDim2(0.4, 0, 0.85, 0)}
 												Font={"Gotham"}
 												TextColor3={googleMaterial.buttonColor}
 												TextStrokeTransparency={0.8}
-												Text={tostring(this.props.playerWins + this.props.playerSessionWins)}
+												Text={tostring(this.props.playerWins)}
 											></textlabel>
 										</frame>
 									</imagelabel>
@@ -575,9 +573,9 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 											></textlabel>
 											<textlabel
 												{...RectText}
-												AnchorPoint={new Vector2(0.9, 0.5)}
-												Position={new UDim2(0.9, 0, 0.5, 0)}
-												Size={new UDim2(0.5, 0, 0.85, 0)}
+												AnchorPoint={new Vector2(1, 0.5)}
+												Position={new UDim2(1, 0, 0.5, 0)}
+												Size={new UDim2(0.4, 0, 0.85, 0)}
 												Font={"Gotham"}
 												TextColor3={googleMaterial.buttonColor}
 												TextStrokeTransparency={0.8}
@@ -602,9 +600,9 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 											></textlabel>
 											<textlabel
 												{...RectText}
-												AnchorPoint={new Vector2(0.9, 0.5)}
-												Position={new UDim2(0.9, 0, 0.5, 0)}
-												Size={new UDim2(0.5, 0, 0.85, 0)}
+												AnchorPoint={new Vector2(1, 0.5)}
+												Position={new UDim2(1, 0, 0.5, 0)}
+												Size={new UDim2(0.4, 0, 0.85, 0)}
 												Font={"Gotham"}
 												TextColor3={googleMaterial.buttonColor}
 												TextStrokeTransparency={0.8}
@@ -629,9 +627,9 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 											></textlabel>
 											<textlabel
 												{...RectText}
-												AnchorPoint={new Vector2(0.9, 0.5)}
-												Position={new UDim2(0.9, 0, 0.5, 0)}
-												Size={new UDim2(0.5, 0, 0.85, 0)}
+												AnchorPoint={new Vector2(1, 0.5)}
+												Position={new UDim2(1, 0, 0.5, 0)}
+												Size={new UDim2(0.4, 0, 0.85, 0)}
 												Font={"Gotham"}
 												TextColor3={googleMaterial.buttonColor}
 												TextStrokeTransparency={0.8}

@@ -137,8 +137,9 @@
 - [x] Playerlist UI
 - [x] Spectate UI
 - [x] VIP Shop UI
-- [x] Arena Tickets UI
+- [x] Arena Tickets Container UI
 - [x] Hover Notifications
+- [ ] Arena Ticket Info UI
 
 > Surface Components
 - [x] Profile Board
@@ -183,6 +184,7 @@
 - [x] Revamp Snackbar using queue
 - [x] Better way of collecting badge info on server
 - [x] Update profile service to contain user KDR stats
+- [ ] Refresh ODS leaderboards after a certain number of changes
 
 > Future Updates
 - [ ] Crafting

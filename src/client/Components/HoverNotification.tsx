@@ -66,7 +66,6 @@ class HoverNotification extends Roact.Component<UIProps> {
 			const parentFrame = hoverFrame.Parent as Frame;
 			if (parentFrame) {
 				hoverFrame.Rotation = (this.props.isRotation && -30) || 0;
-
 				hoverFrame.Position = new UDim2(
 					0,
 					mouse.X - parentFrame.AbsolutePosition.X + 30,
