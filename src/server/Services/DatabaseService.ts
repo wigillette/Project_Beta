@@ -1,4 +1,4 @@
-import { KnitServer as Knit } from "@rbxts/knit";
+import { KnitServer as Knit, RemoteSignal } from "@rbxts/knit";
 import { DataStoreService, Players } from "@rbxts/services";
 import Database from "@rbxts/datastore2";
 import { InventoryService } from "./InventoryService";
@@ -41,6 +41,7 @@ const DatabaseService = Knit.CreateService({
 	Name: "DatabaseService",
 
 	Client: {
+		UpdateSortingData: new RemoteSignal<(sortingTables: SortingFormat) => void>(),
 		GetAllSortingData(Player: Player) {
 			return this.Server.GetAllSortingData();
 		},
@@ -188,6 +189,7 @@ const DatabaseService = Knit.CreateService({
 		while (Players.GetPlayers().size() <= 0) {
 			wait(0.05);
 		}
+		let listeningIterations = 0;
 		while (Players.GetPlayers().size() > 0) {
 			if (this.PendingEntries.size() > 0) {
 				this.PendingEntries.forEach((entry, index) => {
@@ -200,6 +202,13 @@ const DatabaseService = Knit.CreateService({
 			}
 
 			wait(20);
+			listeningIterations += 1;
+			if (listeningIterations % 6 === 0) {
+				spawn(() => {
+					this.InitSortingTables();
+					this.Client.UpdateSortingData.FireAll(this.GetAllSortingData());
+				});
+			}
 		}
 	},
 

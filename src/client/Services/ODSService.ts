@@ -109,6 +109,10 @@ const ODSClient = {
 			.catch((err) => {
 				print(err);
 			});
+
+		DatabaseService.UpdateSortingData.Connect((sortingTables: SortingFormat) => {
+			ODSClient.FetchData(sortingTables);
+		});
 		print("ODS Service Initialized | Client");
 	},
 };

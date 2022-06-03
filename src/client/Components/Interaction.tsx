@@ -4,6 +4,7 @@ import { darkMaterial, whiteGradientProperties, gradientProperties } from "clien
 import RectButton from "./Material/RectButton";
 import DynamicViewport from "./Material/DynamicViewport";
 import { movingFadeAbsolute, tweenPos, tweenTransparency } from "client/UIProperties/FrameEffects";
+import { SoundService } from "@rbxts/services";
 
 interface UIProps {
 	Header: string;
@@ -11,6 +12,9 @@ interface UIProps {
 	Model: Model | Tool;
 	Animation: string | undefined;
 }
+
+const SFX = SoundService.WaitForChild("SFX");
+const typeSFX = SFX.WaitForChild("Typewriter") as Sound;
 
 class Interaction extends Roact.Component<UIProps> {
 	bodyRef;
@@ -126,6 +130,7 @@ class Interaction extends Roact.Component<UIProps> {
 
 				for (let i = 0; i < this.props.Body.size(); i++) {
 					body.Text += this.props.Body.sub(i, i);
+					typeSFX.Play();
 					wait(0.03);
 				}
 				body.Text += this.props.Body.sub(this.props.Body.size());

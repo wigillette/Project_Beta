@@ -49,6 +49,7 @@
 - [x] Betting Reducer
 - [x] Results Reducer
 - [x] PlayerList Reducer
+- [ ] Crafting Reducer
 
 > Data Storage
 - [x] SQL Database vs. Datastore2
@@ -94,6 +95,7 @@
 - [x] Friend Service
 - [x] Badge Service
 - [x] Arena Ticket Service
+- [ ] Crafting Service
 
 > Shared
 - [x] Sword Data
@@ -140,6 +142,7 @@
 - [x] Arena Tickets Container UI
 - [x] Hover Notifications
 - [ ] Arena Ticket Info UI
+- [ ] Crafting UI
 
 > Surface Components
 - [x] Profile Board
@@ -184,10 +187,9 @@
 - [x] Revamp Snackbar using queue
 - [x] Better way of collecting badge info on server
 - [x] Update profile service to contain user KDR stats
-- [ ] Refresh ODS leaderboards after a certain number of changes
+- [x] Refresh ODS leaderboards after a certain number of changes
 
 > Future Updates
-- [ ] Crafting
 - [ ] Trading
 - [ ] Guilds
 - [ ] Pets?

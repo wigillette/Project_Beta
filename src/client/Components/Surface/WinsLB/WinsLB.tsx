@@ -205,7 +205,11 @@ class WinsLB extends Roact.Component<UIProps> {
 	}
 
 	protected didUpdate(previousProps: UIProps, previousState: {}): void {
-		if (previousProps.category !== this.props.category || previousProps.GlobalData !== this.props.GlobalData) {
+		if (
+			previousProps.category !== this.props.category ||
+			previousProps.GlobalData !== this.props.GlobalData ||
+			previousProps.MonthlyData !== this.props.MonthlyData
+		) {
 			const entry = this.props[`${this.props.category}Data` as keyof typeof this.props] as (
 				| string
 				| number
