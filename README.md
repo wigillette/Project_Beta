@@ -137,7 +137,8 @@
 - [x] Playerlist UI
 - [x] Spectate UI
 - [ ] VIP Shop UI
-- [ ] Arena Tickets UI
+- [x] Arena Tickets UI
+- [ ] Hover Notifications
 
 > Surface Components
 - [x] Profile Board
@@ -181,7 +182,7 @@
 - [x] Helpful Tips in Chat
 - [x] Revamp Snackbar using queue
 - [x] Better way of collecting badge info on server
-- [ ] Update profile service to contain user KDR stats
+- [x] Update profile service to contain user KDR stats
 
 > Future Updates
 - [ ] Crafting

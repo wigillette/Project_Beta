@@ -181,7 +181,7 @@ const MatchService = Knit.CreateService({
 						const isWinner = winner === player || winningTeam.includes(player);
 						if (isWinner) {
 							SessionService.IncrementStat(player, "Wins", 1);
-							DatabaseService.AppendPendingEntry(player.UserId, "Wins", 1);
+							DatabaseService.AppendPendingEntry(player.UserId, "Wins", 1, false);
 						}
 						let expEarned = math.max(
 							kills.Value * this.ExpKills -
@@ -544,7 +544,7 @@ const MatchService = Knit.CreateService({
 					humanoid.Died.Connect(() => {
 						deaths.Value += 1;
 						SessionService.IncrementStat(player, "Deaths", 1);
-						DatabaseService.AppendPendingEntry(player.UserId, "Deaths", 1);
+						DatabaseService.AppendPendingEntry(player.UserId, "Deaths", 1, false);
 
 						if (!RESERVED_TEAMS.includes(player.TeamColor) && this.CurrentMode !== "None") {
 							const modeLibraries = this.ModeLibraries; // for some reason it was bugging when i put this.ModeLibraries below lol
@@ -575,7 +575,7 @@ const MatchService = Knit.CreateService({
 									const killerKills = killerLS.FindFirstChild("Kills") as IntValue;
 									if (killerKills) {
 										killerKills.Value += 1;
-										DatabaseService.AppendPendingEntry(killer.UserId, "Kills", 1);
+										DatabaseService.AppendPendingEntry(killer.UserId, "Kills", 1, false);
 										SessionService.IncrementStat(killer, "Kills", 1);
 									}
 								}

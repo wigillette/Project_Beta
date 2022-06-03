@@ -7,10 +7,12 @@ export const FetchBoardData = (player: Player) => {
 	const goldService = Knit.GetService("GoldService");
 	const dbService = Knit.GetService("DatabaseService");
 	const sessionService = Knit.GetService("SessionService");
+	const ticketService = Knit.GetService("ArenaTicketService");
 	const userGold = goldService.GetGold(player);
 	const userStats = ProfileService.GetProfile(player);
 	const userKDR = dbService.GetUserData(player);
 	const sessionKDR = sessionService.GetUserStats(player);
+	const playerTickets = ticketService.GetTickets(player);
 	let sessionKills = 0;
 	let sessionDeaths = 0;
 	let sessionWins = 0;
@@ -31,6 +33,7 @@ export const FetchBoardData = (player: Player) => {
 		sessionKills: sessionKills,
 		sessionDeaths: sessionDeaths,
 		sessionWins: sessionWins,
+		playerTickets: playerTickets,
 		players: Players.GetPlayers(),
 		ownedBadges: [],
 		allBadges: [],

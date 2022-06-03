@@ -7,7 +7,7 @@ export const badges = [
 ];
 
 export const badgeInformation = badges.map((badgeId) => {
-	return BadgeService.GetBadgeInfoAsync(badgeId);
+	return [badgeId, BadgeService.GetBadgeInfoAsync(badgeId)];
 });
 
 export const BADGE_GOLD = {

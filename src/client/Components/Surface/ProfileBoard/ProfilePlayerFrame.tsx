@@ -67,7 +67,7 @@ class Main extends Roact.Component<UIProps> {
 							const badges = badgeService.GetBadges(this.props.player);
 							if (userProfile) {
 								this.props.switchProfile(userProfile);
-								this.props.getBadges(badges);
+								this.props.getBadges(badges as BadgeInfo[][]);
 							}
 						}}
 					/>

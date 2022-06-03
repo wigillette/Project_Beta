@@ -13,6 +13,11 @@ declare global {
 const particlesFolder = ServerStorage.WaitForChild("Particles", 10);
 const levelParticles = particlesFolder?.WaitForChild("Level", 10);
 
+export interface KDR_FORMAT {
+	Kills: number;
+	Deaths: number;
+}
+
 export const ProfileService = Knit.CreateService({
 	Name: "ProfileService",
 

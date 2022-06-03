@@ -27,6 +27,7 @@ interface UIProps {
 	playerLevel: number;
 	playerCoins: number;
 	playerExpCap: number;
+	playerTickets: number;
 	playerSessionKills: number;
 	playerSessionDeaths: number;
 	playerSessionWins: number;
@@ -167,7 +168,7 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 											const badges = badgeService.GetBadges(this.props.playerViewing);
 											if (userProfile) {
 												this.props.switchProfile(userProfile);
-												this.props.getBadges(badges);
+												this.props.getBadges(badges as BadgeInfo[][]);
 											}
 										},
 										MouseEnter: (rbx) => {
@@ -415,7 +416,7 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 												Font={"GothamSemibold"}
 												TextColor3={googleMaterial.buttonColor}
 												TextStrokeTransparency={0.8}
-												Text={"0"}
+												Text={tostring(this.props.playerTickets)}
 												TextXAlignment={"Center"}
 											></textlabel>
 										</frame>
@@ -513,7 +514,11 @@ class ProfileBoardContainer extends Roact.Component<UIProps> {
 												return (
 													<BadgeItem
 														badgeInfo={badge}
-														isOwned={this.props.ownedBadges.includes(badge)}
+														isOwned={this.props.ownedBadges
+															.map((ownedInfo) => {
+																return ownedInfo.Name;
+															})
+															.includes(badge.Name)}
 													></BadgeItem>
 												);
 											})}
@@ -756,6 +761,7 @@ export = RoactRodux.connect(
 			playerSessionKills: state.switchProfile.sessionKills,
 			playerSessionDeaths: state.switchProfile.sessionDeaths,
 			playerSessionWins: state.switchProfile.sessionWins,
+			playerTickets: state.switchProfile.playerTickets,
 			players: state.getPlayers.players,
 			ownedBadges: state.getBadges.ownedBadges,
 			allBadges: state.getBadges.allBadges,
@@ -776,6 +782,7 @@ export = RoactRodux.connect(
 						playerLevel: playerInfo.playerLevel,
 						playerCoins: playerInfo.playerCoins,
 						playerExpCap: playerInfo.playerExpCap,
+						playerTickets: playerInfo.playerTickets,
 						sessionKills: playerInfo.sessionKills,
 						sessionDeaths: playerInfo.sessionDeaths,
 						sessionWins: playerInfo.sessionWins,

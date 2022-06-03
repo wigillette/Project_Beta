@@ -15,6 +15,7 @@ import VotingContainer from "./Voting/VotingContainer";
 import PlayerList from "./PlayerList/PlayerList";
 import SpectateButton from "./Spectate/SpectateButton";
 import SpectateContainer from "./Spectate/SpectateContainer";
+import ArenaTickets from "./ArenaTickets";
 
 const Main = () => {
 	return (
@@ -35,6 +36,7 @@ const Main = () => {
 			<GoldContainer />
 			<SpectateButton />
 			<SpectateContainer />
+			<ArenaTickets />
 		</screengui>
 	);
 };

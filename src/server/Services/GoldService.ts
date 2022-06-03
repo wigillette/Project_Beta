@@ -73,7 +73,7 @@ const ProcessReceipt = (receiptInfo: ReceiptInfo, groupId?: number, boardKey?: n
 				});
 			}
 			const databaseService = Knit.GetService("DatabaseService");
-			databaseService.AppendPendingEntry(player.UserId, "Donations", donationAmount);
+			databaseService.AppendPendingEntry(player.UserId, "Donations", donationAmount, false);
 		}
 	}
 

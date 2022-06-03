@@ -14,6 +14,7 @@ interface Action {
 		playerLevel: number;
 		playerCoins: number;
 		playerExpCap: number;
+		playerTickets: number;
 		sessionKills: number;
 		sessionWins: number;
 		sessionDeaths: number;
@@ -32,6 +33,7 @@ export interface profileBoardState {
 	playerLevel: number;
 	playerCoins: number;
 	playerExpCap: number;
+	playerTickets: number;
 	sessionKills: number;
 	sessionWins: number;
 	sessionDeaths: number;
@@ -58,6 +60,7 @@ export const profileBoardReducer = Rodux.createReducer(
 		sessionKills: clientProfile.sessionKills,
 		sessionWins: clientProfile.sessionWins,
 		sessionDeaths: clientProfile.sessionDeaths,
+		playerTickets: clientProfile.playerTickets,
 		players: Players.GetPlayers(),
 		ownedBadges: badgeInfo[1] as BadgeInfo[],
 		allBadges: badgeInfo[0] as BadgeInfo[],
@@ -78,6 +81,7 @@ export const profileBoardReducer = Rodux.createReducer(
 				newState.sessionDeaths = action.payload.sessionDeaths;
 				newState.sessionKills = action.payload.sessionKills;
 				newState.sessionWins = action.payload.sessionWins;
+				newState.playerTickets = action.payload.playerTickets;
 			}
 			return newState;
 		},

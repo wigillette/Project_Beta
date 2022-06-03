@@ -10,8 +10,10 @@ import { ProfileService } from "./ProfileService";
 import { TwitterService } from "./TwitterService";
 import { SettingsService } from "./SettingsService";
 import { DailyRewardService } from "./DailyRewardService";
+import SessionService from "./SessionService";
 import { INITIAL_DR, DR_FORMAT } from "../../shared/DailyRewardInfo";
 import ObbyChestService, { chestInfo, INITIAL_CHEST } from "./ObbyChestService";
+import ArenaTicketService from "./ArenaTicketService";
 
 declare global {
 	interface KnitServices {
@@ -23,6 +25,7 @@ interface ODSEntryFormat {
 	UserId: number;
 	Stat: string;
 	Amount: number;
+	Overwrite: boolean;
 }
 
 interface SortingFormat {
@@ -106,20 +109,22 @@ const DatabaseService = Knit.CreateService({
 	},
 
 	ResetStats(player: Player) {
-		// CHANGE THIS TO STOP 4 CALLS AT ONCE
 		print(`Resetting ${player.Name}'s stats!`);
-		this.GlobalKills.SetAsync(tostring(player.UserId), 0);
-		this.GlobalWins.SetAsync(tostring(player.UserId), 0);
-		this.MonthlyKills.SetAsync(tostring(player.UserId), 0);
-		this.MonthlyWins.SetAsync(tostring(player.UserId), 0);
+		this.AppendPendingEntry(player.UserId, "Kills", 0, true);
+		this.AppendPendingEntry(player.UserId, "Deaths", 0, true);
+		SessionService.ResetStats(player);
 	},
 
-	SaveODSStat(userId: number, stat: string, amt: number) {
+	SaveODSStat(userId: number, stat: string, amt: number, overwrite: boolean) {
 		print(`Attempting to push pending entry | ${userId} | ${stat} | ${amt}`);
 		if (`Global${stat}` in this) {
 			const globalItem = this[`Global${stat}` as keyof typeof this] as OrderedDataStore;
 			const response = pcall(() => {
-				globalItem.IncrementAsync(tostring(userId), amt);
+				if (!overwrite) {
+					globalItem.IncrementAsync(tostring(userId), amt);
+				} else {
+					globalItem.SetAsync(tostring(userId), amt);
+				}
 			});
 			if (response[0]) {
 				print(
@@ -134,7 +139,11 @@ const DatabaseService = Knit.CreateService({
 		if (`Monthly${stat}` in this) {
 			const monthlyItem = this[`Monthly${stat}` as keyof typeof this] as OrderedDataStore;
 			const response = pcall(() => {
-				monthlyItem.IncrementAsync(tostring(userId), amt);
+				if (!overwrite) {
+					monthlyItem.IncrementAsync(tostring(userId), amt);
+				} else {
+					monthlyItem.SetAsync(tostring(userId), amt);
+				}
 			});
 			if (response[0]) {
 				print(
@@ -148,11 +157,11 @@ const DatabaseService = Knit.CreateService({
 		}
 	},
 
-	AppendPendingEntry(userId: number, stat: string, amount: number) {
-		if (!this.FindExistingEntry(userId, stat)) {
+	AppendPendingEntry(userId: number, stat: string, amount: number, overwrite: boolean) {
+		if (this.FindExistingEntry(userId, stat) === undefined) {
 			print(`Pending Entry | ${userId} | ${stat} | ${amount}`);
-			this.PendingEntries.push({ UserId: userId, Stat: stat, Amount: amount });
-		} else {
+			this.PendingEntries.push({ UserId: userId, Stat: stat, Amount: amount, Overwrite: overwrite });
+		} else if (!overwrite) {
 			this.IncrementEntry(userId, stat, amount);
 		}
 	},
@@ -185,8 +194,8 @@ const DatabaseService = Knit.CreateService({
 		while (Players.GetPlayers().size() > 0) {
 			if (this.PendingEntries.size() > 0) {
 				this.PendingEntries.forEach((entry, index) => {
-					if (entry.UserId !== undefined && entry.Stat !== undefined && entry.Amount) {
-						this.SaveODSStat(entry.UserId, entry.Stat, entry.Amount);
+					if (entry.UserId !== undefined && entry.Stat !== undefined && entry.Amount !== undefined) {
+						this.SaveODSStat(entry.UserId, entry.Stat, entry.Amount, entry.Overwrite);
 						this.PendingEntries.remove(index);
 						wait(6);
 					}
@@ -286,6 +295,16 @@ const DatabaseService = Knit.CreateService({
 			.catch((err) => {
 				print(err);
 				print(`Failed to load ${Player.Name}'s Gamepasses Awarded Info`);
+			});
+
+		const ATStore = Database("ArenaTickets", Player);
+		const AT = ATStore.GetAsync(0)
+			.then((atInfo) => {
+				ArenaTicketService.InitData(Player, atInfo as number);
+			})
+			.catch((err) => {
+				print(err);
+				print(`Failed to load ${Player.Name}'s Arena Tickets Info`);
 			});
 	},
 

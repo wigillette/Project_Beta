@@ -44,18 +44,26 @@ const badgeService = Knit.CreateService({
 			}
 		});
 
-		const ownedBadgesInfo = ownedBadges.map((badge) => {
-			return BadgeService.GetBadgeInfoAsync(badge);
+		const fullBadgeInfo = badgeInformation.map((badge) => {
+			return badge[1] as BadgeInfo;
 		});
 
-		return [badgeInformation, ownedBadgesInfo];
+		const ownedBadgesTags = badgeInformation.filter((badgeInfo) => {
+			return ownedBadges.includes(badgeInfo[0] as number);
+		});
+
+		const ownedBadgesInfo = ownedBadgesTags.map((badge) => {
+			return badge[1] as BadgeInfo;
+		});
+
+		return [fullBadgeInfo, ownedBadgesInfo];
 	},
 
 	KnitInit() {
 		Players.PlayerAdded.Connect((plr) => {
 			BADGE_FUNCTIONS.CheckForOwner(plr);
 		});
-		print("Music Service Initialized | Server");
+		print("Badge Service Initialized | Server");
 	},
 });
 

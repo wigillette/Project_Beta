@@ -25,7 +25,6 @@ const SessionService = Knit.CreateService({
 	PlayerStats: new Map<Player, sessionFormat>(),
 
 	Client: {
-		PostFeedback: new RemoteSignal<(Message: string, Color?: Color3) => void>(),
 		GetUserStats(client: Player, player?: Player) {
 			return this.Server.GetUserStats(client, player);
 		},
@@ -38,6 +37,12 @@ const SessionService = Knit.CreateService({
 			newStats[stat as keyof typeof userStats] += amount;
 			this.PlayerStats.set(player, newStats);
 		}
+	},
+
+	ResetStats(client: Player) {
+		const oldStats = this.PlayerStats.get(client);
+		const wins = (oldStats !== undefined && oldStats.Wins) || 0;
+		this.PlayerStats.set(client, { Kills: 0, Deaths: 0, Wins: wins });
 	},
 
 	GetUserStats(client: Player, player?: Player) {

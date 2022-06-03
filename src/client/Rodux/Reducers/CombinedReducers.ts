@@ -15,6 +15,7 @@ import { ODSReducer } from "./ODSReducer";
 import { profileBoardReducer } from "./ProfileBoardReducer";
 import { advertisementReducer } from "./AdvertisementReducer";
 import { spectateReducer } from "./SpectateReducer";
+import { ticketReducer } from "./TicketReducer";
 
 const reducer = Rodux.combineReducers({
 	toggleShop: shopReducer,
@@ -63,6 +64,7 @@ const reducer = Rodux.combineReducers({
 	toggleMenu: profileReducer,
 	getBadges: profileBoardReducer,
 	viewBadges: profileBoardReducer,
+	getTickets: ticketReducer,
 });
 
 export default reducer;
