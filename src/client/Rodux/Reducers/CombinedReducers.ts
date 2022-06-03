@@ -65,6 +65,7 @@ const reducer = Rodux.combineReducers({
 	getBadges: profileBoardReducer,
 	viewBadges: profileBoardReducer,
 	getTickets: ticketReducer,
+	toggleVIPShop: shopReducer,
 });
 
 export default reducer;

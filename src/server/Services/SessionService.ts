@@ -1,5 +1,6 @@
 import { KnitServer as Knit, RemoteSignal } from "@rbxts/knit";
 import { Players } from "@rbxts/services";
+import { BADGE_FUNCTIONS } from "shared/Badges";
 
 declare global {
 	interface KnitServices {
@@ -23,6 +24,7 @@ const SessionService = Knit.CreateService({
 	Name: "SessionService",
 
 	PlayerStats: new Map<Player, sessionFormat>(),
+	PlayerGlobalStats: new Map<Player, sessionFormat>(),
 
 	Client: {
 		GetUserStats(client: Player, player?: Player) {
@@ -32,10 +34,21 @@ const SessionService = Knit.CreateService({
 
 	IncrementStat(player: Player, stat: string, amount: number) {
 		const userStats = this.PlayerStats.get(player);
-		if (userStats && stat in userStats) {
+		const userGlobalStats = this.PlayerGlobalStats.get(player);
+		if (userStats && stat in userStats && userGlobalStats && stat in userGlobalStats) {
 			const newStats = { ...userStats };
 			newStats[stat as keyof typeof userStats] += amount;
+			const newGlobalStats = { ...userGlobalStats };
+			newGlobalStats[stat as keyof typeof userGlobalStats] += amount;
 			this.PlayerStats.set(player, newStats);
+			this.PlayerGlobalStats.set(player, newGlobalStats);
+
+			// Check for badges
+			if (stat === "Kills") {
+				BADGE_FUNCTIONS.CheckForKillBadges(player, newGlobalStats.Kills);
+			} else if (stat === "Wins") {
+				BADGE_FUNCTIONS.CheckForWinBadges(player, newGlobalStats.Wins);
+			}
 		}
 	},
 
@@ -47,12 +60,19 @@ const SessionService = Knit.CreateService({
 
 	GetUserStats(client: Player, player?: Player) {
 		let profile = undefined;
+		let globalProfile = undefined;
 		if (player) {
 			profile = this.PlayerStats.get(player);
+			globalProfile = this.PlayerGlobalStats.get(player);
 		} else {
 			profile = this.PlayerStats.get(client);
+			globalProfile = this.PlayerGlobalStats.get(client);
 		}
-		return profile;
+		return [profile, globalProfile];
+	},
+
+	InitData(client: Player, kills: number, deaths: number, wins: number) {
+		this.PlayerGlobalStats.set(client, { Kills: kills, Deaths: deaths, Wins: wins });
 	},
 
 	KnitInit() {
@@ -61,6 +81,7 @@ const SessionService = Knit.CreateService({
 		});
 		Players.PlayerRemoving.Connect((player) => {
 			this.PlayerStats.delete(player);
+			this.PlayerGlobalStats.delete(player);
 		});
 		print("Session Service Initialized | Server");
 	},

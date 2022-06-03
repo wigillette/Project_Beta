@@ -16,6 +16,7 @@ import PlayerList from "./PlayerList/PlayerList";
 import SpectateButton from "./Spectate/SpectateButton";
 import SpectateContainer from "./Spectate/SpectateContainer";
 import ArenaTickets from "./ArenaTickets";
+import VIPShop from "./VIPShop/VIPShop";
 
 const Main = () => {
 	return (
@@ -37,6 +38,7 @@ const Main = () => {
 			<SpectateButton />
 			<SpectateContainer />
 			<ArenaTickets />
+			<VIPShop />
 		</screengui>
 	);
 };

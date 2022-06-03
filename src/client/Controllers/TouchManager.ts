@@ -1,6 +1,8 @@
-import { Players } from "@rbxts/services";
+import { MarketplaceService, Players } from "@rbxts/services";
 import { tweenTransparency } from "client/UIProperties/FrameEffects";
 import Store from "client/Rodux/Store";
+import { KnitClient } from "@rbxts/knit";
+const shopService = KnitClient.GetService("ShopService");
 
 // Touch Manager Class
 class TouchManager {
@@ -13,9 +15,14 @@ class TouchManager {
 		if (!this.open) {
 			this.open = true;
 			if (typeIs(this.action, "string")) {
-				Store.dispatch({
-					type: this.action as string,
-				});
+				const canView =
+					this.action !== "toggleVIPShop" ||
+					MarketplaceService.UserOwnsGamePassAsync(Players.LocalPlayer.UserId, 48719460);
+				if (canView) {
+					Store.dispatch({
+						type: this.action as string,
+					});
+				}
 			} else {
 				(this.action as () => void)();
 			}
@@ -27,9 +34,14 @@ class TouchManager {
 		if (this.open) {
 			this.open = false;
 			if (typeIs(this.action, "string")) {
-				Store.dispatch({
-					type: this.action as string,
-				});
+				const canView =
+					this.action !== "toggleVIPShop" ||
+					MarketplaceService.UserOwnsGamePassAsync(Players.LocalPlayer.UserId, 48719460);
+				if (canView) {
+					Store.dispatch({
+						type: this.action as string,
+					});
+				}
 			}
 		}
 	}

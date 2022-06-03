@@ -2,6 +2,7 @@ export const PACK_PRICES = {
 	Alpha: 150,
 	Beta: 500,
 	Gamma: 1000,
+	VIP: 1500,
 };
 
 export const RARITIES = {
@@ -26,6 +27,13 @@ export const RARITIES = {
 		Epic: 9,
 		Legendary: 5,
 	},
+	VIP: {
+		Common: 0,
+		Uncommon: 0,
+		Rare: 14, // 28
+		Epic: 12, // 48
+		Legendary: 8, // 24
+	},
 };
 
 export const RARITY_COLORS = {
@@ -35,6 +43,45 @@ export const RARITY_COLORS = {
 	Epic: Color3.fromRGB(238, 75, 43),
 	Legendary: Color3.fromRGB(34, 139, 34),
 };
+
+export const VIP_INFO = [
+	{
+		Name: "Demonslayer",
+		Rarity: "Rare",
+	},
+	{
+		Name: "Twilight",
+		Rarity: "Rare",
+	},
+	{
+		Name: "Faerie",
+		Rarity: "Epic",
+	},
+	{
+		Name: "Valkyrie",
+		Rarity: "Epic",
+	},
+	{
+		Name: "Illumina",
+		Rarity: "Epic",
+	},
+	{
+		Name: "Leviathan",
+		Rarity: "Epic",
+	},
+	{
+		Name: "Falchion",
+		Rarity: "Legendary",
+	},
+	{
+		Name: "Windforce",
+		Rarity: "Legendary",
+	},
+	{
+		Name: "Lightbringer",
+		Rarity: "Legendary",
+	},
+];
 
 export const PACK_INFO = {
 	Alpha: [

@@ -13,20 +13,17 @@ import {
 	Body,
 	CardGridLayout,
 	SquareAspectRatio,
-	MenuAspectRatio,
-} from "client/UIProperties/RectUI";
-import { googleMaterial, gradientProperties, whiteGradientProperties } from "client/UIProperties/ColorSchemes";
+} from "../../UIProperties/RectUI";
+import { googleMaterial, gradientProperties, whiteGradientProperties } from "../../UIProperties/ColorSchemes";
 import ObjectUtils from "@rbxts/object-utils";
 import { registerGridDynamicScrolling } from "../../UIProperties/DynamicScrolling";
-import SwordShopItem from "./SwordShopItem";
-import { RARITIES, PACK_PRICES, PACK_INFO } from "shared/ShopData";
+import SwordShopItem from "../Shop/SwordShopItem";
 import { MarketplaceService, ReplicatedStorage, Players } from "@rbxts/services";
 import RectButton from "../Material/RectButton";
+import { VIP_INFO, PACK_PRICES, RARITIES } from "../../../shared/ShopData";
 
 interface UIProps {
-	currentPack: string;
 	toggle: boolean;
-	switchPack: (packName: string) => void;
 }
 
 interface UIState {
@@ -35,7 +32,7 @@ interface UIState {
 
 let oldFadeIn = true;
 const shopRef = Roact.createRef<Frame>();
-class Shop extends Roact.Component<UIProps, UIState> {
+class VIPShop extends Roact.Component<UIProps, UIState> {
 	containerRef;
 	gridRef;
 	scrollRef;
@@ -84,21 +81,11 @@ class Shop extends Roact.Component<UIProps, UIState> {
 						<frame {...Header} Size={new UDim2(1, 0, 0.15, 0)}>
 							<imagelabel ImageColor3={googleMaterial.header} {...RectBG}>
 								<textlabel
-									Text={"Sword Shop"}
+									Text={"VIP Shop"}
 									TextStrokeTransparency={0.8}
 									AnchorPoint={new Vector2(0.5, 0.05)}
 									Position={new UDim2(0.5, 0, 0.05, 0)}
-									Size={new UDim2(0.95, 0, 0.45, 0)}
-									TextColor3={googleMaterial.headerFont}
-									{...RectText}
-									Font={"GothamBold"}
-								></textlabel>
-								<textlabel
-									Text={this.props.currentPack}
-									TextStrokeTransparency={0.8}
-									AnchorPoint={new Vector2(0.5, 0.95)}
-									Position={new UDim2(0.5, 0, 0.95, 0)}
-									Size={new UDim2(0.95, 0, 0.45, 0)}
+									Size={new UDim2(0.95, 0, 0.9, 0)}
 									TextColor3={googleMaterial.headerFont}
 									{...RectText}
 									Font={"GothamBold"}
@@ -106,38 +93,12 @@ class Shop extends Roact.Component<UIProps, UIState> {
 								<uigradient {...gradientProperties}></uigradient>
 							</imagelabel>
 						</frame>
-						<frame
-							{...RectContainer}
-							Size={new UDim2(0.95, 0, 0.125, 0)}
-							AnchorPoint={new Vector2(0.5, 0.2)}
-							Position={new UDim2(0.5, 0, 0.2, 0)}
-						>
-							<uilistlayout
-								FillDirection={Enum.FillDirection.Horizontal}
-								HorizontalAlignment={Enum.HorizontalAlignment.Center}
-								VerticalAlignment={Enum.VerticalAlignment.Center}
-								Padding={new UDim(0.075, 0)}
-								SortOrder={Enum.SortOrder.Name}
-							></uilistlayout>
-							{ObjectUtils.keys(PACK_INFO).map((packName) => {
-								return (
-									<RectButton
-										Position={new UDim2(0, 0, 0, 0)}
-										AnchorPoint={new Vector2(0, 0)}
-										Size={new UDim2(0.275, 0, 0.95, 0)}
-										ButtonText={packName.upper()}
-										Callback={() => {
-											this.props.switchPack(packName);
-										}}
-									></RectButton>
-								);
-							})}
-						</frame>
+
 						<frame
 							{...Body}
-							Size={new UDim2(0.95, 0, 0.55, 0)}
-							Position={new UDim2(0.5, 0, 0.7, 0)}
-							AnchorPoint={new Vector2(0.5, 0.7)}
+							Size={new UDim2(0.95, 0, 0.7, 0)}
+							Position={new UDim2(0.5, 0, 0.55, 0)}
+							AnchorPoint={new Vector2(0.5, 0.55)}
 						>
 							<imagelabel ImageColor3={googleMaterial.innerBG2} {...RectBG}>
 								<scrollingframe
@@ -153,17 +114,11 @@ class Shop extends Roact.Component<UIProps, UIState> {
 									</uigridlayout>
 									{
 										// Display all the cards using the CardInfo prop
-										ObjectUtils.values(
-											PACK_INFO[this.props.currentPack as keyof typeof PACK_INFO],
-										).map((Item) => {
+										ObjectUtils.values(VIP_INFO).map((Item) => {
 											return (
 												<SwordShopItem
 													Text={Item.Name}
-													Percentage={
-														RARITIES[this.props.currentPack as keyof typeof RARITIES][
-															Item.Rarity as keyof typeof RARITIES.Alpha
-														]
-													}
+													Percentage={RARITIES.VIP[Item.Rarity as keyof typeof RARITIES.VIP]}
 													Model={this.modelsFolder?.WaitForChild(Item.Name, 10) as Model}
 													Rarity={Item.Rarity}
 												></SwordShopItem>
@@ -180,16 +135,11 @@ class Shop extends Roact.Component<UIProps, UIState> {
 							AnchorPoint={new Vector2(0.5, 0.975)}
 							Size={new UDim2(0.25, 0, 0.2, 0)}
 							ButtonText={
-								(this.state.discount === true &&
-									tostring(
-										math.floor(
-											PACK_PRICES[this.props.currentPack as keyof typeof PACK_PRICES] * 0.9,
-										),
-									)) ||
-								tostring(PACK_PRICES[this.props.currentPack as keyof typeof PACK_PRICES])
+								(this.state.discount === true && tostring(math.floor(PACK_PRICES.VIP * 0.9))) ||
+								tostring(PACK_PRICES.VIP)
 							}
 							Callback={() => {
-								shopService.PurchasePack(this.props.currentPack);
+								shopService.PurchasePack("VIP");
 							}}
 						></RectButton>
 						<uigradient {...whiteGradientProperties}></uigradient>
@@ -234,34 +184,20 @@ class Shop extends Roact.Component<UIProps, UIState> {
 }
 
 interface storeState {
-	toggleShop: shopState;
-	switchPack: shopState;
+	toggleVIPShop: shopState;
 }
 
-export = RoactRodux.connect(
-	function (state: storeState) {
-		const shopFrame = shopRef.getValue() as Frame;
-		if (shopFrame && state.toggleShop.toggle !== oldFadeIn) {
-			oldFadeIn = state.toggleShop.toggle;
-			// Update the frame's position when the toggle changes
-			state.toggleShop.toggle
-				? movingFadeAbsolute(shopFrame, true, new UDim2(0.5, 0, 0.4, 0), true)
-				: movingFadeAbsolute(shopFrame, false, new UDim2(0.5, 0, 0.1, 0), true);
-		}
+export = RoactRodux.connect((state: storeState) => {
+	const shopFrame = shopRef.getValue() as Frame;
+	if (shopFrame && state.toggleVIPShop.vipToggle !== oldFadeIn) {
+		oldFadeIn = state.toggleVIPShop.vipToggle;
+		// Update the frame's position when the toggle changes
+		state.toggleVIPShop.vipToggle
+			? movingFadeAbsolute(shopFrame, true, new UDim2(0.5, 0, 0.4, 0), true)
+			: movingFadeAbsolute(shopFrame, false, new UDim2(0.5, 0, 0.1, 0), true);
+	}
 
-		return {
-			toggle: state.toggleShop.toggle,
-			currentPack: state.switchPack.currentPack,
-		};
-	},
-	(dispatch) => {
-		return {
-			switchPack: (packName: string) => {
-				dispatch({
-					type: "switchPack",
-					payload: { pack: packName },
-				});
-			},
-		};
-	},
-)(Shop);
+	return {
+		toggle: state.toggleVIPShop.vipToggle,
+	};
+})(VIPShop);

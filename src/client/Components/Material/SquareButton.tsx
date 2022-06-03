@@ -1,8 +1,9 @@
-import Roact from "@rbxts/roact";
+import Roact, { Tree } from "@rbxts/roact";
 import { Players } from "@rbxts/services";
 import { RectShadow, RectBG, RippleFrame, RectContainer, SquareAspectRatio } from "client/UIProperties/RectUI";
 import { rippleEffect, tweenColor, tweenRotation, playSound } from "client/UIProperties/ButtonEffects";
 import { googleMaterial, gradientProperties } from "client/UIProperties/ColorSchemes";
+import hoverNotification from "../HoverNotification";
 
 interface UIProps {
 	Position: UDim2;
@@ -13,6 +14,7 @@ interface UIProps {
 	ButtonColor: Color3;
 	HoverColor: Color3;
 	ShadowColor: Color3;
+	HoverText: string;
 	Callback: () => void;
 }
 interface UIState {
@@ -21,10 +23,12 @@ interface UIState {
 class SquareButton extends Roact.Component<UIProps, UIState> {
 	buttonRef;
 	frameRef;
+	hoverNotificationTree: Tree | undefined;
 	constructor(props: UIProps) {
 		super(props);
 		this.buttonRef = Roact.createRef<ImageButton>();
 		this.frameRef = Roact.createRef<Frame>();
+		this.hoverNotificationTree = undefined;
 	}
 
 	state = {
@@ -71,6 +75,11 @@ class SquareButton extends Roact.Component<UIProps, UIState> {
 							const frame = this.frameRef.getValue();
 							if (frame) {
 								tweenRotation(frame, true);
+								const hoverElement = Roact.createElement(hoverNotification, {
+									text: this.props.HoverText,
+									isRotation: true,
+								});
+								this.hoverNotificationTree = Roact.mount(hoverElement, frame);
 							}
 						},
 						MouseLeave: (rbx) => {
@@ -78,6 +87,10 @@ class SquareButton extends Roact.Component<UIProps, UIState> {
 							const frame = this.frameRef.getValue();
 							if (frame) {
 								tweenRotation(frame, false);
+								if (this.hoverNotificationTree) {
+									Roact.unmount(this.hoverNotificationTree);
+									this.hoverNotificationTree = undefined;
+								}
 							}
 						},
 					}}

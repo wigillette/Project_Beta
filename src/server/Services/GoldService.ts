@@ -152,10 +152,10 @@ export const GoldService = Knit.CreateService({
 				if (humanoid) {
 					const player = Players.GetPlayerFromCharacter(char);
 					if (player && char.PrimaryPart) {
-						if (!MarketplaceService.UserOwnsGamePassAsync(player.UserId, 8453352)) {
+						if (!MarketplaceService.UserOwnsGamePassAsync(player.UserId, 48719460)) {
 							char.SetPrimaryPartCFrame(new CFrame(new Vector3(270.756, 75.248, -266.533)));
 							const debounce = this.LoungeDebounces.get(player);
-							if (debounce === false || !debounce) {
+							if (!debounce) {
 								this.LoungeDebounces.set(player, true);
 								spawn(() => {
 									SnackbarService.PushPlayer(

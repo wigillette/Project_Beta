@@ -44,9 +44,6 @@ const DatabaseService = Knit.CreateService({
 		GetAllSortingData(Player: Player) {
 			return this.Server.GetAllSortingData();
 		},
-		GetUserData(client: Player, player: Player) {
-			return this.Server.GetData(client, player);
-		},
 	},
 
 	GlobalWins: DataStoreService.GetOrderedDataStore("GlobalWins"),
@@ -306,6 +303,20 @@ const DatabaseService = Knit.CreateService({
 				print(err);
 				print(`Failed to load ${Player.Name}'s Arena Tickets Info`);
 			});
+
+		let globalKills = this.GlobalKills.GetAsync(tostring(Player.UserId));
+		if (globalKills === undefined) {
+			globalKills = 0;
+		}
+		let globalDeaths = this.GlobalDeaths.GetAsync(tostring(Player.UserId));
+		if (globalDeaths === undefined) {
+			globalDeaths = 0;
+		}
+		let globalWins = this.GlobalWins.GetAsync(tostring(Player.UserId));
+		if (globalWins === undefined) {
+			globalWins = 0;
+		}
+		SessionService.InitData(Player, globalKills, globalDeaths, globalWins);
 	},
 
 	SaveData(Player: Player) {
@@ -318,28 +329,6 @@ const DatabaseService = Knit.CreateService({
 				print(`Failed to save ${Player.Name}'s Data`);
 				print(err);
 			});
-	},
-
-	GetData(client: Player, player: Player) {
-		let userKills = 0;
-		const profileKills = this.GlobalKills.GetAsync(tostring(player.UserId));
-		if (profileKills !== undefined) {
-			userKills = profileKills;
-		}
-
-		let userWins = 0;
-		const profileWins = this.GlobalWins.GetAsync(tostring(player.UserId));
-		if (profileWins !== undefined) {
-			userWins = profileWins;
-		}
-
-		let userDeaths = 0;
-		const profileDeaths = this.GlobalDeaths.GetAsync(tostring(player.UserId));
-		if (profileDeaths !== undefined) {
-			userDeaths = profileDeaths;
-		}
-
-		return [userKills, userWins, userDeaths];
 	},
 
 	KnitInit() {

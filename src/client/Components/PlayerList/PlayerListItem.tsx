@@ -79,7 +79,7 @@ class PlayerListItem extends Roact.Component<UIProps, UIState> {
 						TextXAlignment={Enum.TextXAlignment.Right}
 						TextYAlignment={Enum.TextYAlignment.Bottom}
 					>
-						<uitextsizeconstraint MaxTextSize={16} MinTextSize={12}></uitextsizeconstraint>
+						<uitextsizeconstraint MaxTextSize={16} MinTextSize={6}></uitextsizeconstraint>
 					</textlabel>
 
 					<uigradient {...whiteGradientProperties}></uigradient>

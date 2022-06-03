@@ -61,6 +61,7 @@ class MenuButtons extends Roact.Component<UIProps, UIState> {
 								this.setState({ currentMenu: "Settings" });
 							}
 						}}
+						HoverText={"Change Settings"}
 					/>
 					<SquareButton
 						Position={new UDim2(1, 0, 1, 0)}
@@ -79,6 +80,7 @@ class MenuButtons extends Roact.Component<UIProps, UIState> {
 								this.setState({ currentMenu: "Twitter" });
 							}
 						}}
+						HoverText={"Redeem Codes"}
 					/>
 
 					<SquareButton
@@ -98,6 +100,7 @@ class MenuButtons extends Roact.Component<UIProps, UIState> {
 								this.setState({ currentMenu: "Inventory" });
 							}
 						}}
+						HoverText={"View Inventory"}
 					/>
 				</frame>
 				<imagebutton

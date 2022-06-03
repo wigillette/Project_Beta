@@ -40,6 +40,7 @@ class SpectateButton extends Roact.Component<UIProps, UIState> {
 							this.props.toggleSpectate();
 						}
 					}}
+					HoverText={"Spectate"}
 				/>
 			</frame>
 		);

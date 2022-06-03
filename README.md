@@ -136,9 +136,9 @@
 - [x] Gamepass UI
 - [x] Playerlist UI
 - [x] Spectate UI
-- [ ] VIP Shop UI
+- [x] VIP Shop UI
 - [x] Arena Tickets UI
-- [ ] Hover Notifications
+- [x] Hover Notifications
 
 > Surface Components
 - [x] Profile Board

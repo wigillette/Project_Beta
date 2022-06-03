@@ -1,9 +1,10 @@
-import Roact from "@rbxts/roact";
+import Roact, { Tree } from "@rbxts/roact";
 import { Players } from "@rbxts/services";
 import { RippleFrame } from "client/UIProperties/RectUI";
 import { CircShadow, CircBG, CircContainer, CircText } from "client/UIProperties/CircularUI";
 import { rippleEffect, tweenColor, playSound } from "client/UIProperties/ButtonEffects";
 import { googleMaterial, gradientProperties, mediumGradientProperties } from "client/UIProperties/ColorSchemes";
+import hoverNotification from "../HoverNotification";
 
 interface UIProps {
 	Position: UDim2;
@@ -19,10 +20,12 @@ interface UIState {
 class CircButton extends Roact.Component<UIProps, UIState> {
 	buttonRef;
 	frameRef;
+	hoverNotificationTree: Tree | undefined;
 	constructor(props: UIProps) {
 		super(props);
 		this.buttonRef = Roact.createRef<ImageButton>();
 		this.frameRef = Roact.createRef<Frame>();
+		this.hoverNotificationTree = undefined;
 	}
 
 	state = {
@@ -68,9 +71,21 @@ class CircButton extends Roact.Component<UIProps, UIState> {
 						MouseEnter: (rbx) => {
 							playSound("Hover");
 							tweenColor(rbx, googleMaterial.buttonHover);
+							const frame = this.frameRef.getValue();
+							if (frame) {
+								const hoverElement = Roact.createElement(hoverNotification, {
+									text: "Purchase Perks",
+									isRotation: false,
+								});
+								this.hoverNotificationTree = Roact.mount(hoverElement, frame.Parent);
+							}
 						},
 						MouseLeave: (rbx) => {
 							tweenColor(rbx, googleMaterial.buttonColor);
+							if (this.hoverNotificationTree) {
+								Roact.unmount(this.hoverNotificationTree);
+								this.hoverNotificationTree = undefined;
+							}
 						},
 					}}
 				>
