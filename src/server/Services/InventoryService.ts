@@ -33,10 +33,28 @@ export const InventoryService = Knit.CreateService({
 	// Add an item to the user's inventory
 	AddToInventory(Player: Player, ItemName: string, Category: string) {
 		const playerInventory = this.FetchInventory(Player);
-		playerInventory[Category as keyof typeof playerInventory].set(ItemName, "");
-		this.PlayerInventories.set(Player, playerInventory);
-		this.UpdateInventoryData(Player, playerInventory);
-		this.Client.InventoryChanged.Fire(Player, playerInventory);
+		if (Category in playerInventory) {
+			playerInventory[Category as keyof typeof playerInventory].set(ItemName, "");
+			this.PlayerInventories.set(Player, playerInventory);
+			this.UpdateInventoryData(Player, playerInventory);
+			this.Client.InventoryChanged.Fire(Player, playerInventory);
+		}
+	},
+
+	RemoveFromInventory(Player: Player, ItemName: string, Category: string, updateClient: boolean) {
+		const playerInventory = this.FetchInventory(Player);
+		if (Category in playerInventory) {
+			const categoryItems = playerInventory[Category as keyof typeof playerInventory];
+			if (categoryItems.has(ItemName)) {
+				categoryItems.delete(ItemName);
+				playerInventory[Category as keyof typeof playerInventory] = categoryItems;
+				this.PlayerInventories.set(Player, playerInventory);
+				this.UpdateInventoryData(Player, playerInventory);
+				if (updateClient) {
+					this.Client.InventoryChanged.Fire(Player, playerInventory);
+				}
+			}
+		}
 	},
 
 	// Check if an item is in the user's inventory

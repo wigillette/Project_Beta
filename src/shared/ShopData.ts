@@ -1,9 +1,13 @@
+import Object from "@rbxts/object-utils";
+
 export const PACK_PRICES = {
 	Alpha: 150,
 	Beta: 500,
 	Gamma: 1000,
 	VIP: 1500,
 };
+
+export const RARITY_NAMES = ["Common", "Uncommon", "Rare", "Epic", "Legendary"];
 
 export const RARITIES = {
 	Alpha: {
@@ -192,4 +196,19 @@ export const PACK_INFO = {
 			Rarity: "Legendary",
 		},
 	],
+};
+
+export const GET_RARITY = (sword: string) => {
+	let rarity: string | undefined = undefined;
+	Object.entries(PACK_INFO).forEach((pack) => {
+		if (rarity === undefined) {
+			pack[1].forEach((swordEntry) => {
+				if (rarity === undefined && swordEntry.Name === sword) {
+					rarity = swordEntry.Rarity;
+				}
+			});
+		}
+	});
+
+	return rarity;
 };
