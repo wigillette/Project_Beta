@@ -1,5 +1,4 @@
 import Rodux from "@rbxts/rodux";
-import { PROFILE_FORMAT, INITIAL_STATS } from "shared/LevelInfo";
 
 interface Action {
 	type: string;
@@ -12,7 +11,7 @@ export interface craftingState {
 	selectedSwords: string[];
 }
 
-export const profileReducer = Rodux.createReducer(
+export const craftingReducer = Rodux.createReducer(
 	{ toggle: false, currentRarity: "Common", selectedSwords: [] as string[] },
 	{
 		emptySelectedSwords: (state: craftingState, action: Action) => {

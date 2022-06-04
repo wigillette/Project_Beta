@@ -29,7 +29,6 @@ interface UIProps {
 	playerInventory: Map<string, Model | Tool | "">;
 	toggle: boolean;
 	switchRarity: (rarityName: string) => void;
-	emptySelectedSwords: () => void;
 }
 
 let oldFadeIn = true;
@@ -53,12 +52,12 @@ class CraftingContainer extends Roact.Component<UIProps> {
 		return (
 			<frame
 				{...RectContainer}
-				Size={new UDim2(0.4, 0, 0.5, 0)}
+				Size={new UDim2(0.5, 0, 0.5, 0)}
 				AnchorPoint={new Vector2(0.5, 0.5)}
 				Position={new UDim2(0.5, 0, 0.5, 0)}
 				Ref={craftingRef}
 			>
-				<uiaspectratioconstraint {...SquareAspectRatio} AspectRatio={1.25}></uiaspectratioconstraint>
+				<uiaspectratioconstraint {...SquareAspectRatio} AspectRatio={1.5}></uiaspectratioconstraint>
 				<frame
 					Size={new UDim2(1, 0, 1, 0)}
 					AnchorPoint={new Vector2(0.5, 0.5)}
@@ -72,9 +71,9 @@ class CraftingContainer extends Roact.Component<UIProps> {
 								<textlabel
 									Text={"Crafting"}
 									TextStrokeTransparency={0.8}
-									AnchorPoint={new Vector2(0.5, 0.05)}
-									Position={new UDim2(0.5, 0, 0.05, 0)}
-									Size={new UDim2(0.95, 0, 0.45, 0)}
+									AnchorPoint={new Vector2(0.5, 0.5)}
+									Position={new UDim2(0.5, 0, 0.5, 0)}
+									Size={new UDim2(0.95, 0, 0.9, 0)}
 									TextColor3={googleMaterial.headerFont}
 									{...RectText}
 									Font={"GothamBold"}
@@ -84,7 +83,7 @@ class CraftingContainer extends Roact.Component<UIProps> {
 						</frame>
 						<frame
 							{...RectContainer}
-							Size={new UDim2(0.95, 0, 0.125, 0)}
+							Size={new UDim2(0.95, 0, 0.175, 0)}
 							AnchorPoint={new Vector2(0.5, 0.175)}
 							Position={new UDim2(0.5, 0, 0.175, 0)}
 						>
@@ -92,7 +91,7 @@ class CraftingContainer extends Roact.Component<UIProps> {
 								FillDirection={Enum.FillDirection.Horizontal}
 								HorizontalAlignment={Enum.HorizontalAlignment.Center}
 								VerticalAlignment={Enum.VerticalAlignment.Center}
-								Padding={new UDim(0.075, 0)}
+								Padding={new UDim(0.03, 0)}
 								SortOrder={Enum.SortOrder.Name}
 							></uilistlayout>
 							{RARITY_NAMES.map((rarityName) => {
@@ -112,25 +111,28 @@ class CraftingContainer extends Roact.Component<UIProps> {
 						<frame
 							{...RectContainer}
 							Size={new UDim2(0.95, 0, 0.125, 0)}
-							AnchorPoint={new Vector2(0.5, 0.325)}
-							Position={new UDim2(0.5, 0, 0.325, 0)}
+							AnchorPoint={new Vector2(0.5, 0.32)}
+							Position={new UDim2(0.5, 0, 0.32, 0)}
 						>
-							<uilistlayout
-								FillDirection={Enum.FillDirection.Horizontal}
-								HorizontalAlignment={Enum.HorizontalAlignment.Center}
-								VerticalAlignment={Enum.VerticalAlignment.Center}
-								Padding={new UDim(0.075, 0)}
-								SortOrder={Enum.SortOrder.Name}
-							></uilistlayout>
-							{this.props.selectedSwords.map((swordName) => {
-								return <frame></frame>;
-							})}
+							<imagelabel ImageColor3={googleMaterial.innerBG2} {...RectBG}>
+								<uigradient {...gradientProperties}></uigradient>
+								<uilistlayout
+									FillDirection={Enum.FillDirection.Horizontal}
+									HorizontalAlignment={Enum.HorizontalAlignment.Center}
+									VerticalAlignment={Enum.VerticalAlignment.Center}
+									Padding={new UDim(0.075, 0)}
+									SortOrder={Enum.SortOrder.Name}
+								></uilistlayout>
+								{this.props.selectedSwords.map((swordName) => {
+									return <frame></frame>;
+								})}
+							</imagelabel>
 						</frame>
 						<frame
 							{...Body}
-							Size={new UDim2(0.95, 0, 0.55, 0)}
-							Position={new UDim2(0.5, 0, 0.7, 0)}
-							AnchorPoint={new Vector2(0.5, 0.7)}
+							Size={new UDim2(0.95, 0, 0.375, 0)}
+							Position={new UDim2(0.5, 0, 0.725, 0)}
+							AnchorPoint={new Vector2(0.5, 0.725)}
 						>
 							<imagelabel ImageColor3={googleMaterial.innerBG2} {...RectBG}>
 								<scrollingframe

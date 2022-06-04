@@ -17,6 +17,7 @@ import SpectateButton from "./Spectate/SpectateButton";
 import SpectateContainer from "./Spectate/SpectateContainer";
 import ArenaTickets from "./ArenaTickets";
 import VIPShop from "./VIPShop/VIPShop";
+import CraftingContainer from "./Crafting/CraftingContainer";
 
 const Main = () => {
 	return (
@@ -39,6 +40,7 @@ const Main = () => {
 			<SpectateContainer />
 			<ArenaTickets />
 			<VIPShop />
+			<CraftingContainer />
 		</screengui>
 	);
 };

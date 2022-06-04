@@ -8,6 +8,7 @@ export const locations = [
 	[Workspace.WaitForChild("Location", 10), "toggleShop"],
 	[Workspace.WaitForChild("Location5", 10), "toggleDailyReward"],
 	[Workspace.WaitForChild("Location6", 10), "toggleVIPShop"],
+	[Workspace.WaitForChild("Location7", 10), "toggleCrafting"],
 	[
 		(Workspace.FindFirstChild("HalfWayChest") && (Workspace.WaitForChild("HalfWayChest") as Model).PrimaryPart) ||
 			undefined,

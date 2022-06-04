@@ -16,6 +16,7 @@ import { profileBoardReducer } from "./ProfileBoardReducer";
 import { advertisementReducer } from "./AdvertisementReducer";
 import { spectateReducer } from "./SpectateReducer";
 import { ticketReducer } from "./TicketReducer";
+import { craftingReducer } from "./CraftingReducer";
 
 const reducer = Rodux.combineReducers({
 	toggleShop: shopReducer,
@@ -66,6 +67,11 @@ const reducer = Rodux.combineReducers({
 	viewBadges: profileBoardReducer,
 	getTickets: ticketReducer,
 	toggleVIPShop: shopReducer,
+	selectSword: craftingReducer,
+	removeSword: craftingReducer,
+	toggleCrafting: craftingReducer,
+	switchRarity: craftingReducer,
+	emptySelectedSwords: craftingReducer,
 });
 
 export default reducer;
