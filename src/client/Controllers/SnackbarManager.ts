@@ -12,7 +12,7 @@ class SnackbarManager {
 	public pushNotification(alert: string) {
 		spawn(() => {
 			while (this.isActive) {
-				wait(2);
+				wait(1);
 			}
 			this.isActive = true;
 			const newItem = Roact.createElement(SnackbarItem, { Alert: alert });
@@ -22,7 +22,7 @@ class SnackbarManager {
 			}
 			// Mount the new tree
 			this.currentTree = Roact.mount(newItem, this.snackbarContainer);
-			wait(3);
+			wait(2);
 			this.isActive = false;
 		});
 	}

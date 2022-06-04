@@ -78,7 +78,7 @@ class SnackbarItem extends Roact.Component<UIProps> {
 				this.setUpItem();
 				wait(0.4);
 				this.pushItem();
-				wait(2.5);
+				wait(1.5);
 				this.popItem();
 			})();
 		}

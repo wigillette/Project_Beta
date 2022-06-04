@@ -49,7 +49,7 @@
 - [x] Betting Reducer
 - [x] Results Reducer
 - [x] PlayerList Reducer
-- [ ] Crafting Reducer
+- [x] Crafting Reducer
 
 > Data Storage
 - [x] SQL Database vs. Datastore2
@@ -95,7 +95,7 @@
 - [x] Friend Service
 - [x] Badge Service
 - [x] Arena Ticket Service
-- [ ] Crafting Service
+- [x] Crafting Service
 
 > Shared
 - [x] Sword Data
@@ -142,7 +142,10 @@
 - [x] Arena Tickets Container UI
 - [x] Hover Notifications
 - [ ] Arena Ticket Info UI
-- [ ] Crafting UI
+- [x] Crafting UI
+- [ ] Crafting Item UI
+- [ ] Crafting Selected UI
+- [ ] Ping UI
 
 > Surface Components
 - [x] Profile Board

@@ -21,14 +21,18 @@ import { registerGridDynamicScrolling } from "../../UIProperties/DynamicScrollin
 import { RARITY_NAMES, GET_RARITY } from "shared/ShopData";
 import { MarketplaceService, ReplicatedStorage, Players } from "@rbxts/services";
 import RectButton from "../Material/RectButton";
+import Card from "../Material/Card";
 import { inventoryState } from "client/Rodux/Reducers/InventoryReducer";
+import { pushNotification } from "client/Services/SnackbarService";
+import SwordItem from "./SwordItem";
 
 interface UIProps {
 	currentRarity: string;
-	selectedSwords: string[];
+	swordsSelected: string[];
 	playerInventory: Map<string, Model | Tool | "">;
 	toggle: boolean;
 	switchRarity: (rarityName: string) => void;
+	removeSword: (swordName: string) => void;
 }
 
 let oldFadeIn = true;
@@ -83,7 +87,7 @@ class CraftingContainer extends Roact.Component<UIProps> {
 						</frame>
 						<frame
 							{...RectContainer}
-							Size={new UDim2(0.95, 0, 0.175, 0)}
+							Size={new UDim2(0.95, 0, 0.085, 0)}
 							AnchorPoint={new Vector2(0.5, 0.175)}
 							Position={new UDim2(0.5, 0, 0.175, 0)}
 						>
@@ -110,7 +114,7 @@ class CraftingContainer extends Roact.Component<UIProps> {
 						</frame>
 						<frame
 							{...RectContainer}
-							Size={new UDim2(0.95, 0, 0.125, 0)}
+							Size={new UDim2(0.95, 0, 0.175, 0)}
 							AnchorPoint={new Vector2(0.5, 0.32)}
 							Position={new UDim2(0.5, 0, 0.32, 0)}
 						>
@@ -123,7 +127,8 @@ class CraftingContainer extends Roact.Component<UIProps> {
 									Padding={new UDim(0.075, 0)}
 									SortOrder={Enum.SortOrder.Name}
 								></uilistlayout>
-								{this.props.selectedSwords.map((swordName) => {
+								{ObjectUtils.values(this.props.swordsSelected).map((swordName) => {
+									print(swordName);
 									return <frame></frame>;
 								})}
 							</imagelabel>
@@ -153,7 +158,14 @@ class CraftingContainer extends Roact.Component<UIProps> {
 												return GET_RARITY(sword) === this.props.currentRarity;
 											})
 											.map((Item) => {
-												return <frame></frame>;
+												return (
+													<SwordItem
+														swordName={Item}
+														Model={
+															this.modelsFolder?.WaitForChild(Item, 10) as Model | Tool
+														}
+													/>
+												);
 											})
 									}
 								</scrollingframe>
@@ -167,7 +179,7 @@ class CraftingContainer extends Roact.Component<UIProps> {
 							Size={new UDim2(0.25, 0, 0.2, 0)}
 							ButtonText={"Craft Swords"}
 							Callback={() => {
-								CraftingService.CraftSword(this.props.selectedSwords);
+								CraftingService.CraftSword(this.props.swordsSelected);
 							}}
 						></RectButton>
 						<uigradient {...whiteGradientProperties}></uigradient>
@@ -185,20 +197,6 @@ class CraftingContainer extends Roact.Component<UIProps> {
 		if (grid && scroll) {
 			const connection = registerGridDynamicScrolling(scroll, grid);
 			this.connections.push(connection);
-		}
-	}
-
-	protected didUpdate(previousProps: UIProps): void {
-		if (this.props.toggle === true && previousProps.toggle !== this.props.toggle) {
-			spawn(() => {
-				const response = pcall(() => {
-					return MarketplaceService.UserOwnsGamePassAsync(Players.LocalPlayer.UserId, 8453352);
-				});
-
-				if (response[0]) {
-					this.setState({ discount: response[1] });
-				}
-			});
 		}
 	}
 
@@ -230,10 +228,12 @@ export = RoactRodux.connect(
 				: movingFadeAbsolute(craftingFrame, false, new UDim2(0.5, 0, 0.1, 0), true);
 		}
 
+		print(state.selectSword.selectedSwords);
+
 		return {
 			toggle: state.toggleCrafting.toggle,
 			currentRarity: state.switchRarity.currentRarity,
-			selectedSwords: state.selectSword.selectedSwords,
+			swordsSelected: state.selectSword.selectedSwords,
 			playerInventory: state.updateInventory.inventory.Swords,
 		};
 	},
@@ -243,6 +243,13 @@ export = RoactRodux.connect(
 				dispatch({
 					type: "switchRarity",
 					payload: { newRarity: rarityName },
+				});
+			},
+
+			removeSword: (swordName: string) => {
+				dispatch({
+					type: "removeSword",
+					payload: { selectedSword: swordName },
 				});
 			},
 		};
