@@ -16,12 +16,14 @@ const TradingService = Knit.CreateService({
 	TradingConnections: [] as Player[][],
 	EligiblePlayers: [] as Player[],
 	ItemSelections: new Map<Player, string[]>(),
+	PlayerRequests: new Map<Player, Player[]>(),
 
 	Client: {
 		SelectedChanged: new RemoteSignal<(player1Selected: string[], player2Selected: string[]) => void>(),
 		TradeStarted: new RemoteSignal<(player1Inventory: string[], player2Inventory: string[]) => void>(),
 		TradeEnded: new RemoteSignal<() => void>(),
 		PlayersChanged: new RemoteSignal<(players: Player[]) => void>(),
+		RequestsChanged: new RemoteSignal<(playerRequests: Player[]) => void>(),
 		AddPlayer(client: Player) {
 			this.Server.AddPlayer(client);
 		},
@@ -40,10 +42,47 @@ const TradingService = Knit.CreateService({
 		AcceptTrade(client: Player) {
 			this.Server.AcceptTrade(client);
 		},
+		SendRequest(client: Player, recipient: Player) {
+			this.Server.SendRequest(client, recipient);
+		},
+		DeclineRequest(client: Player, sender: Player) {
+			this.Server.DeclineRequest(client, sender);
+		},
+	},
+
+	DeclineRequest(recipient: Player, sender: Player) {
+		const recipientRequests = this.PlayerRequests.get(recipient);
+
+		if (recipientRequests) {
+			const senderIndex = recipientRequests.indexOf(sender);
+			if (senderIndex !== -1) {
+				recipientRequests.remove(senderIndex);
+				this.PlayerRequests.set(recipient, recipientRequests);
+				this.Client.RequestsChanged.Fire(recipient, recipientRequests);
+				SnackbarService.PushPlayer(sender, `${recipient.Name} declined your trade request.`);
+			}
+		}
+	},
+
+	SendRequest(sender: Player, recipient: Player) {
+		const recipientRequests = this.PlayerRequests.get(recipient);
+		if (recipientRequests && !recipientRequests.includes(sender)) {
+			const isTradeConnection = this.GetPlayer2(recipient);
+			if (!isTradeConnection) {
+				const newRequests = [...recipientRequests, sender];
+				this.PlayerRequests.set(recipient, newRequests);
+				this.Client.RequestsChanged.Fire(recipient, newRequests);
+			} else {
+				SnackbarService.PushPlayer(sender, `${recipient.Name} is currently in a trade!`);
+			}
+		} else {
+			SnackbarService.PushPlayer(sender, `Already sent request to ${recipient.Name}`);
+		}
 	},
 
 	AddPlayer(client: Player) {
 		if (!this.EligiblePlayers.includes(client)) {
+			this.PlayerRequests.set(client, []);
 			this.EligiblePlayers.push(client);
 			this.Client.PlayersChanged.FireAll(this.EligiblePlayers);
 		}
@@ -52,6 +91,7 @@ const TradingService = Knit.CreateService({
 	RemovePlayer(client: Player) {
 		const playerIndex = this.EligiblePlayers.indexOf(client);
 		if (playerIndex !== -1) {
+			this.PlayerRequests.set(client, []);
 			this.EligiblePlayers.remove(playerIndex);
 			this.Client.PlayersChanged.FireAll(this.EligiblePlayers);
 		}
@@ -84,15 +124,37 @@ const TradingService = Knit.CreateService({
 	},
 
 	InitiateTrade(player1: Player, player2: Player) {
-		const entry1 = [player1, player2];
-		const entry2 = [player2, player1];
 		if (
-			!this.TradingConnections.includes(entry1) &&
-			!this.TradingConnections.includes(entry2) &&
+			!this.GetPlayer2(player1) &&
+			!this.GetPlayer2(player2) &&
 			this.EligiblePlayers.includes(player1) &&
 			this.EligiblePlayers.includes(player2)
 		) {
-			this.TradingConnections.push(entry1);
+			this.TradingConnections.push([player1, player2]);
+
+			const player1Requests = this.PlayerRequests.get(player1);
+			const player2Requests = this.PlayerRequests.get(player2);
+
+			// Remove the old requests now that the trade has started
+			if (player1Requests) {
+				const player2Index = player1Requests.indexOf(player2);
+				if (player2Index !== -1) {
+					player1Requests.remove(player2Index);
+					this.PlayerRequests.set(player1, player1Requests);
+					this.Client.RequestsChanged.Fire(player1, player1Requests);
+				}
+			}
+
+			if (player2Requests) {
+				const player1Index = player2Requests.indexOf(player1);
+				if (player1Index !== -1) {
+					player2Requests.remove(player1Index);
+					this.PlayerRequests.set(player2, player2Requests);
+					this.Client.RequestsChanged.Fire(player2, player2Requests);
+				}
+			}
+
+			// Update the inventories on the client
 			const player1Inventory = InventoryService.FetchInventory(player1).Swords;
 			const player2Inventory = InventoryService.FetchInventory(player2).Swords;
 			if (player1) {
@@ -106,6 +168,8 @@ const TradingService = Knit.CreateService({
 			} else {
 				this.EndTrade(player1);
 			}
+		} else {
+			SnackbarService.PushPlayer(player1, `Failed to start trade with ${player2}.`);
 		}
 	},
 

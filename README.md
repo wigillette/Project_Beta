@@ -196,7 +196,6 @@
 - [x] Refresh ODS leaderboards after a certain number of changes
 
 > Future Updates
-- [ ] Trading
 - [ ] Guilds
 - [ ] Pets?
 - [ ] Elixirs?
