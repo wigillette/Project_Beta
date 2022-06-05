@@ -482,7 +482,6 @@ const MatchService = Knit.CreateService({
 
 		Players.PlayerAdded.Connect((player: Player) => {
 			// Leaderstats Stuff Below
-			print("HERE");
 			this.Participants.set(player, true);
 
 			const leaderstats = new Instance("Folder");

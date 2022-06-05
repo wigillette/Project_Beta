@@ -12,6 +12,7 @@ interface UIProps {
 	Position: UDim2;
 	AnchorPoint: Vector2;
 	onClick: (state: boolean) => void;
+	disallowClick?: boolean;
 	initialToggle: boolean;
 }
 
@@ -93,39 +94,46 @@ class ToggleButton extends Roact.Component<UIProps, UIState> {
 								DominantAxis={Enum.DominantAxis.Width}
 								AspectType={Enum.AspectType.ScaleWithParentSize}
 							></uiaspectratioconstraint>
-							<imagebutton
-								ImageColor3={Color3.fromRGB(255, 255, 255)}
-								{...CircBG}
-								ZIndex={5}
-								Event={{
-									MouseEnter: (rbx: ImageButton) => {
-										tweenColor(rbx, Color3.fromRGB(250, 250, 250));
-									},
-									MouseLeave: (rbx: ImageButton) => {
-										tweenColor(rbx, Color3.fromRGB(255, 255, 255));
-									},
-									MouseButton1Click: (rbx: ImageButton) => {
-										const buttonFrame = this.buttonFrameRef.getValue();
-										const client = Players.LocalPlayer;
-										const mouse = client.GetMouse();
-										const shadow = this.shadowRef.getValue();
 
-										if (buttonFrame && shadow) {
-											const finalPos =
-												(this.state.toggle &&
-													new UDim2(1, -buttonFrame.AbsoluteSize.X, 0, 0)) ||
-												new UDim2(0, 0, 0, 0);
-											rippleEffect(buttonFrame, mouse);
-											tweenPosAbsolute(buttonFrame, finalPos);
-											tweenTransparencyAbsolute(shadow, this.state.toggle);
-										}
-										this.setState({ toggle: !this.state.toggle });
-										this.props.onClick(!this.state.toggle);
-									},
-								}}
-							>
-								<uigradient {...whiteGradientProperties}></uigradient>
-							</imagebutton>
+							{(!this.props.disallowClick && (
+								<imagebutton
+									ImageColor3={Color3.fromRGB(255, 255, 255)}
+									{...CircBG}
+									ZIndex={5}
+									Event={{
+										MouseEnter: (rbx: ImageButton) => {
+											tweenColor(rbx, Color3.fromRGB(250, 250, 250));
+										},
+										MouseLeave: (rbx: ImageButton) => {
+											tweenColor(rbx, Color3.fromRGB(255, 255, 255));
+										},
+										MouseButton1Click: (rbx: ImageButton) => {
+											const buttonFrame = this.buttonFrameRef.getValue();
+											const client = Players.LocalPlayer;
+											const mouse = client.GetMouse();
+											const shadow = this.shadowRef.getValue();
+
+											if (buttonFrame && shadow) {
+												const finalPos =
+													(this.state.toggle &&
+														new UDim2(1, -buttonFrame.AbsoluteSize.X, 0, 0)) ||
+													new UDim2(0, 0, 0, 0);
+												rippleEffect(buttonFrame, mouse);
+												tweenPosAbsolute(buttonFrame, finalPos);
+												tweenTransparencyAbsolute(shadow, this.state.toggle);
+											}
+											this.setState({ toggle: !this.state.toggle });
+											this.props.onClick(!this.state.toggle);
+										},
+									}}
+								>
+									<uigradient {...whiteGradientProperties}></uigradient>
+								</imagebutton>
+							)) || (
+								<imagelabel ImageColor3={Color3.fromRGB(255, 255, 255)} {...CircBG} ZIndex={5}>
+									<uigradient {...whiteGradientProperties}></uigradient>
+								</imagelabel>
+							)}
 							<imagelabel ImageColor3={googleMaterial.cardShadow} {...CircShadow} ZIndex={4}></imagelabel>
 						</frame>
 						<imagelabel
@@ -145,6 +153,23 @@ class ToggleButton extends Roact.Component<UIProps, UIState> {
 				</frame>
 			</frame>
 		);
+	}
+
+	protected didUpdate(previousProps: UIProps, previousState: UIState): void {
+		if (this.props.disallowClick) {
+			if (previousProps.initialToggle !== this.props.initialToggle) {
+				const buttonFrame = this.buttonFrameRef.getValue();
+				const shadow = this.shadowRef.getValue();
+
+				if (buttonFrame && shadow) {
+					const finalPos =
+						(this.props.initialToggle && new UDim2(1, -buttonFrame.AbsoluteSize.X, 0, 0)) ||
+						new UDim2(0, 0, 0, 0);
+					tweenPosAbsolute(buttonFrame, finalPos);
+					tweenTransparencyAbsolute(shadow, this.props.initialToggle);
+				}
+			}
+		}
 	}
 }
 

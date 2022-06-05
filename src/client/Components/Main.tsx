@@ -18,6 +18,8 @@ import SpectateContainer from "./Spectate/SpectateContainer";
 import ArenaTickets from "./ArenaTickets";
 import VIPShop from "./VIPShop/VIPShop";
 import CraftingContainer from "./Crafting/CraftingContainer";
+import RequestsContainer from "./Trading/RequestsContainer";
+import TradeContainer from "./Trading/TradeContainer";
 
 const Main = () => {
 	return (
@@ -41,6 +43,8 @@ const Main = () => {
 			<ArenaTickets />
 			<VIPShop />
 			<CraftingContainer />
+			<RequestsContainer />
+			<TradeContainer />
 		</screengui>
 	);
 };

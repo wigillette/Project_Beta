@@ -9,6 +9,8 @@ class TouchManager {
 	action: string | (() => void);
 	trigger: BasePart;
 	open: boolean;
+	enterCallback: (() => void) | undefined;
+	leaveCallback: (() => void) | undefined;
 
 	public displayUI() {
 		// Display the UI when the player is in range
@@ -22,6 +24,10 @@ class TouchManager {
 					Store.dispatch({
 						type: this.action as string,
 					});
+
+					if (this.enterCallback) {
+						this.enterCallback();
+					}
 				}
 			} else {
 				(this.action as () => void)();
@@ -41,6 +47,10 @@ class TouchManager {
 					Store.dispatch({
 						type: this.action as string,
 					});
+
+					if (this.leaveCallback) {
+						this.leaveCallback();
+					}
 				}
 			}
 		}
@@ -75,11 +85,18 @@ class TouchManager {
 		return distance;
 	}
 
-	constructor(trigger: BasePart, action: string | (() => void)) {
+	constructor(
+		trigger: BasePart,
+		action: string | (() => void),
+		enterCallback?: () => void,
+		leaveCallback?: () => void,
+	) {
 		// Linking a part to a UI; display the UI on close proximity to the part
 		this.trigger = trigger;
 		this.action = action;
 		this.open = false;
+		this.enterCallback = enterCallback || undefined;
+		this.leaveCallback = leaveCallback || undefined;
 	}
 }
 

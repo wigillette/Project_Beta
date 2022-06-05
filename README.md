@@ -50,7 +50,7 @@
 - [x] Results Reducer
 - [x] PlayerList Reducer
 - [x] Crafting Reducer
-- [ ] Trading Reducer
+- [x] Trading Reducer
 
 > Data Storage
 - [x] SQL Database vs. Datastore2
@@ -148,7 +148,7 @@
 - [x] Crafting Item UI
 - [x] Crafting Selected UI
 - [ ] Ping UI
-- [ ] Trading UI
+- [x] Trading UI
 
 > Surface Components
 - [x] Profile Board
@@ -194,6 +194,15 @@
 - [x] Better way of collecting badge info on server
 - [x] Update profile service to contain user KDR stats
 - [x] Refresh ODS leaderboards after a certain number of changes
+- [ ] Refunding bets
+- [x] Trading confirmation
+- [ ] Disable trading default sword, trading with onesself
+- [ ] Hide Menu buttons on entering touch
+- [ ] Fix scroll frame on map selection
+- [ ] Add error handling to character load for MVPs
+- [ ] Make characters no can-collide in lobby
+- [ ] Add multiplicity to crafting/trading
+- [ ] Make snackbar service faster by potentially stacking notifications?
 
 > Future Updates
 - [ ] Guilds

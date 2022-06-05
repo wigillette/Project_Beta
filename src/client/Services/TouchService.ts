@@ -19,8 +19,10 @@ export default function init() {
 		// Initialize each trigger
 		const triggerPart = trigger[0] as BasePart | undefined;
 		const action = trigger[1] as string | (() => void);
+		const enterCallback = trigger[2] as (() => void) | undefined;
+		const leaveCallback = trigger[3] as (() => void) | undefined;
 		if (triggerPart && action) {
-			const triggerHook = new TouchManager(triggerPart, action);
+			const triggerHook = new TouchManager(triggerPart, action, enterCallback, leaveCallback);
 			triggerHooks.push(triggerHook);
 		}
 	});

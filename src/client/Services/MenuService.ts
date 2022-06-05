@@ -1,5 +1,3 @@
-import Roact from "@rbxts/roact";
-import { Players, Workspace } from "@rbxts/services";
 import Store from "client/Rodux/Store";
 
 // Run on client service startup

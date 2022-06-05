@@ -31,6 +31,7 @@ import GamepassContainer from "./Components/Surface/Gamepasses/ShopContainer";
 import ObbyChestService from "./Services/ObbyChestService";
 import SpectateService from "./Services/SpectateService";
 import LobbyAnimationsClient from "./Services/LobbyAnimations";
+import TradingClient from "./Services/TradingService";
 
 const playerGui = Players.LocalPlayer.WaitForChild("PlayerGui") as PlayerGui;
 
@@ -219,3 +220,4 @@ ObbyChestService.init();
 SpectateService.init();
 LobbyAnimationsClient.init();
 TicketService.init();
+TradingClient.init();

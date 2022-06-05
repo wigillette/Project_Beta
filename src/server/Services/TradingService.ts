@@ -17,6 +17,7 @@ const TradingService = Knit.CreateService({
 	EligiblePlayers: [] as Player[],
 	ItemSelections: new Map<Player, string[]>(),
 	PlayerRequests: new Map<Player, Player[]>(),
+	TradingConfirmations: new Map<Player, boolean>(),
 
 	Client: {
 		SelectedChanged: new RemoteSignal<(player1Selected: string[], player2Selected: string[]) => void>(),
@@ -24,14 +25,18 @@ const TradingService = Knit.CreateService({
 		TradeEnded: new RemoteSignal<() => void>(),
 		PlayersChanged: new RemoteSignal<(players: Player[]) => void>(),
 		RequestsChanged: new RemoteSignal<(playerRequests: Player[]) => void>(),
+		ConfirmationsChanged: new RemoteSignal<(player1Confirmation: boolean, player2Confirmation: boolean) => void>(),
 		AddPlayer(client: Player) {
 			this.Server.AddPlayer(client);
 		},
 		RemovePlayer(client: Player) {
 			this.Server.RemovePlayer(client);
 		},
-		UpdateSelectedItems(client: Player, clientSelected: string[]) {
-			this.Server.UpdateSelectedItems(client, clientSelected);
+		SelectItem(client: Player, clientSelected: string) {
+			this.Server.SelectItem(client, clientSelected);
+		},
+		RemoveItem(client: Player, itemToRemove: string) {
+			this.Server.RemoveItem(client, itemToRemove);
 		},
 		InitiateTrade(client: Player, player2: Player) {
 			this.Server.InitiateTrade(client, player2);
@@ -48,6 +53,25 @@ const TradingService = Knit.CreateService({
 		DeclineRequest(client: Player, sender: Player) {
 			this.Server.DeclineRequest(client, sender);
 		},
+		ToggleConfirmation(client: Player) {
+			this.Server.ToggleConfirmation(client);
+		},
+	},
+
+	ToggleConfirmation(client: Player) {
+		const confirmation = this.TradingConfirmations.get(client);
+		let newConfirmation = false;
+		if (confirmation !== undefined) {
+			newConfirmation = !confirmation;
+		}
+		this.TradingConfirmations.set(client, newConfirmation);
+		const p2 = this.GetPlayer2(client);
+		if (p2) {
+			const p2Confirmation = this.TradingConfirmations.get(p2);
+			if (p2Confirmation !== undefined) {
+				this.Client.ConfirmationsChanged.Fire(p2, p2Confirmation, newConfirmation);
+			}
+		}
 	},
 
 	DeclineRequest(recipient: Player, sender: Player) {
@@ -93,23 +117,39 @@ const TradingService = Knit.CreateService({
 		if (playerIndex !== -1) {
 			this.PlayerRequests.set(client, []);
 			this.EligiblePlayers.remove(playerIndex);
+			this.EndTrade(client, true);
 			this.Client.PlayersChanged.FireAll(this.EligiblePlayers);
 		}
 	},
 
-	GetPlayer2(client: Player) {
-		const eligibleConnections = this.TradingConnections.filter((tradeConnection) => {
+	GetConnectionIndices(client: Player) {
+		const indices: number[] = [];
+		this.TradingConnections.forEach((connection, index) => {
+			if (connection.includes(client)) {
+				indices.push(index);
+			}
+		});
+
+		return indices;
+	},
+
+	GetConnections(client: Player) {
+		return this.TradingConnections.filter((tradeConnection) => {
 			return tradeConnection[0] === client || tradeConnection[1] === client;
 		});
+	},
+
+	GetPlayer2(client: Player) {
+		const eligibleConnections = this.GetConnections(client);
 		const currentConnection = eligibleConnections[0];
 		let toReturn = undefined;
-		if (currentConnection) {
+		if (currentConnection && eligibleConnections.size() > 0) {
 			toReturn = (currentConnection[0] === client && currentConnection[1]) || currentConnection[0];
 		}
 		return toReturn;
 	},
 
-	UpdateSelectedItems(client: Player, clientSelection: string[]) {
+	SelectItem(client: Player, clientSelection: string) {
 		const player2 = this.GetPlayer2(client);
 		if (player2) {
 			let player2Selection = this.ItemSelections.get(player2);
@@ -117,9 +157,44 @@ const TradingService = Knit.CreateService({
 				this.ItemSelections.set(player2, []);
 				player2Selection = [];
 			}
-			this.ItemSelections.set(client, clientSelection);
+			let player1Selection = this.ItemSelections.get(client);
+			if (!player1Selection) {
+				this.ItemSelections.set(client, []);
+				player1Selection = [];
+			}
+			if (!player1Selection.includes(clientSelection)) {
+				player1Selection.push(clientSelection);
+			}
 
-			this.Client.SelectedChanged.Fire(player2, clientSelection, player2Selection);
+			this.ItemSelections.set(client, player1Selection);
+
+			this.Client.SelectedChanged.Fire(client, player1Selection, player2Selection);
+			this.Client.SelectedChanged.Fire(player2, player2Selection, player1Selection);
+		}
+	},
+
+	RemoveItem(client: Player, item: string) {
+		const player2 = this.GetPlayer2(client);
+		if (player2) {
+			let player2Selection = this.ItemSelections.get(player2);
+			if (!player2Selection) {
+				this.ItemSelections.set(player2, []);
+				player2Selection = [];
+			}
+			let player1Selection = this.ItemSelections.get(client);
+			if (!player1Selection) {
+				this.ItemSelections.set(client, []);
+				player1Selection = [];
+			}
+			const itemToRemove = player1Selection.indexOf(item);
+			if (itemToRemove !== -1) {
+				player1Selection.remove(itemToRemove);
+			}
+
+			this.ItemSelections.set(client, player1Selection);
+
+			this.Client.SelectedChanged.Fire(client, player1Selection, player2Selection);
+			this.Client.SelectedChanged.Fire(player2, player2Selection, player1Selection);
 		}
 	},
 
@@ -154,17 +229,21 @@ const TradingService = Knit.CreateService({
 				}
 			}
 
+			// Initialize confirmations to false
+			this.TradingConfirmations.set(player1, false);
+			this.TradingConfirmations.set(player2, false);
+
 			// Update the inventories on the client
 			const player1Inventory = InventoryService.FetchInventory(player1).Swords;
 			const player2Inventory = InventoryService.FetchInventory(player2).Swords;
-			if (player1) {
+			if (player1 !== undefined) {
 				this.Client.TradeStarted.Fire(player1, Object.keys(player1Inventory), Object.keys(player2Inventory));
 			} else {
 				this.EndTrade(player1);
 			}
 
-			if (player2) {
-				this.Client.TradeStarted.Fire(player2, Object.keys(player1Inventory), Object.keys(player2Inventory));
+			if (player2 !== undefined) {
+				this.Client.TradeStarted.Fire(player2, Object.keys(player2Inventory), Object.keys(player1Inventory));
 			} else {
 				this.EndTrade(player1);
 			}
@@ -173,13 +252,14 @@ const TradingService = Knit.CreateService({
 		}
 	},
 
-	EndTrade(player1: Player) {
+	EndTrade(player1: Player, playerLeft?: boolean) {
 		const player2 = this.GetPlayer2(player1);
-		if (player2) {
-			const entry1 = [player1, player2];
-			const entry2 = [player2, player1];
-			const connection1 = this.TradingConnections.indexOf(entry1);
-			const connection2 = this.TradingConnections.indexOf(entry2);
+		if (player2 !== undefined) {
+			const connectionIndices = this.GetConnectionIndices(player1);
+
+			connectionIndices.forEach((connectionIndex) => {
+				this.TradingConnections.remove(connectionIndex);
+			});
 
 			const selectionEntry1 = this.ItemSelections.get(player1);
 			const selectionEntry2 = this.ItemSelections.get(player2);
@@ -196,12 +276,7 @@ const TradingService = Knit.CreateService({
 				selectionEntry2.clear();
 			}
 
-			if (connection1 !== -1) {
-				this.TradingConnections.remove(connection1);
-			} else if (connection2 !== -1) {
-				this.TradingConnections.remove(connection2);
-			}
-			if (player1) {
+			if (player1 && !playerLeft) {
 				this.Client.TradeEnded.Fire(player1);
 			}
 			if (player2) {
@@ -213,12 +288,16 @@ const TradingService = Knit.CreateService({
 	AcceptTrade(client: Player) {
 		const player2 = this.GetPlayer2(client);
 		if (player2) {
-			const player1Selection = this.ItemSelections.get(client);
-			const player2Selection = this.ItemSelections.get(player2);
-			if (player1Selection && player2Selection) {
-				const player1Profile = ProfileService.GetProfile(client);
-				const player2Profile = ProfileService.GetProfile(player2);
-				if (player1Profile.Level >= 15 && player2Profile.Level >= 15) {
+			const player1Confirmation = this.TradingConfirmations.get(client) || false;
+			const player2Confirmation = this.TradingConfirmations.get(player2) || false;
+
+			if (player1Confirmation && player2Confirmation) {
+				const player1Selection = this.ItemSelections.get(client);
+				const player2Selection = this.ItemSelections.get(player2);
+				if (player1Selection && player2Selection) {
+					const player1Profile = ProfileService.GetProfile(client);
+					const player2Profile = ProfileService.GetProfile(player2);
+					//if (player1Profile.Level >= 15 && player2Profile.Level >= 15) {
 					const player1Inventory = InventoryService.FetchInventory(client).Swords;
 					const player2Inventory = InventoryService.FetchInventory(player2).Swords;
 					let player1HasItems = true;
@@ -249,15 +328,24 @@ const TradingService = Knit.CreateService({
 						SnackbarService.PushPlayer(client, "Trade successful!");
 						SnackbarService.PushPlayer(player2, "Trade successful!");
 						this.EndTrade(client);
+						//} else {
+						//	SnackbarService.PushPlayer(client, "One or more players do not own the selected items!");
+						//	SnackbarService.PushPlayer(player2, "One or more players do not own the selected items!");
+						//}
 					} else {
-						SnackbarService.PushPlayer(client, "One or more players do not own the selected items!");
-						SnackbarService.PushPlayer(player2, "One or more players do not own the selected items!");
+						SnackbarService.PushPlayer(client, "One or more players do not meet the level requirement!");
+						SnackbarService.PushPlayer(player2, "One or more players do not meet the level requirement!");
 					}
 				} else {
-					SnackbarService.PushPlayer(client, "One or more players do not meet the level requirement!");
-					SnackbarService.PushPlayer(player2, "One or more players do not meet the level requirement!");
+					SnackbarService.PushPlayer(client, "Could not locate item selections.");
+					SnackbarService.PushPlayer(player2, "Could not locate item selections.");
 				}
+			} else {
+				SnackbarService.PushPlayer(client, "One or more players need to confirm their selection!");
+				SnackbarService.PushPlayer(player2, "One or more players need to confirm their selection!");
 			}
+		} else {
+			SnackbarService.PushPlayer(client, "Player 2 not found!");
 		}
 	},
 

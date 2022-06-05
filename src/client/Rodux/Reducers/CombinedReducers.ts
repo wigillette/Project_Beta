@@ -17,6 +17,7 @@ import { advertisementReducer } from "./AdvertisementReducer";
 import { spectateReducer } from "./SpectateReducer";
 import { ticketReducer } from "./TicketReducer";
 import { craftingReducer } from "./CraftingReducer";
+import { tradingReducer } from "./TradingReducer";
 
 const reducer = Rodux.combineReducers({
 	toggleShop: shopReducer,
@@ -72,6 +73,13 @@ const reducer = Rodux.combineReducers({
 	toggleCrafting: craftingReducer,
 	switchRarity: craftingReducer,
 	emptySelectedSwords: craftingReducer,
+	endTrade: tradingReducer,
+	updateSelection: tradingReducer,
+	updateTradePlayers: tradingReducer,
+	startTrade: tradingReducer,
+	updateRequests: tradingReducer,
+	toggleRequests: tradingReducer,
+	updateConfirmation: tradingReducer,
 });
 
 export default reducer;

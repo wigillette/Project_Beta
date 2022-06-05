@@ -10,7 +10,9 @@ interface UIProps {
 	ButtonText: string;
 	Callback: () => void;
 	Model: Model | Tool;
+	Size?: UDim2;
 	ButtonSize: UDim2;
+	noCallback?: boolean;
 }
 
 interface UIState {
@@ -38,7 +40,7 @@ class Card extends Roact.Component<UIProps, UIState> {
 	render() {
 		return (
 			<frame
-				Size={new UDim2(0.25, 0, 0.25, 0)}
+				Size={this.props.Size || new UDim2(0.25, 0, 0.25, 0)}
 				AnchorPoint={new Vector2(0.5, 0.5)}
 				Position={new UDim2(0.5, 0, 0.5, 0)}
 				Ref={this.containerRef}
@@ -66,13 +68,15 @@ class Card extends Roact.Component<UIProps, UIState> {
 						ZIndex={3}
 						Animation={undefined}
 					/>
-					<RectButton
-						Position={new UDim2(0.5, 0, 0.95, 0)}
-						AnchorPoint={new Vector2(0.5, 0.95)}
-						Size={this.props.ButtonSize}
-						ButtonText={this.props.ButtonText}
-						Callback={this.props.Callback}
-					/>
+					{!this.props.noCallback && (
+						<RectButton
+							Position={new UDim2(0.5, 0, 0.95, 0)}
+							AnchorPoint={new Vector2(0.5, 0.95)}
+							Size={this.props.ButtonSize}
+							ButtonText={this.props.ButtonText}
+							Callback={this.props.Callback}
+						/>
+					)}
 					<uigradient {...whiteGradientProperties}></uigradient>
 				</imagelabel>
 				<imagelabel ImageColor3={googleMaterial.cardShadow} {...RectShadow}></imagelabel>
