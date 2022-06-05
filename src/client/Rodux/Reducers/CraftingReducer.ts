@@ -30,16 +30,18 @@ export const craftingReducer = Rodux.createReducer(
 		selectSword: (state: craftingState, action: Action) => {
 			const newState = { ...state };
 			if (action.payload && !newState.selectedSwords.includes(action.payload.selectedSword)) {
-				newState.selectedSwords.push(action.payload.selectedSword);
+				newState.selectedSwords = [...newState.selectedSwords, action.payload.selectedSword];
 			}
 			return newState;
 		},
 		removeSword: (state: craftingState, action: Action) => {
 			const newState = { ...state };
 			if (action.payload) {
-				const selectedSword = newState.selectedSwords.indexOf(action.payload.selectedSword);
+				const swords = [...newState.selectedSwords];
+				const selectedSword = swords.indexOf(action.payload.selectedSword);
 				if (selectedSword !== -1) {
-					newState.selectedSwords.remove(selectedSword);
+					swords.remove(selectedSword);
+					newState.selectedSwords = swords;
 				}
 			}
 

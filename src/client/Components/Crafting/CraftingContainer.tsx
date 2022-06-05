@@ -13,18 +13,16 @@ import {
 	Body,
 	CardGridLayout,
 	SquareAspectRatio,
-	MenuAspectRatio,
 } from "client/UIProperties/RectUI";
 import { googleMaterial, gradientProperties, whiteGradientProperties } from "client/UIProperties/ColorSchemes";
 import ObjectUtils from "@rbxts/object-utils";
 import { registerGridDynamicScrolling } from "../../UIProperties/DynamicScrolling";
 import { RARITY_NAMES, GET_RARITY } from "shared/ShopData";
-import { MarketplaceService, ReplicatedStorage, Players } from "@rbxts/services";
+import { ReplicatedStorage } from "@rbxts/services";
 import RectButton from "../Material/RectButton";
 import Card from "../Material/Card";
 import { inventoryState } from "client/Rodux/Reducers/InventoryReducer";
 import { pushNotification } from "client/Services/SnackbarService";
-import SwordItem from "./SwordItem";
 
 interface UIProps {
 	currentRarity: string;
@@ -33,6 +31,7 @@ interface UIProps {
 	toggle: boolean;
 	switchRarity: (rarityName: string) => void;
 	removeSword: (swordName: string) => void;
+	selectSword: (swordName: string) => void;
 }
 
 let oldFadeIn = true;
@@ -120,17 +119,33 @@ class CraftingContainer extends Roact.Component<UIProps> {
 						>
 							<imagelabel ImageColor3={googleMaterial.innerBG2} {...RectBG}>
 								<uigradient {...gradientProperties}></uigradient>
-								<uilistlayout
-									FillDirection={Enum.FillDirection.Horizontal}
-									HorizontalAlignment={Enum.HorizontalAlignment.Center}
-									VerticalAlignment={Enum.VerticalAlignment.Center}
-									Padding={new UDim(0.075, 0)}
-									SortOrder={Enum.SortOrder.Name}
-								></uilistlayout>
-								{ObjectUtils.values(this.props.swordsSelected).map((swordName) => {
-									print(swordName);
-									return <frame></frame>;
-								})}
+								<frame
+									{...RectContainer}
+									Size={new UDim2(0.95, 0, 0.95, 0)}
+									Position={new UDim2(0.5, 0, 0.5, 0)}
+									AnchorPoint={new Vector2(0.5, 0.5)}
+								>
+									<uilistlayout
+										FillDirection={Enum.FillDirection.Horizontal}
+										HorizontalAlignment={Enum.HorizontalAlignment.Center}
+										VerticalAlignment={Enum.VerticalAlignment.Center}
+										Padding={new UDim(0.075, 0)}
+										SortOrder={Enum.SortOrder.Name}
+									></uilistlayout>
+									{this.props.swordsSelected.map((swordName) => {
+										return (
+											<Card
+												Model={this.modelsFolder?.WaitForChild(swordName) as Model | Tool}
+												ButtonText={"REMOVE"}
+												Text={swordName}
+												ButtonSize={new UDim2(0.6, 0, 0.075, 0)}
+												Callback={() => {
+													this.props.removeSword(swordName);
+												}}
+											/>
+										);
+									})}
+								</frame>
 							</imagelabel>
 						</frame>
 						<frame
@@ -159,11 +174,21 @@ class CraftingContainer extends Roact.Component<UIProps> {
 											})
 											.map((Item) => {
 												return (
-													<SwordItem
-														swordName={Item}
-														Model={
-															this.modelsFolder?.WaitForChild(Item, 10) as Model | Tool
+													<Card
+														Model={this.modelsFolder?.WaitForChild(Item) as Model | Tool}
+														ButtonText={
+															(this.props.swordsSelected.includes(Item) && "SELECTED") ||
+															"SELECT"
 														}
+														Text={Item}
+														ButtonSize={new UDim2(0.6, 0, 0.075, 0)}
+														Callback={() => {
+															if (!this.props.swordsSelected.includes(Item)) {
+																this.props.selectSword(Item);
+															} else {
+																pushNotification(`Already selected ${Item}!`);
+															}
+														}}
 													/>
 												);
 											})
@@ -214,6 +239,7 @@ interface storeState {
 	switchRarity: craftingState;
 	emptySelectedSwords: craftingState;
 	selectSword: craftingState;
+	removeSword: craftingState;
 	updateInventory: inventoryState;
 }
 
@@ -228,12 +254,10 @@ export = RoactRodux.connect(
 				: movingFadeAbsolute(craftingFrame, false, new UDim2(0.5, 0, 0.1, 0), true);
 		}
 
-		print(state.selectSword.selectedSwords);
-
 		return {
 			toggle: state.toggleCrafting.toggle,
 			currentRarity: state.switchRarity.currentRarity,
-			swordsSelected: state.selectSword.selectedSwords,
+			swordsSelected: state.removeSword.selectedSwords,
 			playerInventory: state.updateInventory.inventory.Swords,
 		};
 	},
@@ -245,7 +269,12 @@ export = RoactRodux.connect(
 					payload: { newRarity: rarityName },
 				});
 			},
-
+			selectSword: (swordName: string) => {
+				dispatch({
+					type: "selectSword",
+					payload: { selectedSword: swordName },
+				});
+			},
 			removeSword: (swordName: string) => {
 				dispatch({
 					type: "removeSword",

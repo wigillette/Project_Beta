@@ -143,8 +143,8 @@
 - [x] Hover Notifications
 - [ ] Arena Ticket Info UI
 - [x] Crafting UI
-- [ ] Crafting Item UI
-- [ ] Crafting Selected UI
+- [x] Crafting Item UI
+- [x] Crafting Selected UI
 - [ ] Ping UI
 
 > Surface Components
