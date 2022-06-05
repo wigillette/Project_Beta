@@ -50,6 +50,7 @@
 - [x] Results Reducer
 - [x] PlayerList Reducer
 - [x] Crafting Reducer
+- [ ] Trading Reducer
 
 > Data Storage
 - [x] SQL Database vs. Datastore2
@@ -96,6 +97,7 @@
 - [x] Badge Service
 - [x] Arena Ticket Service
 - [x] Crafting Service
+- [x] Trading Service
 
 > Shared
 - [x] Sword Data
@@ -146,6 +148,7 @@
 - [x] Crafting Item UI
 - [x] Crafting Selected UI
 - [ ] Ping UI
+- [ ] Trading UI
 
 > Surface Components
 - [x] Profile Board
