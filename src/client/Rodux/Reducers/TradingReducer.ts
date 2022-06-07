@@ -5,37 +5,40 @@ interface Action {
 	payload?: {
 		player1Selected: string[];
 		player2Selected: string[];
-		player1Inventory: string[];
-		player2Inventory: string[];
+		player1Inventory: Map<string, number>;
+		player2Inventory: Map<string, number>;
 		requests: Player[];
 		playerList: Player[];
 		player2Confirmation: boolean;
+		player2: Player | undefined;
 	};
 }
 
 export interface tradingState {
 	player1Selected: string[];
 	player2Selected: string[];
-	player1Inventory: string[];
-	player2Inventory: string[];
+	player1Inventory: Map<string, number>;
+	player2Inventory: Map<string, number>;
 	requests: Player[];
 	playerList: Player[];
 	requestsToggle: boolean;
 	tradingToggle: boolean;
 	player2Confirmation: boolean;
+	player2: Player | undefined;
 }
 
 export const tradingReducer = Rodux.createReducer(
 	{
 		player1Selected: [] as string[],
 		player2Selected: [] as string[],
-		player1Inventory: [] as string[],
-		player2Inventory: [] as string[],
+		player1Inventory: new Map<string, number>(),
+		player2Inventory: new Map<string, number>(),
 		requests: [] as Player[],
 		playerList: [] as Player[],
 		requestsToggle: false,
 		tradingToggle: false,
 		player2Confirmation: false,
+		player2: undefined as Player | undefined,
 	},
 	{
 		startTrade: (state: tradingState, action: Action) => {
@@ -45,6 +48,7 @@ export const tradingReducer = Rodux.createReducer(
 				newState.player2Inventory = action.payload.player2Inventory;
 				newState.requestsToggle = false;
 				newState.tradingToggle = true;
+				newState.player2 = action.payload.player2;
 			}
 			return newState;
 		},
@@ -54,8 +58,8 @@ export const tradingReducer = Rodux.createReducer(
 			newState.tradingToggle = false;
 			newState.player1Selected = [];
 			newState.player2Selected = [];
-			newState.player1Inventory = [];
-			newState.player2Inventory = [];
+			newState.player1Inventory = new Map<string, number>();
+			newState.player2Inventory = new Map<string, number>();
 			return newState;
 		},
 		updateRequests: (state: tradingState, action: Action) => {

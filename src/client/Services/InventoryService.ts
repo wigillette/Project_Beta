@@ -4,7 +4,7 @@ import Store from "../Rodux/Store";
 const InventoryService = Knit.GetService("InventoryService");
 
 const InventoryClient = {
-	FetchInventory: (Inventory: { Swords: Map<string, Model | Tool | ""> }) => {
+	FetchInventory: (Inventory: { Swords: Map<string, number> }) => {
 		// Update the rodux store with the new inventory
 		Store.dispatch({
 			type: "updateInventory",

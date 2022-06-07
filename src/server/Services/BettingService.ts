@@ -73,6 +73,15 @@ export const BettingService = Knit.CreateService({
 		});
 	},
 
+	RefundBets() {
+		ObjectUtils.entries(this.PlayerBets).forEach((entry) => {
+			const player = entry[0];
+			const betInfo = entry[1];
+			GoldService.AddGold(player, betInfo.Gold);
+			SnackbarService.PushPlayer(player, `You have received a refund for your bet!`);
+		});
+	},
+
 	KnitInit() {
 		print("Betting Service Initialized | Server");
 		Players.PlayerRemoving.Connect((player) => this.PlayerBets.delete(player));

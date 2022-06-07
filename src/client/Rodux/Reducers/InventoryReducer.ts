@@ -1,10 +1,6 @@
 import Rodux from "@rbxts/rodux";
 import { InventoryFormat, INITIAL_INVENTORY, EquippedFormat, INITIAL_EQUIPPED } from "../../../shared/InventoryInfo";
 import ObjectUtils from "@rbxts/object-utils";
-import { ReplicatedStorage } from "@rbxts/services";
-
-// Models Folder:
-const modelsFolder = ReplicatedStorage.WaitForChild("ModelsFolder", 10);
 
 export interface inventoryState {
 	toggle: boolean;
@@ -37,19 +33,8 @@ const inventoryReducer = Rodux.createReducer(
 				currentTab: state.currentTab,
 			};
 
-			if (action.inventory && modelsFolder) {
-				const newMap = new Map<string, Model | Tool>();
-				let item;
-
-				// Create a duplicate map, storing the models and their respective prices
-				ObjectUtils.keys(action.inventory.Swords).forEach((swordName) => {
-					item = modelsFolder.FindFirstChild(swordName) as Model | Tool;
-					if (item) {
-						newMap.set(swordName, item);
-					}
-				});
-
-				newState.inventory.Swords = newMap;
+			if (action.inventory) {
+				newState.inventory.Swords = action.inventory.Swords;
 			}
 
 			return newState;

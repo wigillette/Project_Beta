@@ -18,15 +18,18 @@ import Card from "client/Components/Material/Card";
 import { KnitClient } from "@rbxts/knit";
 import RectButton from "../Material/RectButton";
 import ToggleButton from "../Material/ToggleButton";
+import Object from "@rbxts/object-utils";
+import { flattenInventory } from "shared/InventoryInfo";
 const tradingService = KnitClient.GetService("TradingService");
 
 interface UIProps {
 	player1Selection: string[];
 	player2Selection: string[];
-	player1Inventory: string[];
-	player2Inventory: string[];
+	player1Inventory: Map<string, number>;
+	player2Inventory: Map<string, number>;
 	tradingToggle: boolean;
 	p2Confirmation: boolean;
+	player2: Player | undefined;
 }
 let oldFadeIn = true;
 const tradingRef = Roact.createRef<Frame>();
@@ -67,7 +70,9 @@ class TradingContainer extends Roact.Component<UIProps> {
 					<frame {...Header} Size={new UDim2(1, 0, 0.15, 0)}>
 						<imagelabel ImageColor3={googleMaterial.header} {...RectBG}>
 							<textlabel
-								Text={"Active Trade"}
+								Text={`Trade with ${
+									(this.props.player2 !== undefined && this.props.player2.Name) || "Undefined"
+								}`}
 								TextStrokeTransparency={0.8}
 								AnchorPoint={new Vector2(0.5, 0.5)}
 								Position={new UDim2(0.5, 0, 0.5, 0)}
@@ -109,7 +114,7 @@ class TradingContainer extends Roact.Component<UIProps> {
 										FillDirectionMaxCells={2}
 										Ref={this.player1InventoryGridRef}
 									></uigridlayout>
-									{this.props.player1Inventory
+									{flattenInventory(this.props.player1Inventory)
 										.filter((item) => {
 											return item !== "Default";
 										})
@@ -190,7 +195,7 @@ class TradingContainer extends Roact.Component<UIProps> {
 										Ref={this.player2InventoryGridRef}
 									></uigridlayout>
 
-									{this.props.player2Inventory
+									{flattenInventory(this.props.player2Inventory)
 										.filter((item) => {
 											return item !== "Default";
 										})
@@ -328,5 +333,6 @@ export = RoactRodux.connect((state: storeState) => {
 		player2Inventory: state.startTrade.player2Inventory,
 		tradingToggle: state.startTrade.tradingToggle,
 		p2Confirmation: state.updateConfirmation.player2Confirmation,
+		player2: state.startTrade.player2,
 	};
 })(TradingContainer);

@@ -22,6 +22,8 @@ import { pushNotification } from "../Services/SnackbarService";
 import RectButton from "./Material/RectButton";
 const InventoryService = Knit.GetService("InventoryService");
 import InventoryClient from "client/Services/InventoryService";
+import { ReplicatedStorage } from "@rbxts/services";
+import { flattenInventory } from "shared/InventoryInfo";
 
 let oldFadeIn = true;
 class Inventory extends Roact.Component<inventoryState> {
@@ -30,6 +32,7 @@ class Inventory extends Roact.Component<inventoryState> {
 	gridRef;
 	scrollRef;
 	connections: RBXScriptConnection[];
+	modelsFolder = ReplicatedStorage.WaitForChild("ModelsFolder", 10) as Folder;
 
 	constructor(props: inventoryState) {
 		super(props);
@@ -128,32 +131,33 @@ class Inventory extends Roact.Component<inventoryState> {
 									</uigridlayout>
 									{
 										// Display all the cards using the CardInfo prop
-										ObjectUtils.entries(
+
+										flattenInventory(
 											this.props.inventory[
 												this.props.currentTab as keyof typeof this.props.inventory
 											],
 										).map((Item) => {
 											return (
 												<Card
-													Text={Item[0]}
+													Text={Item}
 													ButtonText={
 														this.props.equipped[
 															this.props.currentTab as keyof typeof this.props.equipped
-														] === Item[0]
+														] === Item
 															? "EQUIPPED"
 															: "EQUIP"
 													}
-													Model={Item[1] as Model | Tool}
+													Model={this.modelsFolder.WaitForChild(Item) as Model | Tool}
 													Callback={() => {
 														let response = "Already equipped!";
 														if (
 															this.props.equipped[
 																this.props
 																	.currentTab as keyof typeof this.props.equipped
-															] !== Item[0]
+															] !== Item
 														) {
 															response = InventoryService.EquipItem(
-																Item[0],
+																Item,
 																this.props.currentTab,
 															);
 														}

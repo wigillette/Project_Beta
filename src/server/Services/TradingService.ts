@@ -21,7 +21,9 @@ const TradingService = Knit.CreateService({
 
 	Client: {
 		SelectedChanged: new RemoteSignal<(player1Selected: string[], player2Selected: string[]) => void>(),
-		TradeStarted: new RemoteSignal<(player1Inventory: string[], player2Inventory: string[]) => void>(),
+		TradeStarted: new RemoteSignal<
+			(player1Inventory: Map<string, number>, player2Inventory: Map<string, number>, player2: Player) => void
+		>(),
 		TradeEnded: new RemoteSignal<() => void>(),
 		PlayersChanged: new RemoteSignal<(players: Player[]) => void>(),
 		RequestsChanged: new RemoteSignal<(playerRequests: Player[]) => void>(),
@@ -162,7 +164,18 @@ const TradingService = Knit.CreateService({
 				this.ItemSelections.set(client, []);
 				player1Selection = [];
 			}
-			if (!player1Selection.includes(clientSelection)) {
+
+			const player1Multiplicities = InventoryService.FetchInventory(client).Swords;
+			let itemMultiplicity = player1Multiplicities.get(clientSelection);
+			if (itemMultiplicity === undefined) {
+				itemMultiplicity = 0;
+			}
+
+			const selectionMultiplicity = player1Selection.filter((item) => {
+				return item === clientSelection;
+			});
+
+			if (selectionMultiplicity.size() < itemMultiplicity) {
 				player1Selection.push(clientSelection);
 			}
 
@@ -237,13 +250,13 @@ const TradingService = Knit.CreateService({
 			const player1Inventory = InventoryService.FetchInventory(player1).Swords;
 			const player2Inventory = InventoryService.FetchInventory(player2).Swords;
 			if (player1 !== undefined) {
-				this.Client.TradeStarted.Fire(player1, Object.keys(player1Inventory), Object.keys(player2Inventory));
+				this.Client.TradeStarted.Fire(player1, player1Inventory, player2Inventory, player2);
 			} else {
 				this.EndTrade(player1);
 			}
 
 			if (player2 !== undefined) {
-				this.Client.TradeStarted.Fire(player2, Object.keys(player2Inventory), Object.keys(player1Inventory));
+				this.Client.TradeStarted.Fire(player2, player2Inventory, player1Inventory, player1);
 			} else {
 				this.EndTrade(player1);
 			}
@@ -297,41 +310,87 @@ const TradingService = Knit.CreateService({
 				if (player1Selection && player2Selection) {
 					const player1Profile = ProfileService.GetProfile(client);
 					const player2Profile = ProfileService.GetProfile(player2);
-					//if (player1Profile.Level >= 15 && player2Profile.Level >= 15) {
-					const player1Inventory = InventoryService.FetchInventory(client).Swords;
-					const player2Inventory = InventoryService.FetchInventory(player2).Swords;
-					let player1HasItems = true;
-					let player2HasItems = true;
-					player1Selection.forEach((item) => {
-						player1HasItems = player1HasItems && player1Inventory.has(item);
-					});
-					player2Selection.forEach((item) => {
-						player2HasItems = player2HasItems && player2Inventory.has(item);
-					});
+					if (player1Profile.Level >= 15 && player2Profile.Level >= 15) {
+						const player1Inventory = InventoryService.FetchInventory(client).Swords;
+						const player2Inventory = InventoryService.FetchInventory(player2).Swords;
+						let player1HasItems = true;
+						let player2HasItems = true;
 
-					if (player1HasItems && player2HasItems) {
-						player2Selection.forEach((item) => {
-							InventoryService.AddToInventory(client, item, "Swords");
-							InventoryService.RemoveFromInventory(player2, item, "Swords", false);
-						});
-						player1Selection.forEach((item) => {
-							InventoryService.AddToInventory(player2, item, "Swords");
-							InventoryService.RemoveFromInventory(client, item, "Swords", false);
+						const p1SelectionMultiplicities = new Map<string, number>();
+						const p2SelectionMultiplicities = new Map<string, number>();
+
+						// CHECK P1 Multiplicities
+						player1Selection.forEach((sword) => {
+							let currentMultiplicity = p1SelectionMultiplicities.get(sword);
+							if (currentMultiplicity === undefined) {
+								currentMultiplicity = 1;
+							} else {
+								currentMultiplicity += 1;
+							}
+							p1SelectionMultiplicities.set(sword, currentMultiplicity);
 						});
 
-						InventoryService.Client.InventoryChanged.Fire(client, InventoryService.FetchInventory(client));
-						InventoryService.Client.InventoryChanged.Fire(
-							player2,
-							InventoryService.FetchInventory(player2),
-						);
+						player1Selection.forEach((sword) => {
+							let ownedMultiplicity = player1Inventory.get(sword);
+							let selectionMultiplicity = p1SelectionMultiplicities.get(sword);
+							if (ownedMultiplicity === undefined) {
+								ownedMultiplicity = 0;
+							}
+							if (selectionMultiplicity === undefined) {
+								selectionMultiplicity = 0;
+							}
+							player1HasItems = player1HasItems && selectionMultiplicity <= ownedMultiplicity;
+						});
 
-						SnackbarService.PushPlayer(client, "Trade successful!");
-						SnackbarService.PushPlayer(player2, "Trade successful!");
-						this.EndTrade(client);
-						//} else {
-						//	SnackbarService.PushPlayer(client, "One or more players do not own the selected items!");
-						//	SnackbarService.PushPlayer(player2, "One or more players do not own the selected items!");
-						//}
+						// CHECK P2 Multiplicities
+						player2Selection.forEach((sword) => {
+							let currentMultiplicity = p2SelectionMultiplicities.get(sword);
+							if (currentMultiplicity === undefined) {
+								currentMultiplicity = 1;
+							} else {
+								currentMultiplicity += 1;
+							}
+							p2SelectionMultiplicities.set(sword, currentMultiplicity);
+						});
+
+						player2Selection.forEach((sword) => {
+							let ownedMultiplicity = player2Inventory.get(sword);
+							let selectionMultiplicity = p2SelectionMultiplicities.get(sword);
+							if (ownedMultiplicity === undefined) {
+								ownedMultiplicity = 0;
+							}
+							if (selectionMultiplicity === undefined) {
+								selectionMultiplicity = 0;
+							}
+							player2HasItems = player2HasItems && selectionMultiplicity <= ownedMultiplicity;
+						});
+
+						if (player1HasItems && player2HasItems) {
+							player2Selection.forEach((item) => {
+								InventoryService.AddToInventory(client, item, "Swords");
+								InventoryService.RemoveFromInventory(player2, item, "Swords", false);
+							});
+							player1Selection.forEach((item) => {
+								InventoryService.AddToInventory(player2, item, "Swords");
+								InventoryService.RemoveFromInventory(client, item, "Swords", false);
+							});
+
+							InventoryService.Client.InventoryChanged.Fire(
+								client,
+								InventoryService.FetchInventory(client),
+							);
+							InventoryService.Client.InventoryChanged.Fire(
+								player2,
+								InventoryService.FetchInventory(player2),
+							);
+
+							SnackbarService.PushPlayer(client, "Trade successful!");
+							SnackbarService.PushPlayer(player2, "Trade successful!");
+							this.EndTrade(client);
+						} else {
+							SnackbarService.PushPlayer(client, "One or more players do not own the selected items!");
+							SnackbarService.PushPlayer(player2, "One or more players do not own the selected items!");
+						}
 					} else {
 						SnackbarService.PushPlayer(client, "One or more players do not meet the level requirement!");
 						SnackbarService.PushPlayer(player2, "One or more players do not meet the level requirement!");

@@ -32,6 +32,7 @@ import ObbyChestService from "./Services/ObbyChestService";
 import SpectateService from "./Services/SpectateService";
 import LobbyAnimationsClient from "./Services/LobbyAnimations";
 import TradingClient from "./Services/TradingService";
+import CraftingClient from "./Services/CraftingService";
 
 const playerGui = Players.LocalPlayer.WaitForChild("PlayerGui") as PlayerGui;
 
@@ -221,3 +222,4 @@ SpectateService.init();
 LobbyAnimationsClient.init();
 TicketService.init();
 TradingClient.init();
+CraftingClient.init();

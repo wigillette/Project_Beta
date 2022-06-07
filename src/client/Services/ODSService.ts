@@ -58,8 +58,8 @@ const ODSClient = {
 		});
 	},
 	UpdateMVP(mvpModel: Model, mvpUserId: number) {
-		pcall(() => {
-			coroutine.wrap(() => {
+		coroutine.wrap(() => {
+			pcall(() => {
 				const info = Players.GetCharacterAppearanceAsync(mvpUserId);
 				ODSClient.CleanUpMVP(mvpModel);
 
@@ -98,8 +98,8 @@ const ODSClient = {
 				}
 
 				mvpModel.Name = Players.GetNameFromUserIdAsync(mvpUserId);
-			})();
-		});
+			});
+		})();
 	},
 	init() {
 		DatabaseService.GetAllSortingDataPromise()

@@ -1,4 +1,4 @@
-import { KnitServer as Knit } from "@rbxts/knit";
+import { KnitServer as Knit, RemoteSignal } from "@rbxts/knit";
 import { GoldService } from "./GoldService";
 import { InventoryService } from "./InventoryService";
 import { ProfileService } from "./ProfileService";
@@ -16,6 +16,7 @@ const CraftingService = Knit.CreateService({
 	Name: "CraftingService",
 
 	Client: {
+		ResetSelection: new RemoteSignal<() => void>(),
 		CraftSword(client: Player, selectedSwords: string[]) {
 			this.Server.CraftSword(client, selectedSwords);
 		},
@@ -59,9 +60,31 @@ const CraftingService = Knit.CreateService({
 			if (level >= 10) {
 				if (swords.size() === 5) {
 					let ownsAllSwords = true;
+					const selectionMultiplicities = new Map<string, number>();
+
 					swords.forEach((sword) => {
-						ownsAllSwords = ownsAllSwords && InventoryService.ContainsItem(client, sword, "Swords");
+						let currentMultiplicity = selectionMultiplicities.get(sword);
+						if (currentMultiplicity === undefined) {
+							currentMultiplicity = 1;
+						} else {
+							currentMultiplicity += 1;
+						}
+						selectionMultiplicities.set(sword, currentMultiplicity);
 					});
+
+					const ownedSwords = InventoryService.FetchInventory(client).Swords;
+					swords.forEach((sword) => {
+						let ownedMultiplicity = ownedSwords.get(sword);
+						let selectionMultiplicity = selectionMultiplicities.get(sword);
+						if (ownedMultiplicity === undefined) {
+							ownedMultiplicity = 0;
+						}
+						if (selectionMultiplicity === undefined) {
+							selectionMultiplicity = 0;
+						}
+						ownsAllSwords = ownsAllSwords && selectionMultiplicity <= ownedMultiplicity;
+					});
+
 					if (ownsAllSwords) {
 						const rarities: string[] = [];
 						swords.forEach((sword) => {
@@ -99,6 +122,7 @@ const CraftingService = Knit.CreateService({
 												client,
 												InventoryService.FetchInventory(client),
 											);
+											this.Client.ResetSelection.Fire(client);
 
 											InventoryService.AddToInventory(client, randomSword, "Swords");
 											GoldService.AddGold(client, -300);

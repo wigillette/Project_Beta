@@ -23,11 +23,12 @@ import RectButton from "../Material/RectButton";
 import Card from "../Material/Card";
 import { inventoryState } from "client/Rodux/Reducers/InventoryReducer";
 import { pushNotification } from "client/Services/SnackbarService";
+import { flattenInventory, hasSelectedMax } from "shared/InventoryInfo";
 
 interface UIProps {
 	currentRarity: string;
 	swordsSelected: string[];
-	playerInventory: Map<string, Model | Tool | "">;
+	playerInventory: Map<string, number>;
 	toggle: boolean;
 	switchRarity: (rarityName: string) => void;
 	removeSword: (swordName: string) => void;
@@ -168,7 +169,7 @@ class CraftingContainer extends Roact.Component<UIProps> {
 									</uigridlayout>
 									{
 										// Display all the cards using the CardInfo prop
-										ObjectUtils.keys(this.props.playerInventory)
+										flattenInventory(this.props.playerInventory)
 											.filter((sword) => {
 												return GET_RARITY(sword) === this.props.currentRarity;
 											})
@@ -176,17 +177,20 @@ class CraftingContainer extends Roact.Component<UIProps> {
 												return (
 													<Card
 														Model={this.modelsFolder?.WaitForChild(Item) as Model | Tool}
-														ButtonText={
-															(this.props.swordsSelected.includes(Item) && "SELECTED") ||
-															"SELECT"
-														}
+														ButtonText={"SELECT"}
 														Text={Item}
 														ButtonSize={new UDim2(0.6, 0, 0.075, 0)}
 														Callback={() => {
-															if (!this.props.swordsSelected.includes(Item)) {
+															if (
+																!hasSelectedMax(
+																	this.props.swordsSelected,
+																	Item,
+																	this.props.playerInventory,
+																)
+															) {
 																this.props.selectSword(Item);
 															} else {
-																pushNotification(`Already selected ${Item}!`);
+																pushNotification(`Selected maximum number of ${Item}!`);
 															}
 														}}
 													/>
@@ -241,6 +245,7 @@ interface storeState {
 	selectSword: craftingState;
 	removeSword: craftingState;
 	updateInventory: inventoryState;
+	resetSelection: craftingState;
 }
 
 export = RoactRodux.connect(

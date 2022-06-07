@@ -212,7 +212,11 @@ const MatchService = Knit.CreateService({
 		});
 
 		// Award for bets
-		BettingService.AwardBets(winner);
+		if (winner === "None" || winner === undefined) {
+			BettingService.RefundBets();
+		} else {
+			BettingService.AwardBets(winner);
+		}
 	},
 
 	GiveWeapon(player: Player, isAntiTK: boolean) {

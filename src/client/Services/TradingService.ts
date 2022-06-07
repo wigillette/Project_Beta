@@ -14,10 +14,10 @@ const TradingClient = {
 			payload: { player1Selected: player1Selected, player2Selected: player2Selected },
 		});
 	},
-	StartTrade(player1Inventory: string[], player2Inventory: string[]) {
+	StartTrade(player1Inventory: Map<string, number>, player2Inventory: Map<string, number>, player2: Player) {
 		store.dispatch({
 			type: "startTrade",
-			payload: { player1Inventory: player1Inventory, player2Inventory: player2Inventory },
+			payload: { player1Inventory: player1Inventory, player2Inventory: player2Inventory, player2: player2 },
 		});
 	},
 	UpdateRequests(playerRequests: Player[]) {
@@ -46,9 +46,11 @@ const TradingClient = {
 		TradingService.SelectedChanged.Connect((player1Selected: string[], player2Selected: string[]) => {
 			TradingClient.UpdateSelection(player1Selected, player2Selected);
 		});
-		TradingService.TradeStarted.Connect((player1Inventory: string[], player2Inventory: string[]) => {
-			TradingClient.StartTrade(player1Inventory, player2Inventory);
-		});
+		TradingService.TradeStarted.Connect(
+			(player1Inventory: Map<string, number>, player2Inventory: Map<string, number>, player2: Player) => {
+				TradingClient.StartTrade(player1Inventory, player2Inventory, player2);
+			},
+		);
 		TradingService.RequestsChanged.Connect((playerRequests: Player[]) => {
 			TradingClient.UpdateRequests(playerRequests);
 		});

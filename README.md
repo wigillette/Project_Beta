@@ -194,15 +194,17 @@
 - [x] Better way of collecting badge info on server
 - [x] Update profile service to contain user KDR stats
 - [x] Refresh ODS leaderboards after a certain number of changes
-- [ ] Refunding bets
+- [x] Refunding bets
 - [x] Trading confirmation
-- [ ] Disable trading default sword, trading with onesself
 - [ ] Hide Menu buttons on entering touch
 - [ ] Fix scroll frame on map selection
-- [ ] Add error handling to character load for MVPs
+- [x] Add error handling to character load for MVPs
 - [ ] Make characters no can-collide in lobby
-- [ ] Add multiplicity to crafting/trading
+- [x] Add multiplicity to crafting/trading
 - [ ] Make snackbar service faster by potentially stacking notifications?
+- [ ] Fix scroll on trade
+- [x] Add names to trading
+- [ ] Only show crafting/trading when level requirements are met
 
 > Future Updates
 - [ ] Guilds

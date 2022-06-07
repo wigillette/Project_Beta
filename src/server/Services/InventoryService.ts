@@ -34,7 +34,11 @@ export const InventoryService = Knit.CreateService({
 	AddToInventory(Player: Player, ItemName: string, Category: string) {
 		const playerInventory = this.FetchInventory(Player);
 		if (Category in playerInventory) {
-			playerInventory[Category as keyof typeof playerInventory].set(ItemName, "");
+			const multiplicity = playerInventory[Category as keyof typeof playerInventory].get(ItemName);
+			playerInventory[Category as keyof typeof playerInventory].set(
+				ItemName,
+				(multiplicity === undefined && 1) || (multiplicity as number) + 1,
+			);
 			this.PlayerInventories.set(Player, playerInventory);
 			this.UpdateInventoryData(Player, playerInventory);
 			this.Client.InventoryChanged.Fire(Player, playerInventory);
@@ -46,7 +50,13 @@ export const InventoryService = Knit.CreateService({
 		if (Category in playerInventory) {
 			const categoryItems = playerInventory[Category as keyof typeof playerInventory];
 			if (categoryItems.has(ItemName)) {
-				categoryItems.delete(ItemName);
+				const multiplicity = categoryItems.get(ItemName);
+				if (multiplicity === 1) {
+					categoryItems.delete(ItemName);
+				} else {
+					categoryItems.set(ItemName, (multiplicity as number) - 1);
+				}
+
 				playerInventory[Category as keyof typeof playerInventory] = categoryItems;
 				this.PlayerInventories.set(Player, playerInventory);
 				this.UpdateInventoryData(Player, playerInventory);
