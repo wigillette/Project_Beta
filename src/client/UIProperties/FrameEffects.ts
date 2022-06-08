@@ -106,12 +106,13 @@ export const tweenTransparency = (frame: Frame, recurse: boolean, fadeIn: boolea
 			BackgroundTransparency: transparency,
 		}).Play();
 	}
-	coroutine.wrap(() => {
-		if (transparency === 1 && frame.Name !== "Card") {
-			wait(0.15);
+
+	if (transparency === 1 && frame.Name !== "Card" && !fadeIn) {
+		spawn(() => {
+			wait(0.1);
 			frame.Visible = false;
-		}
-	})();
+		});
+	}
 };
 
 export const tweenTransparencyAbsolute = (object: ImageLabel | ImageButton | TextLabel, fadeIn: boolean) => {

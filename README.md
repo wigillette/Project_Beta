@@ -199,11 +199,12 @@
 - [x] Hide Menu buttons on entering touch
 - [ ] Fix scroll frame on map selection
 - [x] Add error handling to character load for MVPs
-- [ ] Make characters no can-collide in lobby
+- [x] Make characters no can-collide in lobby
 - [x] Add multiplicity to crafting/trading
 - [ ] Make snackbar service faster by potentially stacking notifications?
 - [ ] Fix scroll on trade
 - [x] Add names to trading
+- [ ] Menu reappearing bug
 - [ ] Only show crafting/trading when level requirements are met
 
 > Future Updates

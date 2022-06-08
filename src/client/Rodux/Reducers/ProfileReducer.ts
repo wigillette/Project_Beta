@@ -40,8 +40,8 @@ export const profileReducer = Rodux.createReducer(
 		},
 		showMenu: (state: profileState) => {
 			const newState = { ...state };
-			newState.Visible = false;
-			newState.ToggleVisible = false;
+			newState.Visible = true;
+			newState.ToggleVisible = true;
 			return newState;
 		},
 	},

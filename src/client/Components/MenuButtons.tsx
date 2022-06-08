@@ -116,6 +116,7 @@ class MenuButtons extends Roact.Component<UIProps, UIState> {
 					Position={new UDim2(0, 0, 1, 0)}
 					AnchorPoint={new Vector2(0, 1)}
 					Image={"rbxassetid://4974409019"}
+					Visible={this.props.toggleVisible}
 					Ref={toggleButtonRef}
 					Event={{
 						MouseButton1Click: () => {
@@ -156,12 +157,11 @@ export = RoactRodux.connect(
 				state.toggleMenu.Visible ? new UDim2(0.75, 0, 1, 0) : new UDim2(0.6, 0, 1, 0),
 				false,
 			);
-			tweenTransparencyAbsolute(toggleButton, state.hideMenu.ToggleVisible);
 		}
 
 		return {
 			visible: state.toggleMenu.Visible,
-			toggleVisible: state.hideMenu.ToggleVisible,
+			toggleVisible: state.showMenu.ToggleVisible,
 		};
 	},
 	(dispatch) => {

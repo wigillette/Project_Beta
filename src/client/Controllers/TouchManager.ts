@@ -16,14 +16,14 @@ class TouchManager {
 		// Display the UI when the player is in range
 		if (!this.open) {
 			this.open = true;
+			Store.dispatch({
+				type: "hideMenu",
+			});
 			if (typeIs(this.action, "string")) {
 				const canView =
 					this.action !== "toggleVIPShop" ||
 					MarketplaceService.UserOwnsGamePassAsync(Players.LocalPlayer.UserId, 48719460);
 				if (canView) {
-					Store.dispatch({
-						type: "hideMenu",
-					});
 					Store.dispatch({
 						type: this.action as string,
 					});
@@ -42,6 +42,7 @@ class TouchManager {
 		// Hide the UI when the player is no longer in range
 		if (this.open) {
 			this.open = false;
+
 			if (typeIs(this.action, "string")) {
 				const canView =
 					this.action !== "toggleVIPShop" ||
@@ -51,13 +52,12 @@ class TouchManager {
 						type: this.action as string,
 					});
 
-					Store.dispatch({
-						type: "showMenu",
-					});
-
 					if (this.leaveCallback) {
 						this.leaveCallback();
 					}
+					Store.dispatch({
+						type: "showMenu",
+					});
 				}
 			}
 		}
