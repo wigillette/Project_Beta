@@ -196,7 +196,7 @@
 - [x] Refresh ODS leaderboards after a certain number of changes
 - [x] Refunding bets
 - [x] Trading confirmation
-- [ ] Hide Menu buttons on entering touch
+- [x] Hide Menu buttons on entering touch
 - [ ] Fix scroll frame on map selection
 - [x] Add error handling to character load for MVPs
 - [ ] Make characters no can-collide in lobby

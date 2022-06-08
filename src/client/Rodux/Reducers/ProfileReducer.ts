@@ -11,10 +11,11 @@ export interface profileState {
 	Experience: number;
 	ExpCap: number;
 	Visible: boolean;
+	ToggleVisible: boolean;
 }
 
 export const profileReducer = Rodux.createReducer(
-	{ ...INITIAL_STATS, Visible: true },
+	{ ...INITIAL_STATS, Visible: true, ToggleVisible: true },
 	{
 		fetchExp: (state: profileState, action: Action) => {
 			const newState = { ...state };
@@ -29,6 +30,18 @@ export const profileReducer = Rodux.createReducer(
 			const newState = { ...state };
 			newState.Visible = !newState.Visible;
 
+			return newState;
+		},
+		hideMenu: (state: profileState) => {
+			const newState = { ...state };
+			newState.Visible = false;
+			newState.ToggleVisible = false;
+			return newState;
+		},
+		showMenu: (state: profileState) => {
+			const newState = { ...state };
+			newState.Visible = false;
+			newState.ToggleVisible = false;
 			return newState;
 		},
 	},

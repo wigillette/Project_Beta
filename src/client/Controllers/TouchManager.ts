@@ -22,6 +22,9 @@ class TouchManager {
 					MarketplaceService.UserOwnsGamePassAsync(Players.LocalPlayer.UserId, 48719460);
 				if (canView) {
 					Store.dispatch({
+						type: "hideMenu",
+					});
+					Store.dispatch({
 						type: this.action as string,
 					});
 
@@ -46,6 +49,10 @@ class TouchManager {
 				if (canView) {
 					Store.dispatch({
 						type: this.action as string,
+					});
+
+					Store.dispatch({
+						type: "showMenu",
 					});
 
 					if (this.leaveCallback) {

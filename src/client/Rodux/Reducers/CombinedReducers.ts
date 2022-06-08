@@ -81,6 +81,8 @@ const reducer = Rodux.combineReducers({
 	toggleRequests: tradingReducer,
 	updateConfirmation: tradingReducer,
 	resetSelection: craftingReducer,
+	hideMenu: profileReducer,
+	showMenu: profileReducer,
 });
 
 export default reducer;

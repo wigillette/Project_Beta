@@ -1,7 +1,12 @@
 import Roact from "@rbxts/roact";
 import RoactRodux from "@rbxts/roact-rodux";
 import MenuService from "client/Services/MenuService";
-import { movingFadeAbsolute, tweenPosAbsolute, tweenTransparency } from "client/UIProperties/FrameEffects";
+import {
+	movingFadeAbsolute,
+	tweenPosAbsolute,
+	tweenTransparency,
+	tweenTransparencyAbsolute,
+} from "client/UIProperties/FrameEffects";
 import { profileState } from "client/Rodux/Reducers/ProfileReducer";
 import { RectContainer, SquareAspectRatio } from "client/UIProperties/RectUI";
 import SquareButton from "../Components/Material/SquareButton";
@@ -10,6 +15,7 @@ import { playSound, rippleEffect, tweenColor } from "client/UIProperties/ButtonE
 import { whiteGradientProperties } from "client/UIProperties/ColorSchemes";
 interface UIProps {
 	visible: boolean;
+	toggleVisible: boolean;
 	toggleMenu: () => void;
 }
 
@@ -18,6 +24,7 @@ interface UIState {
 }
 const containerRef = Roact.createRef<Frame>();
 const buttonContainerRef = Roact.createRef<Frame>();
+const toggleButtonRef = Roact.createRef<ImageButton>();
 class MenuButtons extends Roact.Component<UIProps, UIState> {
 	state = {
 		currentMenu: "",
@@ -109,6 +116,7 @@ class MenuButtons extends Roact.Component<UIProps, UIState> {
 					Position={new UDim2(0, 0, 1, 0)}
 					AnchorPoint={new Vector2(0, 1)}
 					Image={"rbxassetid://4974409019"}
+					Ref={toggleButtonRef}
 					Event={{
 						MouseButton1Click: () => {
 							playSound("Click");
@@ -133,22 +141,27 @@ class MenuButtons extends Roact.Component<UIProps, UIState> {
 
 interface storeState {
 	toggleMenu: profileState;
+	showMenu: profileState;
+	hideMenu: profileState;
 }
 
 export = RoactRodux.connect(
 	function (state: storeState) {
 		const buttonContainer = buttonContainerRef.getValue();
-		if (buttonContainer) {
+		const toggleButton = toggleButtonRef.getValue();
+		if (buttonContainer && toggleButton) {
 			movingFadeAbsolute(
 				buttonContainer,
 				state.toggleMenu.Visible,
 				state.toggleMenu.Visible ? new UDim2(0.75, 0, 1, 0) : new UDim2(0.6, 0, 1, 0),
 				false,
 			);
+			tweenTransparencyAbsolute(toggleButton, state.hideMenu.ToggleVisible);
 		}
 
 		return {
 			visible: state.toggleMenu.Visible,
+			toggleVisible: state.hideMenu.ToggleVisible,
 		};
 	},
 	(dispatch) => {
