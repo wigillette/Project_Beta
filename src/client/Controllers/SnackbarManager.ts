@@ -2,37 +2,77 @@ import { Players } from "@rbxts/services";
 import Roact from "@rbxts/roact";
 import SnackbarContainer from "client/Components/Snackbar/SnackbarContainer";
 import SnackbarItem from "client/Components/Snackbar/SnackbarItem";
+import { tweenPos, tweenPosAbsolute } from "client/UIProperties/FrameEffects";
 
 // SnackbarManager Class
+class SnackbarObject {
+	tree: Roact.Tree;
+	index: number;
+	container: Frame;
+
+	incrementIndex() {
+		this.index += 1;
+		if (this.container) {
+			this.container.Name = tostring(this.index);
+		}
+	}
+
+	getIndex() {
+		return this.index;
+	}
+
+	constructor(tree: Roact.Tree, container: Frame) {
+		this.tree = tree;
+		this.index = 0;
+		this.container = container;
+	}
+}
+
+const positions: number[] = [1, 0.5, 0];
 class SnackbarManager {
-	currentTree: Roact.Tree | undefined;
+	objects: SnackbarObject[];
 	snackbarContainer: Frame;
-	isActive: boolean;
+
+	public popNotification(snackbarObj: SnackbarObject) {
+		const index = this.objects.indexOf(snackbarObj);
+		if (index !== -1) {
+			this.objects.remove(index);
+		}
+		Roact.unmount(snackbarObj.tree);
+	}
 
 	public pushNotification(alert: string) {
-		spawn(() => {
-			while (this.isActive) {
-				wait(1);
+		this.objects.forEach((object) => {
+			object.incrementIndex();
+			if (object.getIndex() > 2) {
+				this.popNotification(object);
+			} else if (object.container && object.index in positions) {
+				tweenPosAbsolute(
+					object.container,
+					new UDim2(0.5, 0, positions[object.getIndex() as keyof typeof positions] as number, 0),
+				);
 			}
-			this.isActive = true;
-			const newItem = Roact.createElement(SnackbarItem, { Alert: alert });
-			if (this.currentTree) {
-				// Unmount the previous tree
-				Roact.unmount(this.currentTree as Roact.Tree);
-			}
-			// Mount the new tree
-			this.currentTree = Roact.mount(newItem, this.snackbarContainer);
-			wait(2);
-			this.isActive = false;
 		});
+
+		// Mount the new tree
+		const newItem = Roact.createElement(SnackbarItem, { Alert: alert, Index: 0 });
+
+		const tree = Roact.mount(newItem, this.snackbarContainer);
+		const container = this.snackbarContainer.WaitForChild(0, 10) as Frame;
+		const object = new SnackbarObject(tree, container);
+		this.objects.push(object);
+
+		spawn(() => {
+			wait(1.5);
+			this.popNotification(object);
+		});
+		print(this.objects);
 	}
 
 	constructor() {
-		// Fetching the player objects
 		const client = Players.LocalPlayer;
 		const pg = client.WaitForChild("PlayerGui");
 		const main = pg.WaitForChild("Main");
-
 		// Creating the snack bar container
 		const containerElement = Roact.createElement(SnackbarContainer);
 
@@ -41,8 +81,21 @@ class SnackbarManager {
 
 		// Setting up object variables
 		this.snackbarContainer = main.WaitForChild("Snackbar") as Frame;
-		this.currentTree = undefined;
-		this.isActive = false;
+		this.objects = [];
+
+		/*
+		spawn(() => {
+			wait(5);
+			print("HERE");
+			for (let i = 0; i < 100; i++) {
+				this.pushNotification("TESTING");
+				wait(1);
+				if (i !== 0 && i % 3 === 0) {
+					wait(10);
+				}
+			}
+		});
+		*/
 	}
 }
 

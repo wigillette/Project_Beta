@@ -1,7 +1,7 @@
 import Roact from "@rbxts/roact";
 import { TweenService, Workspace } from "@rbxts/services";
 
-let debounce = false;
+const debounces = new Map<Instance, boolean>();
 
 export const tweenSize = (frame: Frame, size: UDim2) => {
 	const popSize: UDim2 = new UDim2(size.X.Scale, size.X.Offset + 10, size.Y.Scale, size.Y.Offset + 10);
@@ -174,15 +174,20 @@ export const movingFade = (frame: Frame, fadeIn: boolean, magnitude: number, blu
 };
 
 export const movingFadeAbsolute = (frame: Frame, fadeIn: boolean, position: UDim2, blurEffect: boolean) => {
-	// Add the blur effect
-	if (blurEffect) {
-		updateBlurEffect(fadeIn, frame.Name);
+	const state = debounces.get(frame);
+
+	if (!state) {
+		debounces.set(frame, true);
+		// Add the blur effect
+		if (blurEffect) {
+			updateBlurEffect(fadeIn, frame.Name);
+		}
+		// Tween the frame
+		tweenPosAbsolute(frame, position);
+		// Tween the transparency
+		tweenTransparency(frame, true, fadeIn);
+		debounces.set(frame, false);
 	}
-	// Tween the frame
-	tweenPosAbsolute(frame, position);
-	// Tween the transparency
-	tweenTransparency(frame, true, fadeIn);
-	debounce = false;
 };
 
 export const tweenRotation = (frame: Frame | TextLabel | ImageLabel, rotation: number) => {

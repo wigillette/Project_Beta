@@ -204,7 +204,7 @@
 - [ ] Make snackbar service faster by potentially stacking notifications?
 - [ ] Fix scroll on trade
 - [x] Add names to trading
-- [ ] Menu reappearing bug
+- [x] Menu reappearing bug
 - [ ] Only show crafting/trading when level requirements are met
 
 > Future Updates

@@ -5,6 +5,7 @@ import { googleMaterial, whiteGradientProperties } from "client/UIProperties/Col
 
 interface UIProps {
 	Alert: string;
+	Index: number;
 }
 
 class SnackbarItem extends Roact.Component<UIProps> {
@@ -17,13 +18,14 @@ class SnackbarItem extends Roact.Component<UIProps> {
 	render() {
 		return (
 			<frame
-				Size={new UDim2(1, 0, 1, 0)}
-				AnchorPoint={new Vector2(0.5, 0.5)}
+				Size={new UDim2(1, 0, 0.283, 0)}
+				AnchorPoint={new Vector2(0.5, 1)}
 				Position={new UDim2(0.5, 0, 1, 0)}
 				Ref={this.containerRef}
+				Key={this.props.Index}
 				{...CircContainer}
 			>
-				<uiaspectratioconstraint {...CircAspectRatio}></uiaspectratioconstraint>
+				<uiaspectratioconstraint {...CircAspectRatio} AspectRatio={6}></uiaspectratioconstraint>
 				<imagelabel ImageColor3={googleMaterial.outerBG} {...CircBG}>
 					<textlabel
 						Text={this.props.Alert}
@@ -45,7 +47,7 @@ class SnackbarItem extends Roact.Component<UIProps> {
 		const container = this.containerRef.getValue();
 
 		if (container) {
-			movingFade(container, false, -0.5, false);
+			movingFade(container, false, 0.5, false);
 			wait(0.5);
 			container.Destroy();
 		}
@@ -78,16 +80,17 @@ class SnackbarItem extends Roact.Component<UIProps> {
 				this.setUpItem();
 				wait(0.4);
 				this.pushItem();
-				wait(1.5);
-				this.popItem();
 			})();
 		}
+	}
+
+	public getContainerRef() {
+		return this.containerRef.getValue();
 	}
 
 	protected willUnmount(): void {
 		// Pop this notification if a new one is incoming
 		this.popItem();
-		wait(0.4);
 	}
 }
 
