@@ -2,6 +2,7 @@ import { MarketplaceService, Players } from "@rbxts/services";
 import { tweenTransparency } from "client/UIProperties/FrameEffects";
 import Store from "client/Rodux/Store";
 import { KnitClient } from "@rbxts/knit";
+import { pushNotification } from "client/Services/SnackbarService";
 const shopService = KnitClient.GetService("ShopService");
 
 // Touch Manager Class
@@ -11,29 +12,40 @@ class TouchManager {
 	open: boolean;
 	enterCallback: (() => void) | undefined;
 	leaveCallback: (() => void) | undefined;
+	conditionFunction: (() => [boolean, string]) | undefined;
 
 	public displayUI() {
 		// Display the UI when the player is in range
 		if (!this.open) {
 			this.open = true;
-			Store.dispatch({
-				type: "hideMenu",
-			});
+
 			if (typeIs(this.action, "string")) {
-				const canView =
-					this.action !== "toggleVIPShop" ||
-					MarketplaceService.UserOwnsGamePassAsync(Players.LocalPlayer.UserId, 48719460);
+				let canView = true;
+				if (this.conditionFunction !== undefined) {
+					canView = this.conditionFunction()[0];
+				}
+
 				if (canView) {
 					Store.dispatch({
 						type: this.action as string,
+					});
+					Store.dispatch({
+						type: "hideMenu",
 					});
 
 					if (this.enterCallback) {
 						this.enterCallback();
 					}
+				} else {
+					if (this.conditionFunction !== undefined) {
+						pushNotification(this.conditionFunction()[1]);
+					}
 				}
 			} else {
 				(this.action as () => void)();
+				Store.dispatch({
+					type: "hideMenu",
+				});
 			}
 		}
 	}
@@ -44,20 +56,21 @@ class TouchManager {
 			this.open = false;
 
 			if (typeIs(this.action, "string")) {
-				const canView =
-					this.action !== "toggleVIPShop" ||
-					MarketplaceService.UserOwnsGamePassAsync(Players.LocalPlayer.UserId, 48719460);
+				let canView = true;
+				if (this.conditionFunction !== undefined) {
+					canView = this.conditionFunction()[0];
+				}
 				if (canView) {
 					Store.dispatch({
 						type: this.action as string,
+					});
+					Store.dispatch({
+						type: "showMenu",
 					});
 
 					if (this.leaveCallback) {
 						this.leaveCallback();
 					}
-					Store.dispatch({
-						type: "showMenu",
-					});
 				}
 			}
 		}
@@ -97,6 +110,7 @@ class TouchManager {
 		action: string | (() => void),
 		enterCallback?: () => void,
 		leaveCallback?: () => void,
+		conditionFunction?: () => [boolean, string],
 	) {
 		// Linking a part to a UI; display the UI on close proximity to the part
 		this.trigger = trigger;
@@ -104,6 +118,7 @@ class TouchManager {
 		this.open = false;
 		this.enterCallback = enterCallback || undefined;
 		this.leaveCallback = leaveCallback || undefined;
+		this.conditionFunction = conditionFunction || undefined;
 	}
 }
 

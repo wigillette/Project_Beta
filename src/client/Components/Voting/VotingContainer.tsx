@@ -91,22 +91,13 @@ class Voting extends Roact.Component<UIProps> {
 							AnchorPoint={new Vector2(0.5, 0.3)}
 						>
 							<imagelabel ImageColor3={googleMaterial.innerBG2} {...RectBG}>
-								<scrollingframe
+								<frame
 									BackgroundTransparency={1}
-									Ref={this.scrollRef}
 									Size={new UDim2(0.95, 0, 0.95, 0)}
 									Position={new UDim2(0.5, 0, 0.5, 0)}
 									AnchorPoint={new Vector2(0.5, 0.5)}
-									BorderSizePixel={0}
 								>
-									<uigridlayout
-										Ref={this.gridRef}
-										{...CardGridLayout}
-										CellSize={new UDim2(0.2, 0, 0.2, 0)}
-										FillDirectionMaxCells={4}
-									>
-										<uiaspectratioconstraint {...SquareAspectRatio}></uiaspectratioconstraint>
-									</uigridlayout>
+									
 									{
 										// Display all the choices using the voting item prop
 										ObjectUtils.values(this.props.maps).map((mapName) => {
@@ -123,7 +114,7 @@ class Voting extends Roact.Component<UIProps> {
 											);
 										})
 									}
-								</scrollingframe>
+								</frame>
 
 								<uigradient {...gradientProperties}></uigradient>
 							</imagelabel>

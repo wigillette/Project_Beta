@@ -66,7 +66,6 @@ class SnackbarManager {
 			wait(2);
 			this.popNotification(object);
 		});
-		print(this.objects);
 	}
 
 	constructor() {

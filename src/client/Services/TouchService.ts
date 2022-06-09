@@ -9,8 +9,6 @@ export default function init() {
 	// Client Objects
 	const MatchService = KnitClient.GetService("MatchService");
 	const client = Players.LocalPlayer;
-	const pg = client.WaitForChild("PlayerGui");
-	const main = pg.WaitForChild("Main");
 
 	// List of trigger parts and their corresponding Rodux action names
 	const triggerHooks: TouchManager[] = [];
@@ -21,8 +19,9 @@ export default function init() {
 		const action = trigger[1] as string | (() => void);
 		const enterCallback = trigger[2] as (() => void) | undefined;
 		const leaveCallback = trigger[3] as (() => void) | undefined;
+		const conditionFunction = trigger[4] as (() => [boolean, string]) | undefined;
 		if (triggerPart && action) {
-			const triggerHook = new TouchManager(triggerPart, action, enterCallback, leaveCallback);
+			const triggerHook = new TouchManager(triggerPart, action, enterCallback, leaveCallback, conditionFunction);
 			triggerHooks.push(triggerHook);
 		}
 	});
