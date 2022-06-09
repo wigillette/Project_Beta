@@ -20,15 +20,17 @@ class SnackbarItem extends Roact.Component<UIProps> {
 			<frame
 				Size={new UDim2(1, 0, 0.283, 0)}
 				AnchorPoint={new Vector2(0.5, 1)}
-				Position={new UDim2(0.5, 0, 1, 0)}
+				Position={new UDim2(0.5, 0, 1.5, 0)}
 				Ref={this.containerRef}
 				Key={this.props.Index}
+				Visible={false}
 				{...CircContainer}
 			>
 				<uiaspectratioconstraint {...CircAspectRatio} AspectRatio={6}></uiaspectratioconstraint>
-				<imagelabel ImageColor3={googleMaterial.outerBG} {...CircBG}>
+				<imagelabel ImageTransparency={1} ImageColor3={googleMaterial.outerBG} {...CircBG}>
 					<textlabel
 						Text={this.props.Alert}
+						TextTransparency={1}
 						AnchorPoint={new Vector2(0.5, 0.5)}
 						Position={new UDim2(0.5, 0, 0.5, 0)}
 						Size={new UDim2(0.9, 0, 0.9, 0)}
@@ -37,7 +39,7 @@ class SnackbarItem extends Roact.Component<UIProps> {
 					></textlabel>
 					<uigradient {...whiteGradientProperties}></uigradient>
 				</imagelabel>
-				<imagelabel ImageColor3={googleMaterial.outerShadow} {...CircShadow}></imagelabel>
+				<imagelabel ImageColor3={googleMaterial.outerShadow} ImageTransparency={1} {...CircShadow}></imagelabel>
 			</frame>
 		);
 	}
@@ -57,31 +59,12 @@ class SnackbarItem extends Roact.Component<UIProps> {
 		// Tween the notification up and make it visible to the viwewer
 		const container = this.containerRef.getValue();
 		if (container) {
-			container.Visible = true;
 			movingFade(container, true, -0.5, false);
 		}
 	}
 
-	private setUpItem(): void {
-		// Make the notification invisible to start
-		const container = this.containerRef.getValue();
-		if (container) {
-			container.Visible = false;
-			tweenTransparency(container, true, false);
-		}
-	}
-
 	protected didMount(): void {
-		// Animate the notification when it is mounted to the view
-		const container = this.containerRef.getValue();
-
-		if (container) {
-			coroutine.wrap(() => {
-				this.setUpItem();
-				wait(0.4);
-				this.pushItem();
-			})();
-		}
+		this.pushItem();
 	}
 
 	public getContainerRef() {

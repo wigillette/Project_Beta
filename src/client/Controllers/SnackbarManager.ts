@@ -28,7 +28,7 @@ class SnackbarObject {
 	}
 }
 
-const positions: number[] = [1, 0.5, 0];
+const positions: number[] = [1, 0.75, 0.5];
 class SnackbarManager {
 	objects: SnackbarObject[];
 	snackbarContainer: Frame;
@@ -63,7 +63,7 @@ class SnackbarManager {
 		this.objects.push(object);
 
 		spawn(() => {
-			wait(1.5);
+			wait(2);
 			this.popNotification(object);
 		});
 		print(this.objects);
@@ -82,20 +82,6 @@ class SnackbarManager {
 		// Setting up object variables
 		this.snackbarContainer = main.WaitForChild("Snackbar") as Frame;
 		this.objects = [];
-
-		/*
-		spawn(() => {
-			wait(5);
-			print("HERE");
-			for (let i = 0; i < 100; i++) {
-				this.pushNotification("TESTING");
-				wait(1);
-				if (i !== 0 && i % 3 === 0) {
-					wait(10);
-				}
-			}
-		});
-		*/
 	}
 }
 

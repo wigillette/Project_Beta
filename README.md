@@ -201,10 +201,10 @@
 - [x] Add error handling to character load for MVPs
 - [x] Make characters no can-collide in lobby
 - [x] Add multiplicity to crafting/trading
-- [ ] Make snackbar service faster by potentially stacking notifications?
+- [x] Make snackbar service faster by potentially stacking notifications?
 - [ ] Fix scroll on trade
 - [x] Add names to trading
-- [x] Menu reappearing bug
+- [ ] Menu reappearing bug
 - [ ] Only show crafting/trading when level requirements are met
 
 > Future Updates
