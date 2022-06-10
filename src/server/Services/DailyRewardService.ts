@@ -23,13 +23,14 @@ export const DailyRewardService = Knit.CreateService({
 			return this.Server.GetDRInfo(Player);
 		},
 		ClaimReward(Player: Player) {
-			this.Server.ClaimReward(Player);
+			return this.Server.ClaimReward(Player);
 		},
 	},
 
 	ClaimReward(Player: Player) {
 		const DRInfo = this.GetDRInfo(Player);
 		DRInfo.TimeRemaining = 86400 - (os.time() - DRInfo.PreviouslyClaimed);
+		let canClaim = false;
 		if (DRInfo.TimeRemaining <= 0) {
 			// Add the reward
 			let day = math.min(DRInfo.Streak, 4);
@@ -48,9 +49,11 @@ export const DailyRewardService = Knit.CreateService({
 			this.Client.StreakChanged.Fire(Player, DRInfo);
 			this.UpdateDailyRewardData(Player, DRInfo);
 			SnackbarService.PushPlayer(Player, `You have received ${reward} gold!`);
+			canClaim = true;
 		} else {
 			SnackbarService.PushPlayer(Player, `You have ${DRInfo.TimeRemaining} seconds remaining!`);
 		}
+		return canClaim;
 	},
 
 	GetDRInfo(Player: Player) {

@@ -2,12 +2,11 @@ import Roact from "@rbxts/roact";
 import RoactRodux from "@rbxts/roact-rodux";
 import { googleMaterial, whiteGradientProperties } from "client/UIProperties/ColorSchemes";
 import { RectBG, RectContainer, RectShadow, RectText, SquareAspectRatio } from "client/UIProperties/RectUI";
-import { CircContainer, CircBG, CircShadow, CircText } from "client/UIProperties/CircularUI";
 import RectProgress from "./Material/RectProgress";
 import DynamicViewport from "./Material/DynamicViewport";
 import MenuButtons from "./MenuButtons";
 import { PROFILE_FORMAT } from "shared/LevelInfo";
-import { Players } from "@rbxts/services";
+import ProfileService from "../Services/ProfileService";
 
 interface UIProps {
 	Experience: number;
@@ -85,6 +84,12 @@ class Profile extends Roact.Component<UIProps> {
 				<MenuButtons />
 			</frame>
 		);
+	}
+
+	protected didUpdate(previousProps: UIProps, previousState: {}): void {
+		if (this.props.Level !== previousProps.Level) {
+			ProfileService.PlayLevelUpSFX();
+		}
 	}
 }
 

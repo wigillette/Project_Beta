@@ -98,6 +98,8 @@
 - [x] Arena Ticket Service
 - [x] Crafting Service
 - [x] Trading Service
+- [ ] Idle Service
+- [ ] Ping Service
 
 > Shared
 - [x] Sword Data
@@ -206,7 +208,9 @@
 - [x] Add names to trading
 - [ ] Menu visibility bug on enter
 - [x] Only show crafting/trading when level requirements are met
-- [ ] Add level and daily reward SFX
+- [x] Add level and daily reward SFX
+- [x] Daily Reward Chest Animation
+- [ ] Revamp Intro
 
 > Future Updates
 - [ ] Guilds
