@@ -208,6 +208,13 @@ class Shop extends Roact.Component<UIProps, UIState> {
 			const connection = registerGridDynamicScrolling(scroll, grid);
 			this.connections.push(connection);
 		}
+
+		const frame = shopRef.getValue() as Frame;
+		if (frame) {
+			this.props.toggle
+				? movingFadeAbsolute(frame, true, new UDim2(0.5, 0, 0.4, 0), true)
+				: movingFadeAbsolute(frame, false, new UDim2(0.5, 0, 0.1, 0), true);
+		}
 	}
 
 	protected didUpdate(previousProps: UIProps, previousState: UIState): void {
@@ -221,6 +228,17 @@ class Shop extends Roact.Component<UIProps, UIState> {
 					this.setState({ discount: response[1] });
 				}
 			});
+		}
+
+		if (previousProps.toggle !== this.props.toggle || this.props.toggle !== oldFadeIn) {
+			const frame = shopRef.getValue() as Frame;
+			if (frame && oldFadeIn !== this.props.toggle) {
+				oldFadeIn = this.props.toggle;
+				// Update the frame's position when the toggle changes
+				this.props.toggle
+					? movingFadeAbsolute(frame, true, new UDim2(0.5, 0, 0.4, 0), true)
+					: movingFadeAbsolute(frame, false, new UDim2(0.5, 0, 0.1, 0), true);
+			}
 		}
 	}
 
@@ -240,15 +258,6 @@ interface storeState {
 
 export = RoactRodux.connect(
 	function (state: storeState) {
-		const shopFrame = shopRef.getValue() as Frame;
-		if (shopFrame && state.toggleShop.toggle !== oldFadeIn) {
-			oldFadeIn = state.toggleShop.toggle;
-			// Update the frame's position when the toggle changes
-			state.toggleShop.toggle
-				? movingFadeAbsolute(shopFrame, true, new UDim2(0.5, 0, 0.4, 0), true)
-				: movingFadeAbsolute(shopFrame, false, new UDim2(0.5, 0, 0.1, 0), true);
-		}
-
 		return {
 			toggle: state.toggleShop.toggle,
 			currentPack: state.switchPack.currentPack,

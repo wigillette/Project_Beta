@@ -178,6 +178,27 @@ class DailyReward extends Roact.Component<UIProps, UIState> {
 				wait(1);
 			}
 		})();
+
+		const frame = dailyRewardRef.getValue() as Frame;
+		if (frame) {
+			oldFadeIn = this.props.toggle;
+			this.props.toggle
+				? movingFadeAbsolute(frame, true, new UDim2(0.5, 0, 0.4, 0), true)
+				: movingFadeAbsolute(frame, false, new UDim2(0.5, 0, 0.1, 0), true);
+		}
+	}
+
+	protected didUpdate(previousProps: UIProps, previousState: {}): void {
+		if (this.props.toggle !== previousProps.toggle || this.props.toggle !== oldFadeIn) {
+			const frame = dailyRewardRef.getValue() as Frame;
+			if (frame && oldFadeIn !== this.props.toggle) {
+				oldFadeIn = this.props.toggle;
+				// Update the frame's position when the toggle changes
+				this.props.toggle
+					? movingFadeAbsolute(frame, true, new UDim2(0.5, 0, 0.4, 0), true)
+					: movingFadeAbsolute(frame, false, new UDim2(0.5, 0, 0.1, 0), true);
+			}
+		}
 	}
 }
 
@@ -187,15 +208,6 @@ interface storeState {
 }
 
 export = RoactRodux.connect((state: storeState) => {
-	const dailyRewardFrame = dailyRewardRef.getValue();
-
-	if (dailyRewardFrame && state.toggleDailyReward.toggle !== oldFadeIn) {
-		oldFadeIn = state.toggleDailyReward.toggle;
-		state.toggleDailyReward.toggle
-			? movingFadeAbsolute(dailyRewardFrame, true, new UDim2(0.5, 0, 0.4, 0), true)
-			: movingFadeAbsolute(dailyRewardFrame, false, new UDim2(0.5, 0, 0.1, 0), true);
-	}
-
 	return {
 		toggle: state.toggleDailyReward.toggle,
 		currentStreak: state.updateStreak.streak,

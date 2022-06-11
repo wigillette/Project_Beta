@@ -191,6 +191,14 @@ class Betting extends Roact.Component<UIProps> {
 			const connection = registerGridDynamicScrolling(scroll, grid);
 			this.connections.push(connection);
 		}
+
+		const frame = bettingRef.getValue() as Frame;
+		if (frame) {
+			oldFade = this.props.toggle;
+			this.props.toggle
+				? movingFadeAbsolute(frame, true, new UDim2(0.5, 0, 0.4, 0), true)
+				: movingFadeAbsolute(frame, false, new UDim2(0.5, 0, 0.1, 0), true);
+		}
 	}
 
 	protected willUnmount(): void {
@@ -199,6 +207,19 @@ class Betting extends Roact.Component<UIProps> {
 			connection.Disconnect();
 		});
 		this.connections.clear();
+	}
+
+	protected didUpdate(previousProps: UIProps, previousState: {}): void {
+		if (this.props.toggle !== previousProps.toggle || this.props.toggle !== oldFade) {
+			const bettingFrame = bettingRef.getValue() as Frame;
+			if (bettingFrame && oldFade !== this.props.toggle) {
+				oldFade = this.props.toggle;
+				// Update the frame's position when the toggle changes
+				this.props.toggle
+					? movingFadeAbsolute(bettingFrame, true, new UDim2(0.5, 0, 0.4, 0), true)
+					: movingFadeAbsolute(bettingFrame, false, new UDim2(0.5, 0, 0.1, 0), true);
+			}
+		}
 	}
 }
 
@@ -213,15 +234,6 @@ interface storeState {
 
 export = RoactRodux.connect(
 	(state: storeState) => {
-		const bettingFrame = bettingRef.getValue() as Frame;
-		if (bettingFrame && oldFade !== state.toggleBetting.toggle) {
-			oldFade = state.toggleBetting.toggle;
-			// Update the frame's position when the toggle changes
-			state.toggleBetting.toggle
-				? movingFadeAbsolute(bettingFrame, true, new UDim2(0.5, 0, 0.4, 0), true)
-				: movingFadeAbsolute(bettingFrame, false, new UDim2(0.5, 0, 0.1, 0), true);
-		}
-
 		return {
 			toggle: state.toggleBetting.toggle,
 			choices: state.updateBettingInfo.choices,

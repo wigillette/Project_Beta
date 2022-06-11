@@ -97,7 +97,6 @@ class Voting extends Roact.Component<UIProps> {
 									Position={new UDim2(0.5, 0, 0.5, 0)}
 									AnchorPoint={new Vector2(0.5, 0.5)}
 								>
-									
 									{
 										// Display all the choices using the voting item prop
 										ObjectUtils.values(this.props.maps).map((mapName) => {
@@ -209,6 +208,14 @@ class Voting extends Roact.Component<UIProps> {
 			const connection = registerGridDynamicScrolling(scroll, grid);
 			this.connections.push(connection);
 		}
+
+		const frame = votingRef.getValue() as Frame;
+		if (frame) {
+			oldFade = this.props.toggle;
+			this.props.toggle
+				? movingFadeAbsolute(frame, true, new UDim2(0.5, 0, 0.4, 0), true)
+				: movingFadeAbsolute(frame, false, new UDim2(0.5, 0, 0.1, 0), true);
+		}
 	}
 
 	protected willUnmount(): void {
@@ -217,6 +224,19 @@ class Voting extends Roact.Component<UIProps> {
 			connection.Disconnect();
 		});
 		this.connections.clear();
+	}
+
+	protected didUpdate(previousProps: UIProps, previousState: {}): void {
+		if (this.props.toggle !== previousProps.toggle || oldFade !== this.props.toggle) {
+			const frame = votingRef.getValue() as Frame;
+			if (frame && oldFade !== this.props.toggle) {
+				oldFade = this.props.toggle;
+				// Update the frame's position when the toggle changes
+				this.props.toggle
+					? movingFadeAbsolute(frame, true, new UDim2(0.5, 0, 0.4, 0), true)
+					: movingFadeAbsolute(frame, false, new UDim2(0.5, 0, 0.1, 0), true);
+			}
+		}
 	}
 }
 
@@ -229,15 +249,6 @@ interface storeState {
 
 export = RoactRodux.connect(
 	(state: storeState) => {
-		const votingFrame = votingRef.getValue() as Frame;
-		if (votingFrame && oldFade !== state.setVotingToggle.toggle) {
-			oldFade = state.setVotingToggle.toggle;
-			// Update the frame's position when the toggle changes
-			state.setVotingToggle.toggle
-				? movingFadeAbsolute(votingFrame, true, new UDim2(0.5, 0, 0.4, 0), true)
-				: movingFadeAbsolute(votingFrame, false, new UDim2(0.5, 0, 0.1, 0), true);
-		}
-
 		return {
 			toggle: state.setVotingToggle.toggle,
 			maps: state.updateVotingOptions.maps,

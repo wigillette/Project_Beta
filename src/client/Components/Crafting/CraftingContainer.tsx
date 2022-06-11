@@ -227,6 +227,14 @@ class CraftingContainer extends Roact.Component<UIProps> {
 			const connection = registerGridDynamicScrolling(scroll, grid);
 			this.connections.push(connection);
 		}
+
+		const frame = craftingRef.getValue() as Frame;
+		if (frame) {
+			oldFadeIn = this.props.toggle;
+			this.props.toggle
+				? movingFadeAbsolute(frame, true, new UDim2(0.5, 0, 0.4, 0), true)
+				: movingFadeAbsolute(frame, false, new UDim2(0.5, 0, 0.1, 0), true);
+		}
 	}
 
 	protected willUnmount(): void {
@@ -235,6 +243,19 @@ class CraftingContainer extends Roact.Component<UIProps> {
 			connection.Disconnect();
 		});
 		this.connections.clear();
+	}
+
+	protected didUpdate(previousProps: UIProps, previousState: {}): void {
+		if (this.props.toggle !== previousProps.toggle || this.props.toggle !== oldFadeIn) {
+			const frame = craftingRef.getValue() as Frame;
+			if (frame && oldFadeIn !== this.props.toggle) {
+				oldFadeIn = this.props.toggle;
+				// Update the frame's position when the toggle changes
+				this.props.toggle
+					? movingFadeAbsolute(frame, true, new UDim2(0.5, 0, 0.4, 0), true)
+					: movingFadeAbsolute(frame, false, new UDim2(0.5, 0, 0.1, 0), true);
+			}
+		}
 	}
 }
 
@@ -250,15 +271,6 @@ interface storeState {
 
 export = RoactRodux.connect(
 	(state: storeState) => {
-		const craftingFrame = craftingRef.getValue() as Frame;
-		if (craftingFrame && state.toggleCrafting.toggle !== oldFadeIn) {
-			oldFadeIn = state.toggleCrafting.toggle;
-			// Update the frame's position when the toggle changes
-			state.toggleCrafting.toggle
-				? movingFadeAbsolute(craftingFrame, true, new UDim2(0.5, 0, 0.4, 0), true)
-				: movingFadeAbsolute(craftingFrame, false, new UDim2(0.5, 0, 0.1, 0), true);
-		}
-
 		return {
 			toggle: state.toggleCrafting.toggle,
 			currentRarity: state.switchRarity.currentRarity,

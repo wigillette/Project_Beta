@@ -158,6 +158,13 @@ class VIPShop extends Roact.Component<UIProps, UIState> {
 			const connection = registerGridDynamicScrolling(scroll, grid);
 			this.connections.push(connection);
 		}
+
+		const frame = shopRef.getValue() as Frame;
+		if (frame) {
+			this.props.toggle
+				? movingFadeAbsolute(frame, true, new UDim2(0.5, 0, 0.4, 0), true)
+				: movingFadeAbsolute(frame, false, new UDim2(0.5, 0, 0.1, 0), true);
+		}
 	}
 
 	protected didUpdate(previousProps: UIProps, previousState: UIState): void {
@@ -171,6 +178,18 @@ class VIPShop extends Roact.Component<UIProps, UIState> {
 					this.setState({ discount: response[1] });
 				}
 			});
+		}
+
+		const frame = shopRef.getValue() as Frame;
+		if (frame && (oldFadeIn !== this.props.toggle || previousProps.toggle !== this.props.toggle)) {
+			oldFadeIn = this.props.toggle;
+
+			if (oldFadeIn !== this.props.toggle) {
+				// Update the frame's position when the toggle changes
+				this.props.toggle
+					? movingFadeAbsolute(frame, true, new UDim2(0.5, 0, 0.4, 0), true)
+					: movingFadeAbsolute(frame, false, new UDim2(0.5, 0, 0.1, 0), true);
+			}
 		}
 	}
 
@@ -188,15 +207,6 @@ interface storeState {
 }
 
 export = RoactRodux.connect((state: storeState) => {
-	const shopFrame = shopRef.getValue() as Frame;
-	if (shopFrame && state.toggleVIPShop.vipToggle !== oldFadeIn) {
-		oldFadeIn = state.toggleVIPShop.vipToggle;
-		// Update the frame's position when the toggle changes
-		state.toggleVIPShop.vipToggle
-			? movingFadeAbsolute(shopFrame, true, new UDim2(0.5, 0, 0.4, 0), true)
-			: movingFadeAbsolute(shopFrame, false, new UDim2(0.5, 0, 0.1, 0), true);
-	}
-
 	return {
 		toggle: state.toggleVIPShop.vipToggle,
 	};

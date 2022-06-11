@@ -138,6 +138,20 @@ class MenuButtons extends Roact.Component<UIProps, UIState> {
 			</frame>
 		);
 	}
+
+	protected didUpdate(previousProps: UIProps, previousState: {}): void {
+		if (this.props.visible !== previousProps.visible) {
+			const frame = buttonContainerRef.getValue() as Frame;
+			if (frame) {
+				movingFadeAbsolute(
+					frame,
+					this.props.visible,
+					this.props.visible ? new UDim2(0.75, 0, 1, 0) : new UDim2(0.6, 0, 1, 0),
+					false,
+				);
+			}
+		}
+	}
 }
 
 interface storeState {
@@ -148,17 +162,6 @@ interface storeState {
 
 export = RoactRodux.connect(
 	function (state: storeState) {
-		const buttonContainer = buttonContainerRef.getValue();
-		const toggleButton = toggleButtonRef.getValue();
-		if (buttonContainer && toggleButton) {
-			movingFadeAbsolute(
-				buttonContainer,
-				state.toggleMenu.Visible,
-				state.toggleMenu.Visible ? new UDim2(0.75, 0, 1, 0) : new UDim2(0.6, 0, 1, 0),
-				false,
-			);
-		}
-
 		return {
 			visible: state.toggleMenu.Visible,
 			toggleVisible: state.showMenu.ToggleVisible,

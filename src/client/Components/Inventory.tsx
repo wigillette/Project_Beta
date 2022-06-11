@@ -2,7 +2,7 @@ import Roact from "@rbxts/roact";
 import RoactRodux from "@rbxts/roact-rodux";
 import { movingFadeAbsolute } from "../UIProperties/FrameEffects";
 import { KnitClient as Knit } from "@rbxts/knit";
-import { inventoryState } from "../Rodux/Reducers/InventoryReducer";
+import inventoryReducer, { inventoryState } from "../Rodux/Reducers/InventoryReducer";
 import {
 	RectShadow,
 	RectBG,
@@ -189,6 +189,14 @@ class Inventory extends Roact.Component<inventoryState> {
 			const connection = registerGridDynamicScrolling(scroll, grid);
 			this.connections.push(connection);
 		}
+
+		const frame = Inventory.InventoryRef.getValue() as Frame;
+		if (frame) {
+			oldFadeIn = this.props.toggle;
+			this.props.toggle
+				? movingFadeAbsolute(frame, true, new UDim2(0.5, 0, 0.4, 0), true)
+				: movingFadeAbsolute(frame, false, new UDim2(0.5, 0, 0.1, 0), true);
+		}
 	}
 
 	protected willUnmount(): void {
@@ -197,6 +205,19 @@ class Inventory extends Roact.Component<inventoryState> {
 			connection.Disconnect();
 		});
 		this.connections.clear();
+	}
+
+	protected didUpdate(previousProps: inventoryState, previousState: {}): void {
+		if (this.props.toggle !== previousProps.toggle) {
+			const frame = Inventory.InventoryRef.getValue() as Frame;
+			if (frame && oldFadeIn !== this.props.toggle) {
+				oldFadeIn = this.props.toggle;
+				// Update the frame's position when the toggle changes
+				this.props.toggle
+					? movingFadeAbsolute(frame, true, new UDim2(0.5, 0, 0.4, 0), true)
+					: movingFadeAbsolute(frame, false, new UDim2(0.5, 0, 0.1, 0), true);
+			}
+		}
 	}
 }
 
@@ -209,13 +230,6 @@ interface storeState {
 }
 
 export = RoactRodux.connect(function (state: storeState) {
-	const InventoryFrame = Inventory.InventoryRef.getValue() as Frame;
-	if (InventoryFrame && state.toggleInventory.toggle !== oldFadeIn) {
-		oldFadeIn = state.setInventoryToggle.toggle;
-		state.toggleInventory.toggle
-			? movingFadeAbsolute(InventoryFrame, true, new UDim2(0.5, 0, 0.4, 0), true)
-			: movingFadeAbsolute(InventoryFrame, false, new UDim2(0.5, 0, 0.1, 0), true);
-	}
 	return {
 		toggle: state.toggleInventory.toggle,
 		inventory: state.updateInventory.inventory,

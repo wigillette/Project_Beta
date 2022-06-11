@@ -206,11 +206,12 @@
 - [x] Make snackbar service faster by potentially stacking notifications?
 - [ ] Fix scroll on trade
 - [x] Add names to trading
-- [ ] Menu visibility bug on enter
+- [x] Menu visibility bug on enter
 - [x] Only show crafting/trading when level requirements are met
 - [x] Add level and daily reward SFX
 - [x] Daily Reward Chest Animation
 - [ ] Revamp Intro
+- [x] Move tweens to didUpdate 
 
 > Future Updates
 - [ ] Guilds

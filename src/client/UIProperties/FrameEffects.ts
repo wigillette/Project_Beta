@@ -162,15 +162,21 @@ const updateBlurEffect = (fadeIn: boolean, key: string) => {
 };
 
 export const movingFade = (frame: Frame, fadeIn: boolean, magnitude: number, blurEffect: boolean) => {
-	const direction = fadeIn ? "Down" : "Up";
-	// Add the blur effect
-	if (blurEffect) {
-		updateBlurEffect(fadeIn, frame.Name);
+	const state = debounces.get(frame);
+
+	if (!state) {
+		debounces.set(frame, true);
+		const direction = fadeIn ? "Down" : "Up";
+		// Add the blur effect
+		if (blurEffect) {
+			updateBlurEffect(fadeIn, frame.Name);
+		}
+		// Tween the frame
+		tweenPos(frame, direction, magnitude);
+		// Tween the transparency
+		tweenTransparency(frame, true, fadeIn);
+		debounces.set(frame, false);
 	}
-	// Tween the frame
-	tweenPos(frame, direction, magnitude);
-	// Tween the transparency
-	tweenTransparency(frame, true, fadeIn);
 };
 
 export const movingFadeAbsolute = (frame: Frame, fadeIn: boolean, position: UDim2, blurEffect: boolean) => {

@@ -152,6 +152,14 @@ class RequestsContainer extends Roact.Component<UIProps> {
 			this.connections.push(playerListConnection);
 			this.connections.push(requestsListConnection);
 		}
+
+		const frame = tradingRef.getValue() as Frame;
+		if (frame) {
+			oldFadeIn = this.props.requestsToggle;
+			this.props.requestsToggle
+				? movingFadeAbsolute(frame, true, new UDim2(0.5, 0, 0.4, 0), true)
+				: movingFadeAbsolute(frame, false, new UDim2(0.5, 0, 0.1, 0), true);
+		}
 	}
 
 	protected willUnmount(): void {
@@ -160,6 +168,19 @@ class RequestsContainer extends Roact.Component<UIProps> {
 			connection.Disconnect();
 		});
 		this.connections.clear();
+	}
+
+	protected didUpdate(previousProps: UIProps, previousState: {}): void {
+		if (this.props.requestsToggle !== previousProps.requestsToggle || oldFadeIn !== this.props.requestsToggle) {
+			const frame = tradingRef.getValue() as Frame;
+			if (frame && oldFadeIn !== this.props.requestsToggle) {
+				oldFadeIn = this.props.requestsToggle;
+				// Update the frame's position when the toggle changes
+				this.props.requestsToggle
+					? movingFadeAbsolute(frame, true, new UDim2(0.5, 0, 0.4, 0), true)
+					: movingFadeAbsolute(frame, false, new UDim2(0.5, 0, 0.1, 0), true);
+			}
+		}
 	}
 }
 
@@ -172,15 +193,6 @@ interface storeState {
 }
 
 export = RoactRodux.connect((state: storeState) => {
-	const tradingFrame = tradingRef.getValue() as Frame;
-	if (tradingFrame && state.startTrade.requestsToggle !== oldFadeIn) {
-		oldFadeIn = state.startTrade.requestsToggle;
-		// Update the frame's position when the toggle changes
-		state.startTrade.requestsToggle
-			? movingFadeAbsolute(tradingFrame, true, new UDim2(0.5, 0, 0.4, 0), true)
-			: movingFadeAbsolute(tradingFrame, false, new UDim2(0.5, 0, 0.1, 0), true);
-	}
-
 	return {
 		requestsToggle: state.startTrade.requestsToggle,
 		playerList: state.updateTradePlayers.playerList,

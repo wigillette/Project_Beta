@@ -112,6 +112,25 @@ class SpectateContainer extends Roact.Component<UIProps, UIState> {
 				}
 			}
 		}
+
+		if (this.props.toggle !== previousProps.toggle) {
+			const frame = spectateContainerRef.getValue() as Frame;
+			if (frame) {
+				// Update the frame's position when the toggle changes
+				this.props.toggle
+					? movingFadeAbsolute(frame, true, new UDim2(0.5, 0, 0.95, 0), false)
+					: movingFadeAbsolute(frame, false, new UDim2(0.5, 0, 1, 0), false);
+			}
+		}
+	}
+
+	protected didMount(): void {
+		const frame = spectateContainerRef.getValue() as Frame;
+		if (frame) {
+			this.props.toggle
+				? movingFadeAbsolute(frame, true, new UDim2(0.5, 0, 0.95, 0), false)
+				: movingFadeAbsolute(frame, false, new UDim2(0.5, 0, 1, 0), false);
+		}
 	}
 }
 
@@ -123,13 +142,6 @@ interface storeState {
 
 export = RoactRodux.connect(
 	(state: storeState) => {
-		const spectatorFrame = spectateContainerRef.getValue();
-
-		if (spectatorFrame) {
-			state.toggleSpectate.toggle
-				? movingFadeAbsolute(spectatorFrame, true, new UDim2(0.5, 0, 0.95, 0), false)
-				: movingFadeAbsolute(spectatorFrame, false, new UDim2(0.5, 0, 1, 0), false);
-		}
 		return {
 			participants: state.updateParticipants.participants,
 			playerViewing: state.switchSpectating.playerViewing,

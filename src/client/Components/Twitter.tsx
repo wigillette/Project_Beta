@@ -66,6 +66,29 @@ class Twitter extends Roact.Component<UIProps> {
 			</frame>
 		);
 	}
+
+	protected didUpdate(previousProps: UIProps, previousState: {}): void {
+		if (this.props.toggle !== previousProps.toggle) {
+			const frame = twitterRef.getValue() as Frame;
+			if (frame && oldFadeIn !== this.props.toggle) {
+				oldFadeIn = this.props.toggle;
+				// Update the frame's position when the toggle changes
+				this.props.toggle
+					? movingFadeAbsolute(frame, true, new UDim2(0.5, 0, 0.4, 0), true)
+					: movingFadeAbsolute(frame, false, new UDim2(0.5, 0, 0.1, 0), true);
+			}
+		}
+	}
+
+	protected didMount(): void {
+		const frame = twitterRef.getValue() as Frame;
+		if (frame) {
+			oldFadeIn = this.props.toggle;
+			this.props.toggle
+				? movingFadeAbsolute(frame, true, new UDim2(0.5, 0, 0.4, 0), true)
+				: movingFadeAbsolute(frame, false, new UDim2(0.5, 0, 0.1, 0), true);
+		}
+	}
 }
 
 interface storeState {
@@ -73,15 +96,6 @@ interface storeState {
 }
 
 export = RoactRodux.connect(function (state: storeState) {
-	const twitterFrame = twitterRef.getValue() as Frame;
-	if (twitterFrame && state.toggleTwitter.toggle !== oldFadeIn) {
-		oldFadeIn = state.toggleTwitter.toggle;
-		// Update the frame's position when the toggle changes
-		state.toggleTwitter.toggle
-			? movingFadeAbsolute(twitterFrame, true, new UDim2(0.5, 0, 0.4, 0), true)
-			: movingFadeAbsolute(twitterFrame, false, new UDim2(0.5, 0, 0.1, 0), true);
-	}
-
 	return {
 		toggle: state.toggleTwitter.toggle,
 	};
