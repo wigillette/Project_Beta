@@ -161,6 +161,7 @@ class VIPShop extends Roact.Component<UIProps, UIState> {
 
 		const frame = shopRef.getValue() as Frame;
 		if (frame) {
+			oldFadeIn = this.props.toggle;
 			this.props.toggle
 				? movingFadeAbsolute(frame, true, new UDim2(0.5, 0, 0.4, 0), true)
 				: movingFadeAbsolute(frame, false, new UDim2(0.5, 0, 0.1, 0), true);
@@ -181,10 +182,9 @@ class VIPShop extends Roact.Component<UIProps, UIState> {
 		}
 
 		const frame = shopRef.getValue() as Frame;
-		if (frame && (oldFadeIn !== this.props.toggle || previousProps.toggle !== this.props.toggle)) {
-			oldFadeIn = this.props.toggle;
-
+		if (frame && previousProps.toggle !== this.props.toggle) {
 			if (oldFadeIn !== this.props.toggle) {
+				oldFadeIn = this.props.toggle;
 				// Update the frame's position when the toggle changes
 				this.props.toggle
 					? movingFadeAbsolute(frame, true, new UDim2(0.5, 0, 0.4, 0), true)

@@ -13,11 +13,13 @@ class TouchManager {
 	enterCallback: (() => void) | undefined;
 	leaveCallback: (() => void) | undefined;
 	conditionFunction: (() => [boolean, string]) | undefined;
+	debounce: boolean;
 
 	public displayUI() {
 		// Display the UI when the player is in range
-		if (!this.open) {
+		if (!this.open && !this.debounce) {
 			this.open = true;
+			this.debounce = true;
 
 			if (typeIs(this.action, "string")) {
 				let canView = true;
@@ -47,14 +49,16 @@ class TouchManager {
 					type: "hideMenu",
 				});
 			}
+			wait(0.2);
+			this.debounce = false;
 		}
 	}
 
 	public hideUI() {
 		// Hide the UI when the player is no longer in range
-		if (this.open) {
+		if (this.open && !this.debounce) {
 			this.open = false;
-
+			this.debounce = true;
 			if (typeIs(this.action, "string")) {
 				let canView = true;
 				if (this.conditionFunction !== undefined) {
@@ -73,6 +77,8 @@ class TouchManager {
 					}
 				}
 			}
+			wait(0.2);
+			this.debounce = false;
 		}
 	}
 
@@ -119,6 +125,7 @@ class TouchManager {
 		this.enterCallback = enterCallback || undefined;
 		this.leaveCallback = leaveCallback || undefined;
 		this.conditionFunction = conditionFunction || undefined;
+		this.debounce = false;
 	}
 }
 

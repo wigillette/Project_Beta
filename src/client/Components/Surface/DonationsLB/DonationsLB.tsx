@@ -134,6 +134,12 @@ class DonationsLB extends Roact.Component<UIProps> {
 					Position={new UDim2(0.5, 0, 0.32, 0)}
 					Size={new UDim2(0.8, 0, 0.575, 0)}
 				>
+					<uilistlayout
+						Padding={new UDim(0.015, 0)}
+						FillDirection={"Vertical"}
+						VerticalAlignment={"Top"}
+						HorizontalAlignment={"Center"}
+					></uilistlayout>
 					{Object.entries(entries[this.props.pageNumber]).map((data, index) => {
 						return (
 							<LBEntry

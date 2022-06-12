@@ -7,6 +7,7 @@ const book = bookStand.WaitForChild("Book") as UnionOperation;
 const standardPos = bookStand.WaitForChild("StandardPos") as Part;
 
 const LobbyAnimationsClient = {
+	idleChestsFolder: Workspace.WaitForChild("IdleChests"),
 	RunBookListener: (character: Model) => {
 		const hrp = character.FindFirstChild("HumanoidRootPart") as BasePart;
 		let viewing = false;
@@ -87,6 +88,20 @@ const LobbyAnimationsClient = {
 
 		const character = Players.LocalPlayer.Character || Players.LocalPlayer.CharacterAdded.Wait()[0];
 		LobbyAnimationsClient.RunBookListener(character);
+
+		LobbyAnimationsClient.idleChestsFolder.GetChildren().forEach((child) => {
+			if (child.IsA("Model")) {
+				const animation = new Instance("Animation");
+				animation.Name = "IdleChest";
+				animation.AnimationId = "rbxassetid://9891617693";
+				animation.Parent = child;
+				const animationController = new Instance("AnimationController");
+				animationController.Parent = child;
+				const animationTrack = animationController.LoadAnimation(animation);
+				animationTrack.Play();
+				animationTrack.AdjustSpeed(0.25);
+			}
+		});
 
 		Players.LocalPlayer.CharacterAdded.Connect((char) => {
 			wait(0.5);

@@ -98,7 +98,7 @@
 - [x] Arena Ticket Service
 - [x] Crafting Service
 - [x] Trading Service
-- [ ] Idle Service
+- [x] Idle Service
 - [ ] Ping Service
 
 > Shared

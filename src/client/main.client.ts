@@ -33,6 +33,7 @@ import SpectateService from "./Services/SpectateService";
 import LobbyAnimationsClient from "./Services/LobbyAnimations";
 import TradingClient from "./Services/TradingService";
 import CraftingClient from "./Services/CraftingService";
+import IdleClient from "./Services/IdleService";
 
 const playerGui = Players.LocalPlayer.WaitForChild("PlayerGui") as PlayerGui;
 
@@ -223,3 +224,4 @@ LobbyAnimationsClient.init();
 TicketService.init();
 TradingClient.init();
 CraftingClient.init();
+IdleClient.init();
