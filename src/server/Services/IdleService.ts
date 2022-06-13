@@ -14,6 +14,9 @@ const IdleService = Knit.CreateService({
 			const material = (isAFK && Enum.Material.ForceField) || Enum.Material.Plastic;
 			this.Server.UpdateState(client, material);
 		},
+		UpdatePing() {
+			return this.Server.UpdatePing();
+		},
 	},
 
 	UpdateState(player: Player, material: Enum.Material) {
@@ -39,6 +42,10 @@ const IdleService = Knit.CreateService({
 				this.UpdateState(player, Enum.Material.Plastic);
 			}
 		}
+	},
+
+	UpdatePing() {
+		return true;
 	},
 
 	KnitInit() {

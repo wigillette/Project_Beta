@@ -42,6 +42,7 @@ class HoverNotification extends Roact.Component<UIProps> {
 				>
 					<uigradient {...mediumGradientProperties}></uigradient>
 					<textlabel
+						Key={"HoverLabel"}
 						Text={this.props.text}
 						Position={new UDim2(0.5, 0, 0.5, 0)}
 						AnchorPoint={new Vector2(0.5, 0.5)}

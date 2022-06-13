@@ -99,7 +99,7 @@
 - [x] Crafting Service
 - [x] Trading Service
 - [x] Idle Service
-- [ ] Ping Service
+- [x] Ping Service
 
 > Shared
 - [x] Sword Data
@@ -149,7 +149,7 @@
 - [x] Crafting UI
 - [x] Crafting Item UI
 - [x] Crafting Selected UI
-- [ ] Ping UI
+- [x] Ping UI
 - [x] Trading UI
 
 > Surface Components

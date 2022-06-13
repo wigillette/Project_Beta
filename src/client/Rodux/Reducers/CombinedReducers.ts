@@ -18,6 +18,7 @@ import { spectateReducer } from "./SpectateReducer";
 import { ticketReducer } from "./TicketReducer";
 import { craftingReducer } from "./CraftingReducer";
 import { tradingReducer } from "./TradingReducer";
+import { pingReducer } from "./PingReducer";
 
 const reducer = Rodux.combineReducers({
 	toggleShop: shopReducer,
@@ -82,8 +83,8 @@ const reducer = Rodux.combineReducers({
 	updateConfirmation: tradingReducer,
 	resetSelection: craftingReducer,
 	showMenu: profileReducer,
-
 	hideMenu: profileReducer,
+	updatePing: pingReducer,
 });
 
 export default reducer;

@@ -1,17 +1,11 @@
 import Roact from "@rbxts/roact";
 import RoactRodux from "@rbxts/roact-rodux";
 import MenuService from "client/Services/MenuService";
-import {
-	movingFadeAbsolute,
-	tweenPosAbsolute,
-	tweenTransparency,
-	tweenTransparencyAbsolute,
-} from "client/UIProperties/FrameEffects";
+import { movingFadeAbsolute } from "client/UIProperties/FrameEffects";
 import { profileState } from "client/Rodux/Reducers/ProfileReducer";
 import { RectContainer, SquareAspectRatio } from "client/UIProperties/RectUI";
 import SquareButton from "../Components/Material/SquareButton";
-import RectButton from "./Material/RectButton";
-import { playSound, rippleEffect, tweenColor } from "client/UIProperties/ButtonEffects";
+import { playSound, tweenColor } from "client/UIProperties/ButtonEffects";
 import { whiteGradientProperties } from "client/UIProperties/ColorSchemes";
 interface UIProps {
 	visible: boolean;

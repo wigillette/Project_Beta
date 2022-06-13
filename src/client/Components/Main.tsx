@@ -20,6 +20,7 @@ import VIPShop from "./VIPShop/VIPShop";
 import CraftingContainer from "./Crafting/CraftingContainer";
 import RequestsContainer from "./Trading/RequestsContainer";
 import TradeContainer from "./Trading/TradeContainer";
+import Ping from "./Ping";
 
 const Main = () => {
 	return (
@@ -45,6 +46,7 @@ const Main = () => {
 			<CraftingContainer />
 			<RequestsContainer />
 			<TradeContainer />
+			<Ping />
 		</screengui>
 	);
 };
