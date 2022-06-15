@@ -210,7 +210,7 @@
 - [x] Only show crafting/trading when level requirements are met
 - [x] Add level and daily reward SFX
 - [x] Daily Reward Chest Animation
-- [ ] Revamp Intro
+- [x] Revamp Intro
 - [x] Move tweens to didUpdate 
 
 > Future Updates

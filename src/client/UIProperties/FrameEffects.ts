@@ -14,7 +14,7 @@ export const tweenSize = (frame: Frame, size: UDim2) => {
 	})();
 };
 
-export const tweenPos = (frame: Frame, direction: string, magnitude: number) => {
+export const tweenPos = (frame: Frame | ImageLabel, direction: string, magnitude: number) => {
 	let newPos: UDim2 = frame.Position;
 	let magnitudes = [0, 0];
 	switch (direction) {
@@ -38,7 +38,7 @@ export const tweenPos = (frame: Frame, direction: string, magnitude: number) => 
 	});
 };
 
-export const tweenPosAbsolute = (frame: Frame | TextLabel, position: UDim2) => {
+export const tweenPosAbsolute = (frame: Frame | TextLabel | ImageLabel, position: UDim2) => {
 	pcall(() => {
 		frame.TweenPosition(position, Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.15, true, undefined);
 	});
@@ -79,7 +79,7 @@ const tweenTransparencyRecurse = (children: Instance[], recurse: boolean, transp
 	});
 };
 
-export const tweenTransparency = (frame: Frame, recurse: boolean, fadeIn: boolean) => {
+export const tweenTransparency = (frame: Frame | ImageLabel, recurse: boolean, fadeIn: boolean) => {
 	let transparency = 0;
 
 	if (fadeIn) {
@@ -90,7 +90,7 @@ export const tweenTransparency = (frame: Frame, recurse: boolean, fadeIn: boolea
 	}
 
 	const children = frame.GetChildren();
-	if (recurse === true) {
+	if (recurse === true && frame.IsA("Frame")) {
 		if (!fadeIn) {
 			TweenService.Create(
 				frame,
@@ -101,15 +101,20 @@ export const tweenTransparency = (frame: Frame, recurse: boolean, fadeIn: boolea
 			).Play();
 		}
 		tweenTransparencyRecurse(children, recurse, transparency);
-	} else if (fadeIn) {
+	} else if (fadeIn && frame.IsA("Frame")) {
 		TweenService.Create(frame, new TweenInfo(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0), {
 			BackgroundTransparency: transparency,
+		}).Play();
+	} else if (!fadeIn && frame.IsA("ImageLabel")) {
+		print("HERE");
+		TweenService.Create(frame, new TweenInfo(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0), {
+			ImageTransparency: transparency,
 		}).Play();
 	}
 
 	if (transparency === 1 && frame.Name !== "Card" && !fadeIn) {
 		spawn(() => {
-			wait(0.1);
+			wait(0.3);
 			frame.Visible = false;
 		});
 	}
@@ -161,7 +166,7 @@ const updateBlurEffect = (fadeIn: boolean, key: string) => {
 	}
 };
 
-export const movingFade = (frame: Frame, fadeIn: boolean, magnitude: number, blurEffect: boolean) => {
+export const movingFade = (frame: Frame | ImageLabel, fadeIn: boolean, magnitude: number, blurEffect: boolean) => {
 	const state = debounces.get(frame);
 
 	if (!state) {
@@ -179,7 +184,12 @@ export const movingFade = (frame: Frame, fadeIn: boolean, magnitude: number, blu
 	}
 };
 
-export const movingFadeAbsolute = (frame: Frame, fadeIn: boolean, position: UDim2, blurEffect: boolean) => {
+export const movingFadeAbsolute = (
+	frame: Frame | ImageLabel,
+	fadeIn: boolean,
+	position: UDim2,
+	blurEffect: boolean,
+) => {
 	const state = debounces.get(frame);
 
 	if (!state) {

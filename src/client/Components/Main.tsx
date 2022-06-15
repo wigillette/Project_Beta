@@ -9,7 +9,7 @@ import DailyReward from "./DailyReward/DailyReward";
 import MatchPanel from "./MatchPanel/MatchPanel";
 import GoldContainer from "./Gold/GoldContainer";
 import BettingContainer from "./Betting/BettingContainer";
-import IntroScreen from "./IntroScreen";
+import NewIntro from "./Introduction/NewIntro";
 import MatchResults from "./Results/MatchResults";
 import VotingContainer from "./Voting/VotingContainer";
 import PlayerList from "./PlayerList/PlayerList";
@@ -25,7 +25,7 @@ import Ping from "./Ping";
 const Main = () => {
 	return (
 		<screengui ResetOnSpawn={false}>
-			<IntroScreen />
+			<NewIntro />
 			<Profile />
 			<Shop />
 			<Inventory />
