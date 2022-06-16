@@ -2,6 +2,7 @@ import { KnitServer as Knit, RemoteSignal } from "@rbxts/knit";
 import { Players, ReplicatedStorage, Workspace } from "@rbxts/services";
 import { InventoryService } from "./InventoryService";
 import MatchService from "./MatchService";
+import SnackbarService from "./SnackbarService";
 
 declare global {
 	interface KnitServices {
@@ -14,6 +15,7 @@ const PracticeArenaService = Knit.CreateService({
 	ArenaEnter: Workspace.WaitForChild("Location2", 10) as Part,
 	ArenaLeave: Workspace.WaitForChild("Location3", 10) as Part,
 	SwordGiver: Workspace.WaitForChild("PracticeArena", 10) as Part,
+	Debounces: new Map<Player, boolean>(),
 
 	SetUpEnterListener() {
 		this.ArenaEnter.Touched.Connect((hit) => {
@@ -22,14 +24,20 @@ const PracticeArenaService = Knit.CreateService({
 				const humanoid = character.FindFirstChildOfClass("Humanoid");
 				if (humanoid) {
 					const player = Players.GetPlayerFromCharacter(character);
-					if (player && player.TeamColor === new BrickColor("White")) {
+					if (player && player.TeamColor === new BrickColor("White") && !this.Debounces.get(player)) {
 						const isPlaying = MatchService.CanAccess(player)[0];
+						this.Debounces.set(player, true);
 						if (isPlaying === false) {
 							pcall(() => {
 								player.TeamColor = new BrickColor("Ghost grey");
 								player.LoadCharacter();
 							});
+						} else {
+							SnackbarService.PushPlayer(player, "Must have playing disabled");
 						}
+
+						wait(0.2);
+						this.Debounces.set(player, false);
 					}
 				}
 			}
@@ -42,14 +50,20 @@ const PracticeArenaService = Knit.CreateService({
 				const humanoid = character.FindFirstChildOfClass("Humanoid");
 				if (humanoid) {
 					const player = Players.GetPlayerFromCharacter(character);
-					if (player && player.TeamColor === new BrickColor("Ghost grey")) {
+					if (player && player.TeamColor === new BrickColor("Ghost grey") && !this.Debounces.get(player)) {
 						const isPlaying = MatchService.CanAccess(player)[0];
+						this.Debounces.set(player, true);
 						if (isPlaying === false) {
 							pcall(() => {
 								player.TeamColor = new BrickColor("White");
 								player.LoadCharacter();
 							});
+						} else {
+							SnackbarService.PushPlayer(player, "Must have playing disabled");
 						}
+
+						wait(0.2);
+						this.Debounces.set(player, false);
 					}
 				}
 			}

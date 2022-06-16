@@ -37,12 +37,19 @@ export const SettingsService = Knit.CreateService({
 			}
 
 			// Update the UI and change the map, update database
-			this.PlayerSettings.set(Player, userSettings);
-			this.Client.SettingsChanged.Fire(Player, userSettings);
-			this.UpdateSettings(Player, userSettings);
+			if (Setting !== "Playing") {
+				this.PlayerSettings.set(Player, userSettings);
+				this.Client.SettingsChanged.Fire(Player, userSettings);
+				this.UpdateSettings(Player, userSettings);
 
-			// Push a notification
-			SnackbarService.PushPlayer(Player, `${Value ? "Enabled" : "Disabled"} ${Setting}`);
+				// Push a notification
+				SnackbarService.PushPlayer(Player, `${Value ? "Enabled" : "Disabled"} ${Setting}`);
+			} else if (Player.TeamColor === new BrickColor("White")) {
+				this.PlayerSettings.set(Player, userSettings);
+				this.Client.SettingsChanged.Fire(Player, userSettings);
+				this.UpdateSettings(Player, userSettings);
+				SnackbarService.PushPlayer(Player, `${Value ? "Enabled" : "Disabled"} ${Setting}`);
+			}
 		}
 	},
 

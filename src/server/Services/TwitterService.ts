@@ -31,6 +31,7 @@ export const TwitterService = Knit.CreateService({
 				const response = TwitterCodes[Code.lower() as keyof typeof TwitterCodes](Player);
 				// Update the database with the redeemed codes
 				redeemedCodes.push(Code.lower());
+				this.PlayerCodes.set(Player, redeemedCodes);
 				this.UpdateCodes(Player, redeemedCodes);
 				// Send a notification to the client that the code was successfully redeemed
 				SnackbarService.PushPlayer(Player, response);

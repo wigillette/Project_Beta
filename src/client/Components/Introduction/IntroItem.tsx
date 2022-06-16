@@ -27,7 +27,6 @@ class IntroItem extends Roact.Component<UIProps> {
 				Size={new UDim2(0.1, 0, 1, 36)}
 				Position={new UDim2(0, 0, 0, -36)}
 				AnchorPoint={new Vector2(0, 0)}
-				BackgroundColor3={darkMaterial.outerBG}
 				BackgroundTransparency={1}
 				ZIndex={12}
 			>

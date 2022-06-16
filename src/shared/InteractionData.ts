@@ -43,13 +43,14 @@ export const NPCInteractions = [
 	},
 	{
 		Name: "Assistant Sophia",
-		Message: "Crafting is currently unavailable. Our development team is working as efficiently as possible!",
+		Message: "I cannot wait until I reach level 10 and am able to craft! I have so many different swords!",
 		Model: interactionsFolder.WaitForChild("Crafting") as Model,
 		Animation: "rbxassetid://9606255387",
 	},
 	{
 		Name: "Assistant Jack",
-		Message: "Sorry bud, trading is not available at this time! It is rumored to be released soon!",
+		Message:
+			"I have so many duplicates of swords that I need to give away. Hopefully, I will reach level 15 in a few more matches!",
 		Model: interactionsFolder.WaitForChild("Trading2") as Model,
 		Animation: "rbxassetid://9606255387",
 	},

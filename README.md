@@ -212,6 +212,8 @@
 - [x] Daily Reward Chest Animation
 - [x] Revamp Intro
 - [x] Move tweens to didUpdate 
+- [x] Twitter Codes not saving
+- [ ] Fix playing setting with being outside of lobby
 
 > Future Updates
 - [ ] Guilds
