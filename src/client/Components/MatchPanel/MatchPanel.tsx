@@ -34,8 +34,8 @@ class MatchPanel extends Roact.Component<UIProps, UIState> {
 		return (
 			<frame
 				{...RectContainer}
-				Position={new UDim2(0.5, 0, 0, 0)}
-				AnchorPoint={new Vector2(0.5, 0)}
+				Position={new UDim2(0.5, 0, 0.025, 0)}
+				AnchorPoint={new Vector2(0.5, 0.025)}
 				Size={new UDim2(0.2, 0, 0.2, 0)}
 				ZIndex={-2}
 			>

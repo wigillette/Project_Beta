@@ -33,9 +33,9 @@ class IntroItem extends Roact.Component<UIProps> {
 				<imagelabel
 					{...CircBG}
 					Ref={this.upperRef}
-					Position={new UDim2(0.5, 0, 0.5, 0)}
-					AnchorPoint={new Vector2(0.5, 0.5)}
-					Size={new UDim2(1, 0, 0.75, 0)}
+					Position={new UDim2(0.5, 0, 0, 0)}
+					AnchorPoint={new Vector2(0.5, 0)}
+					Size={new UDim2(1, 0, 1.75, 0)}
 					ImageColor3={googleMaterial.buttonColor}
 					Key={"Upper"}
 					ZIndex={13}
@@ -45,12 +45,12 @@ class IntroItem extends Roact.Component<UIProps> {
 				<imagelabel
 					{...CircBG}
 					Ref={this.lowerRef}
-					Position={new UDim2(0.5, 0, 0.3, 0)}
-					AnchorPoint={new Vector2(0.5, 0.3)}
+					Position={new UDim2(0.5, 0, 1, 0)}
+					AnchorPoint={new Vector2(0.5, 1)}
 					Size={new UDim2(1, 0, 1, 0)}
 					ImageColor3={Color3.fromRGB(122, 214, 240)}
 					Key={"Bottom"}
-					ZIndex={12}
+					ZIndex={14}
 				>
 					<uigradient {...gradientProperties}></uigradient>
 				</imagelabel>
@@ -67,7 +67,7 @@ class IntroItem extends Roact.Component<UIProps> {
 			for (let i = 0; i < 25; i++) {
 				if (upperFrame && lowerFrame) {
 					pcall(() => {
-						randY = math.random() * 0.2 + 0.1;
+						randY = math.random() * 0.3 - 0.75;
 						upperFrame.TweenPosition(
 							new UDim2(
 								upperFrame.Position.X.Scale,
@@ -85,7 +85,7 @@ class IntroItem extends Roact.Component<UIProps> {
 							new UDim2(
 								lowerFrame.Position.X.Scale,
 								lowerFrame.Position.X.Offset,
-								0.7 - randY,
+								0.8 - randY,
 								lowerFrame.Position.Y.Offset,
 							),
 							Enum.EasingDirection.Out,

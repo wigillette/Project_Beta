@@ -1,4 +1,3 @@
-import Roact from "@rbxts/roact";
 import { TweenService, Workspace } from "@rbxts/services";
 
 const debounces = new Map<Instance, boolean>();
@@ -106,7 +105,6 @@ export const tweenTransparency = (frame: Frame | ImageLabel, recurse: boolean, f
 			BackgroundTransparency: transparency,
 		}).Play();
 	} else if (!fadeIn && frame.IsA("ImageLabel")) {
-		print("HERE");
 		TweenService.Create(frame, new TweenInfo(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0), {
 			ImageTransparency: transparency,
 		}).Play();

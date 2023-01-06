@@ -21,6 +21,7 @@ import CraftingContainer from "./Crafting/CraftingContainer";
 import RequestsContainer from "./Trading/RequestsContainer";
 import TradeContainer from "./Trading/TradeContainer";
 import Ping from "./Ping";
+import TopBar from "./TopBar";
 
 const Main = () => {
 	return (
@@ -47,6 +48,7 @@ const Main = () => {
 			<RequestsContainer />
 			<TradeContainer />
 			<Ping />
+			<TopBar />
 		</screengui>
 	);
 };

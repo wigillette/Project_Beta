@@ -81,7 +81,7 @@ class Profile extends Roact.Component<UIProps> {
 					</imagelabel>
 					<imagelabel {...RectShadow} ImageColor3={googleMaterial.outerShadow}></imagelabel>
 				</frame>
-				<MenuButtons />
+				{/* <MenuButtons /> */}
 			</frame>
 		);
 	}
