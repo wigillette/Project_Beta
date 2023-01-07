@@ -29,8 +29,8 @@ class PlayerList extends Roact.Component<UIProps> {
 		return (
 			<frame
 				{...RectContainer}
-				Position={new UDim2(0.975, 0, 0.025, 0)}
-				AnchorPoint={new Vector2(0.95, 0.05)}
+				Position={new UDim2(0.98, 0, 0.025, 0)}
+				AnchorPoint={new Vector2(0.98, 0.05)}
 				Size={new UDim2(0.15, 0, 0.3, 0)}
 			>
 				<uiaspectratioconstraint

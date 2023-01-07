@@ -39,11 +39,11 @@ class RectProgress extends Roact.Component<UIProps> {
 				AnchorPoint={this.props.AnchorPoint}
 				ZIndex={6}
 			>
-				<uiaspectratioconstraint
+				{/* <uiaspectratioconstraint
 					AspectRatio={8}
 					DominantAxis={Enum.DominantAxis.Width}
 					AspectType={Enum.AspectType.ScaleWithParentSize}
-				></uiaspectratioconstraint>
+				></uiaspectratioconstraint> */}
 
 				<imagelabel ImageColor3={googleMaterial.cardBG} {...CircBG} ZIndex={7}>
 					<uigradient {...gradientProperties}></uigradient>

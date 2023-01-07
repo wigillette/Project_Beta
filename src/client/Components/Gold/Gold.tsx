@@ -9,6 +9,8 @@ import { goldState } from "../../Rodux/Reducers/GoldReducer";
 interface UIProps {
 	Gold: number;
 	onToggle: () => void;
+	position: UDim2;
+	size: UDim2;
 }
 
 class Gold extends Roact.Component<UIProps> {
@@ -27,15 +29,15 @@ class Gold extends Roact.Component<UIProps> {
 	render() {
 		return (
 			<frame
-				Size={new UDim2(0.125, 0, 0.125, 0)}
-				AnchorPoint={new Vector2(0.025, 0.975)}
-				Position={new UDim2(0.025, 0, 0.975, 0)}
+				Size={this.props.size}
+				AnchorPoint={new Vector2(this.props.position.X.Scale, this.props.position.Y.Scale)}
+				Position={this.props.position}
 				Ref={this.containerRef}
 				{...CircContainer}
 			>
 				<uiaspectratioconstraint
 					AspectRatio={5}
-					DominantAxis={Enum.DominantAxis.Width}
+					DominantAxis={Enum.DominantAxis.Height}
 					AspectType={Enum.AspectType.ScaleWithParentSize}
 				></uiaspectratioconstraint>
 				<imagelabel ImageColor3={googleMaterial.outerBG} {...CircBG}>

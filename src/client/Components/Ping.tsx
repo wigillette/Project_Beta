@@ -6,6 +6,8 @@ import hoverNotification from "./HoverNotification";
 
 interface UIProps {
 	ping: number;
+	position: UDim2;
+	size: UDim2;
 }
 
 class Ping extends Roact.Component<UIProps> {
@@ -21,9 +23,9 @@ class Ping extends Roact.Component<UIProps> {
 		return (
 			<frame
 				{...RectContainer}
-				Size={new UDim2(0.025, 0, 0.075, 0)}
-				Position={new UDim2(0.975, 0, 0.9, 0)}
-				AnchorPoint={new Vector2(0.975, 0.9)}
+				Size={this.props.size}
+				Position={this.props.position}
+				AnchorPoint={new Vector2(this.props.position.X.Scale, this.props.position.Y.Scale)}
 				Ref={this.frameRef}
 			>
 				<imagelabel

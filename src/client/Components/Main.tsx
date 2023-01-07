@@ -22,6 +22,7 @@ import RequestsContainer from "./Trading/RequestsContainer";
 import TradeContainer from "./Trading/TradeContainer";
 import Ping from "./Ping";
 import TopBar from "./TopBar";
+import LobbyMenus from "./LobbyMenus";
 
 const Main = () => {
 	return (
@@ -38,17 +39,14 @@ const Main = () => {
 			<MatchResults />
 			<VotingContainer />
 			<PlayerList />
-			<Gold />
 			<GoldContainer />
-			<SpectateButton />
 			<SpectateContainer />
-			<ArenaTickets />
 			<VIPShop />
 			<CraftingContainer />
 			<RequestsContainer />
 			<TradeContainer />
-			<Ping />
 			<TopBar />
+			<LobbyMenus />
 		</screengui>
 	);
 };

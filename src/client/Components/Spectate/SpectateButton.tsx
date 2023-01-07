@@ -6,13 +6,13 @@ import { RectContainer, SquareAspectRatio } from "client/UIProperties/RectUI";
 import SquareButton from "../Material/SquareButton";
 interface UIProps {
 	toggleSpectate: () => void;
+	size: UDim2;
+	position: UDim2;
 }
-
-interface UIState {}
 
 const matchService = KnitClient.GetService("MatchService");
 
-class SpectateButton extends Roact.Component<UIProps, UIState> {
+class SpectateButton extends Roact.Component<UIProps> {
 	constructor(props: UIProps) {
 		super(props);
 	}
@@ -21,11 +21,14 @@ class SpectateButton extends Roact.Component<UIProps, UIState> {
 		return (
 			<frame
 				{...RectContainer}
-				Size={new UDim2(0.025, 0, 0.075, 0)}
-				Position={new UDim2(0.16, 0, 0.975, 0)}
-				AnchorPoint={new Vector2(0.175, 0.975)}
+				Size={this.props.size}
+				Position={this.props.position}
+				AnchorPoint={new Vector2(this.props.position.X.Scale, this.props.position.Y.Scale)}
 			>
-				<uiaspectratioconstraint {...SquareAspectRatio}></uiaspectratioconstraint>
+				<uiaspectratioconstraint
+					{...SquareAspectRatio}
+					DominantAxis={Enum.DominantAxis.Height}
+				></uiaspectratioconstraint>
 				<SquareButton
 					Position={new UDim2(0.5, 0, 0.5, 0)}
 					AnchorPoint={new Vector2(0.5, 0.5)}

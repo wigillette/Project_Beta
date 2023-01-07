@@ -23,64 +23,56 @@ class Profile extends Roact.Component<UIProps> {
 		return (
 			<frame
 				{...RectContainer}
-				Position={new UDim2(0.03, 0, 0.85, 0)}
-				Size={new UDim2(0.175, 0, 0.25, 0)}
-				AnchorPoint={new Vector2(0.03, 0.85)}
+				Position={new UDim2(0.98, 0, 0.98, 0)}
+				Size={new UDim2(0.075, 0, 0.15, 0)}
+				AnchorPoint={new Vector2(0.98, 0.98)}
 			>
 				<uiaspectratioconstraint {...SquareAspectRatio}></uiaspectratioconstraint>
-				<frame
-					{...RectContainer}
-					Size={new UDim2(0.475, 0, 1, 0)}
-					Position={new UDim2(0, 0, 1, 0)}
-					AnchorPoint={new Vector2(0, 1)}
-				>
-					<uiaspectratioconstraint {...SquareAspectRatio}></uiaspectratioconstraint>
-					<imagelabel {...RectBG} ImageColor3={googleMaterial.outerBG}>
+				<imagelabel {...RectBG} ImageColor3={googleMaterial.outerBG}>
+					<uigradient {...whiteGradientProperties}></uigradient>
+					<DynamicViewport
+						Model={undefined}
+						Position={new UDim2(0.5, 0, 0.5, 0)}
+						AnchorPoint={new Vector2(0.5, 0.5)}
+						Size={new UDim2(0.9, 0, 0.9, 0)}
+						rotate={false}
+						Animation={undefined}
+						ZIndex={5}
+					></DynamicViewport>
+					<RectProgress
+						Icon={"rbxassetid://5371573492"}
+						IconColor={Color3.fromRGB(69, 204, 224)}
+						Size={new UDim2(0.85, 0, 0.2, 0)}
+						Position={new UDim2(1, 0, 1, 0)}
+						AnchorPoint={new Vector2(1, 1)}
+						percentage={this.props.Experience}
+						cap={this.props.ExpCap}
+						Color={googleMaterial.buttonColor}
+						SeparatorColor={Color3.fromRGB(20, 107, 140)}
+					></RectProgress>
+					<imagelabel
+						{...RectBG}
+						ZIndex={10}
+						Position={new UDim2(0, 0, 1, 0)}
+						Size={new UDim2(0.25, 0, 1, 0)}
+						AnchorPoint={new Vector2(0, 1)}
+						ImageColor3={googleMaterial.innerBG}
+					>
+						<uiaspectratioconstraint {...SquareAspectRatio}></uiaspectratioconstraint>
 						<uigradient {...whiteGradientProperties}></uigradient>
-						<DynamicViewport
-							Model={undefined}
+						<textlabel
+							{...RectText}
+							Font={"GothamBold"}
 							Position={new UDim2(0.5, 0, 0.5, 0)}
 							AnchorPoint={new Vector2(0.5, 0.5)}
 							Size={new UDim2(0.9, 0, 0.9, 0)}
-							rotate={false}
-							Animation={undefined}
-							ZIndex={5}
-						></DynamicViewport>
-						<RectProgress
-							Icon={"rbxassetid://5371573492"}
-							IconColor={Color3.fromRGB(69, 204, 224)}
-							Size={new UDim2(0.85, 0, 0.3, 0)}
-							Position={new UDim2(1, 0, 1, 0)}
-							AnchorPoint={new Vector2(1, 1)}
-							percentage={this.props.Experience}
-							cap={this.props.ExpCap}
-							Color={googleMaterial.buttonColor}
-							SeparatorColor={Color3.fromRGB(20, 107, 140)}
-						></RectProgress>
-						<imagelabel
-							{...RectBG}
-							ZIndex={10}
-							Position={new UDim2(0, 0, 1, 0)}
-							Size={new UDim2(0.25, 0, 1, 0)}
-							AnchorPoint={new Vector2(0, 1)}
-							ImageColor3={googleMaterial.innerBG}
-						>
-							<uiaspectratioconstraint {...SquareAspectRatio}></uiaspectratioconstraint>
-							<uigradient {...whiteGradientProperties}></uigradient>
-							<textlabel
-								{...RectText}
-								Font={"GothamBold"}
-								Position={new UDim2(0.5, 0, 0.5, 0)}
-								AnchorPoint={new Vector2(0.5, 0.5)}
-								Size={new UDim2(0.9, 0, 0.9, 0)}
-								TextColor3={googleMaterial.cardFont}
-								Text={tostring(this.props.Level)}
-								ZIndex={11}
-							></textlabel>
-						</imagelabel>
+							TextColor3={googleMaterial.cardFont}
+							Text={tostring(this.props.Level)}
+							ZIndex={11}
+						></textlabel>
 					</imagelabel>
-					<imagelabel {...RectShadow} ImageColor3={googleMaterial.outerShadow}></imagelabel>
-				</frame>
+				</imagelabel>
+				<imagelabel {...RectShadow} ImageColor3={googleMaterial.outerShadow}></imagelabel>
 				{/* <MenuButtons /> */}
 			</frame>
 		);

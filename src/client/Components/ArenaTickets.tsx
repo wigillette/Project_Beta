@@ -8,6 +8,8 @@ import { playSound, tweenColor } from "client/UIProperties/ButtonEffects";
 import HoverNotification from "./HoverNotification";
 interface UIProps {
 	TicketAmount: number;
+	size: UDim2;
+	position: UDim2;
 }
 
 class TicketContainer extends Roact.Component<UIProps> {
@@ -22,14 +24,14 @@ class TicketContainer extends Roact.Component<UIProps> {
 	render() {
 		return (
 			<frame
-				Size={new UDim2(0.075, 0, 0.2, 0)}
-				AnchorPoint={new Vector2(0.975, 0.975)}
-				Position={new UDim2(0.975, 0, 0.975, 0)}
+				Size={this.props.size}
+				AnchorPoint={new Vector2(this.props.position.X.Scale, this.props.position.Y.Scale)}
+				Position={this.props.position}
 				{...CircContainer}
 			>
 				<uiaspectratioconstraint
-					AspectRatio={3}
-					DominantAxis={"Width"}
+					AspectRatio={2.5}
+					DominantAxis={"Height"}
 					AspectType={"ScaleWithParentSize"}
 				></uiaspectratioconstraint>
 				<imagelabel ImageColor3={googleMaterial.outerBG} {...CircBG}>

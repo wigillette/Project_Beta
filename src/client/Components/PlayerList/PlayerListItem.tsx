@@ -37,10 +37,10 @@ class PlayerListItem extends Roact.Component<UIProps, UIState> {
 
 	render() {
 		return (
-			<frame {...RectContainer} Size={new UDim2(0.9, 0, 0.095, 0)} ZIndex={-1} Ref={this.playerFrameRef}>
+			<frame {...RectContainer} Size={new UDim2(1, 0, 0.095, 0)} ZIndex={-1} Ref={this.playerFrameRef}>
 				<uiaspectratioconstraint
 					AspectType={Enum.AspectType.ScaleWithParentSize}
-					AspectRatio={6}
+					AspectRatio={7}
 					DominantAxis={Enum.DominantAxis.Width}
 				></uiaspectratioconstraint>
 				<imagelabel {...RectBG} ImageColor3={googleMaterial.outerBG}>
@@ -91,15 +91,15 @@ class PlayerListItem extends Roact.Component<UIProps, UIState> {
 
 	protected didMount(): void {
 		const playerFrame = this.playerFrameRef.getValue();
-		if (playerFrame) {
-			coroutine.wrap(() => {
-				playerFrame.Visible = false;
-				tweenTransparency(playerFrame, true, false);
-				wait(0.35);
-				playerFrame.Visible = true;
-				tweenTransparency(playerFrame, true, true);
-			})();
-		}
+		// if (playerFrame) {
+		// 	spawn(() => {
+		// 		playerFrame.Visible = false;
+		// 		tweenTransparency(playerFrame, true, false);
+		// 		wait(0.35);
+		// 		playerFrame.Visible = true;
+		// 		// tweenTransparency(playerFrame, true, true);
+		// 	});
+		// }
 
 		if (this.props.player) {
 			this.props.player.GetPropertyChangedSignal("TeamColor").Connect(() => {

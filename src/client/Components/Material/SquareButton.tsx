@@ -72,6 +72,7 @@ class SquareButton extends Roact.Component<UIProps, UIState> {
 						MouseEnter: (rbx) => {
 							playSound("Hover");
 							tweenColor(rbx, this.props.HoverColor);
+							/*
 							const frame = this.frameRef.getValue();
 							if (frame) {
 								tweenRotation(frame, true);
@@ -81,9 +82,11 @@ class SquareButton extends Roact.Component<UIProps, UIState> {
 								});
 								this.hoverNotificationTree = Roact.mount(hoverElement, frame);
 							}
+							*/
 						},
 						MouseLeave: (rbx) => {
 							tweenColor(rbx, this.props.ButtonColor);
+							/*
 							const frame = this.frameRef.getValue();
 							if (frame) {
 								tweenRotation(frame, false);
@@ -92,6 +95,7 @@ class SquareButton extends Roact.Component<UIProps, UIState> {
 									this.hoverNotificationTree = undefined;
 								}
 							}
+							*/
 						},
 					}}
 				>
