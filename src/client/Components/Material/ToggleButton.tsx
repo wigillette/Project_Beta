@@ -25,16 +25,11 @@ class ToggleButton extends Roact.Component<UIProps, UIState> {
 	frameRef;
 	shadowRef;
 
-	state = {
-		toggle: true,
-	};
-
 	constructor(props: UIProps) {
 		super(props);
 		this.buttonFrameRef = Roact.createRef<Frame>();
 		this.frameRef = Roact.createRef<Frame>();
 		this.shadowRef = Roact.createRef<ImageLabel>();
-		this.state.toggle = !this.props.initialToggle;
 	}
 
 	getButtonSize() {
@@ -83,7 +78,7 @@ class ToggleButton extends Roact.Component<UIProps, UIState> {
 						<frame
 							Size={new UDim2(1, 0, 1, 0)}
 							Position={
-								(!this.state.toggle && new UDim2(1, this.getButtonSize(), 0, 0)) ||
+								(this.props.initialToggle && new UDim2(1, this.getButtonSize(), 0, 0)) ||
 								new UDim2(0, 0, 0, 0)
 							}
 							{...CircContainer}
@@ -115,15 +110,14 @@ class ToggleButton extends Roact.Component<UIProps, UIState> {
 
 											if (buttonFrame && shadow) {
 												const finalPos =
-													(this.state.toggle &&
+													(!this.props.initialToggle &&
 														new UDim2(1, -buttonFrame.AbsoluteSize.X, 0, 0)) ||
 													new UDim2(0, 0, 0, 0);
 												rippleEffect(buttonFrame, mouse);
 												tweenPosAbsolute(buttonFrame, finalPos);
-												tweenTransparencyAbsolute(shadow, this.state.toggle);
+												tweenTransparencyAbsolute(shadow, !this.props.initialToggle);
 											}
-											this.setState({ toggle: !this.state.toggle });
-											this.props.onClick(!this.state.toggle);
+											this.props.onClick(!this.props.initialToggle);
 										},
 									}}
 								>
@@ -141,7 +135,7 @@ class ToggleButton extends Roact.Component<UIProps, UIState> {
 							{...CircBG}
 							ZIndex={2}
 							Size={new UDim2(0.9, 0, 0.9, 0)}
-							ImageTransparency={(this.state.toggle && 1) || 0}
+							ImageTransparency={this.props.initialToggle ? 0 : 1}
 							Ref={this.shadowRef}
 							Key={"ToggleShadow"}
 						>

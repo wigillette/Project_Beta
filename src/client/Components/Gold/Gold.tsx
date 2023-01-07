@@ -35,11 +35,11 @@ class Gold extends Roact.Component<UIProps> {
 				Ref={this.containerRef}
 				{...CircContainer}
 			>
-				<uiaspectratioconstraint
+				{/* <uiaspectratioconstraint
 					AspectRatio={5}
 					DominantAxis={Enum.DominantAxis.Height}
 					AspectType={Enum.AspectType.ScaleWithParentSize}
-				></uiaspectratioconstraint>
+				></uiaspectratioconstraint> */}
 				<imagelabel ImageColor3={googleMaterial.outerBG} {...CircBG}>
 					<uigradient {...whiteGradientProperties}></uigradient>
 					<frame

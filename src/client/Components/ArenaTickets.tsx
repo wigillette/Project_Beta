@@ -29,11 +29,11 @@ class TicketContainer extends Roact.Component<UIProps> {
 				Position={this.props.position}
 				{...CircContainer}
 			>
-				<uiaspectratioconstraint
+				{/* <uiaspectratioconstraint
 					AspectRatio={2.5}
 					DominantAxis={"Height"}
 					AspectType={"ScaleWithParentSize"}
-				></uiaspectratioconstraint>
+				></uiaspectratioconstraint> */}
 				<imagelabel ImageColor3={googleMaterial.outerBG} {...CircBG}>
 					<frame
 						{...RectContainer}

@@ -25,7 +25,7 @@ export const popText = (label: TextLabel, currentText: string, newText: string, 
 	})();
 };
 
-export const tweenColor = (button: ImageButton, newColor: Color3) => {
+export const tweenColor = (button: ImageButton | ImageLabel, newColor: Color3) => {
 	TweenService.Create(button, new TweenInfo(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0), {
 		ImageColor3: newColor,
 	}).Play();

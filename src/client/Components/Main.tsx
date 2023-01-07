@@ -28,7 +28,6 @@ const Main = () => {
 	return (
 		<screengui ResetOnSpawn={false}>
 			<NewIntro />
-			<Profile />
 			<Shop />
 			<Inventory />
 			<Twitter />
@@ -38,7 +37,7 @@ const Main = () => {
 			<BettingContainer />
 			<MatchResults />
 			<VotingContainer />
-			<PlayerList />
+			{/* <PlayerList /> */}
 			<GoldContainer />
 			<SpectateContainer />
 			<VIPShop />
