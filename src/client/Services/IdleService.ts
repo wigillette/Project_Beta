@@ -4,6 +4,9 @@ import store from "client/Rodux/Store";
 const IdleService = KnitClient.GetService("IdleService");
 
 const IdleClient = {
+	loadPlayer: () => {
+		IdleService.LoadPlayer();
+	},
 	init: () => {
 		UserInputService.WindowFocused.Connect(() => {
 			if (Players.LocalPlayer.IsInGroup(5255599)) {

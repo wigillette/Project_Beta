@@ -34,8 +34,11 @@ import LobbyAnimationsClient from "./Services/LobbyAnimations";
 import TradingClient from "./Services/TradingService";
 import CraftingClient from "./Services/CraftingService";
 import IdleClient from "./Services/IdleService";
+import OldIntro from "./Components/Introduction/OldIntro";
 
 const playerGui = Players.LocalPlayer.WaitForChild("PlayerGui") as PlayerGui;
+
+const intro = Roact.createElement(OldIntro);
 
 const app = Roact.createElement(
 	RoactRodux.StoreProvider,
@@ -225,3 +228,8 @@ TicketService.init();
 TradingClient.init();
 CraftingClient.init();
 IdleClient.init();
+
+// spawn(() => {
+// 	wait(0.5);
+Roact.mount(intro, playerGui, "Intro");
+// });

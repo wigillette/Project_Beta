@@ -100,7 +100,7 @@ export const tweenTransparency = (frame: Frame | ImageLabel, recurse: boolean, f
 			).Play();
 		}
 		tweenTransparencyRecurse(children, recurse, transparency);
-	} else if (fadeIn && frame.IsA("Frame")) {
+	} else if (frame.IsA("Frame")) {
 		TweenService.Create(frame, new TweenInfo(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0), {
 			BackgroundTransparency: transparency,
 		}).Play();

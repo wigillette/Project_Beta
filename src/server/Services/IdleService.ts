@@ -17,6 +17,13 @@ const IdleService = Knit.CreateService({
 		UpdatePing() {
 			return this.Server.UpdatePing();
 		},
+		LoadPlayer(client: Player) {
+			this.Server.LoadPlayer(client);
+		},
+	},
+
+	LoadPlayer(client: Player) {
+		client.TeamColor = new BrickColor("White");
 	},
 
 	UpdateState(player: Player, material: Enum.Material) {

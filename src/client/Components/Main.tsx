@@ -23,11 +23,13 @@ import TradeContainer from "./Trading/TradeContainer";
 import Ping from "./Ping";
 import TopBar from "./TopBar";
 import LobbyMenus from "./LobbyMenus";
+import OldIntro from "./Introduction/OldIntro";
 
 const Main = () => {
 	return (
 		<screengui ResetOnSpawn={false}>
-			<NewIntro />
+			{/* <NewIntro /> */}
+			{/* <OldIntro /> */}
 			<Shop />
 			<Inventory />
 			<Twitter />
