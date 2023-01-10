@@ -376,7 +376,7 @@ const MatchService = Knit.CreateService({
 	GetParticipants() {
 		const participantList = [] as Player[];
 		ObjectUtils.entries(this.Participants).forEach((participant) => {
-			if (participant[1]) {
+			if (participant[1] && participant[0] && participant[0].TeamColor !== new BrickColor("Pastel yellow")) {
 				participantList.push(participant[0]);
 			}
 		});
@@ -507,7 +507,10 @@ const MatchService = Knit.CreateService({
 				wait(0.5);
 				if (player.Team && player.Team.Name !== "Ghosts") {
 					this.AddSword(player);
-					if (player.TeamColor !== new BrickColor("White")) {
+					if (
+						player.TeamColor !== new BrickColor("White") &&
+						player.TeamColor !== new BrickColor("Pastel yellow")
+					) {
 						this.AddHealthBar(char);
 					}
 				}

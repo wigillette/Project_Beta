@@ -1,21 +1,21 @@
-export const INITIAL_CAMERA = new CFrame(-36.7, 34.764, 13.1);
+export const INITIAL_CAMERA = new CFrame(235.237, 75.531, -295.77);
 
 export const INTRO_CAMERAS = [
 	[
-		new CFrame(36.506, 76.048, 4.292),
-		new CFrame(36.506, 45.248, 26.792).mul(CFrame.Angles(math.rad(10), math.rad(5), math.rad(20))),
+		new CFrame(271.044, 82.454, -261.07),
+		new CFrame(260.106, 74.148, -221).mul(CFrame.Angles(math.rad(15), math.rad(5), math.rad(15))),
 	],
 	[
-		new CFrame(11.706, 71.248, 33.092),
-		new CFrame(0.106, 63.148, 74.592).mul(CFrame.Angles(math.rad(15), math.rad(5), math.rad(15))),
+		new CFrame(-311.863, 122.87, -262.671),
+		new CFrame(-394.844, 110.381, -163.485).mul(CFrame.Angles(math.rad(10), math.rad(5), math.rad(20))),
 	],
 	[
-		new CFrame(64.306, 59.848, 80.792),
-		new CFrame(4.506, 69.648, 98.392).mul(CFrame.Angles(math.rad(25), math.rad(20), math.rad(5))),
+		new CFrame(229.929, 104.687, -271.752),
+		new CFrame(192.798, 98.784, -233.283).mul(CFrame.Angles(math.rad(25), math.rad(20), math.rad(5))),
 	],
 	[
-		new CFrame(100.605, 49.048, 47.092),
-		new CFrame(76.205, 45.048, 94.692).mul(CFrame.Angles(math.rad(5), math.rad(25), math.rad(15))),
+		new CFrame(226.655, 83.181, -314.836),
+		new CFrame(232.813, 77.396, -236.424).mul(CFrame.Angles(math.rad(5), math.rad(25), math.rad(15))),
 	],
 ];
 

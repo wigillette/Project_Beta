@@ -2,14 +2,7 @@ import Roact from "@rbxts/roact";
 import { Workspace, Players, TweenService } from "@rbxts/services";
 import IdleClient from "client/Services/IdleService";
 import { darkMaterial } from "client/UIProperties/ColorSchemes";
-import {
-	tweenPosAbsolute,
-	tweenTransparency,
-	tweenRotation,
-	tweenTransparencyAbsolute,
-	movingFadeAbsolute,
-	movingFade,
-} from "client/UIProperties/FrameEffects";
+import { tweenTransparency } from "client/UIProperties/FrameEffects";
 import { RectContainer, RectText, SquareAspectRatio } from "client/UIProperties/RectUI";
 import { INTRO_CAMERAS, INITIAL_CAMERA, TRANSITION_INFO, BLACKOUT_INFO } from "shared/IntroCameraData";
 import RectButton from "../Material/RectButton";
@@ -21,7 +14,8 @@ interface UIState {
 
 class Intro extends Roact.Component<UIProps, UIState> {
 	blackoutRef;
-	containerRef;
+	guiRef;
+	buttonContainer;
 
 	state = {
 		isLoading: true,
@@ -30,18 +24,18 @@ class Intro extends Roact.Component<UIProps, UIState> {
 	constructor(props: UIProps) {
 		super(props);
 		this.blackoutRef = Roact.createRef<Frame>();
-		this.containerRef = Roact.createRef<Frame>();
+		this.guiRef = Roact.createRef<ScreenGui>();
+		this.buttonContainer = Roact.createRef<Frame>();
 	}
 
 	render() {
 		return (
-			<screengui ResetOnSpawn={false}>
+			<screengui ResetOnSpawn={false} Ref={this.guiRef}>
 				<frame
 					{...RectContainer}
 					Size={new UDim2(1, 36, 1, 36)}
 					Position={new UDim2(0.5, 0, 0, -36)}
 					AnchorPoint={new Vector2(0.5, 0)}
-					Ref={this.containerRef}
 					BackgroundColor3={darkMaterial.outerBG}
 					BackgroundTransparency={1}
 					ZIndex={12}
@@ -60,6 +54,7 @@ class Intro extends Roact.Component<UIProps, UIState> {
 						Size={new UDim2(0.4, 0, 0.4, 0)}
 						Position={new UDim2(0.5, 0, 0.5, 0)}
 						AnchorPoint={new Vector2(0.5, 0.5)}
+						Ref={this.buttonContainer}
 					>
 						<uiaspectratioconstraint
 							AspectRatio={1.5}
@@ -113,8 +108,9 @@ class Intro extends Roact.Component<UIProps, UIState> {
 		const playerGui = client.WaitForChild("PlayerGui");
 		const Main = playerGui.WaitForChild("Main");
 		const camera = Workspace.CurrentCamera;
-		const introFrame = this.containerRef.getValue() as Frame;
+		const container = this.guiRef.getValue() as ScreenGui;
 		const blackoutFrame = this.blackoutRef.getValue() as Frame;
+		const buttonContainer = this.buttonContainer.getValue() as Frame;
 		let visibleMenus: Frame[] = [];
 		if (camera) {
 			spawn(() => {
@@ -131,8 +127,12 @@ class Intro extends Roact.Component<UIProps, UIState> {
 
 				while (this.state.isLoading) {
 					camera.CFrame = INTRO_CAMERAS[i][0];
-					TweenService.Create(camera, TRANSITION_INFO, { CFrame: INTRO_CAMERAS[i][1] }).Play();
-					wait(6);
+					const transformation = TweenService.Create(camera, TRANSITION_INFO, {
+						CFrame: INTRO_CAMERAS[i][1],
+					});
+					transformation.Play();
+
+					transformation.Completed.Wait();
 					tweenTransparency(blackoutFrame, false, true);
 					wait(0.5);
 					tweenTransparency(blackoutFrame, false, false);
@@ -140,11 +140,12 @@ class Intro extends Roact.Component<UIProps, UIState> {
 				}
 
 				TweenService.Create(blur, BLACKOUT_INFO, { Size: 0 }).Play();
+				tweenTransparency(buttonContainer, true, false);
 				wait(1);
 				blur.Destroy();
 				visibleMenus.forEach((menu) => (menu.Visible = true));
 				camera.CameraType = Enum.CameraType.Custom;
-				introFrame.Visible = false;
+				container.Enabled = false;
 			});
 		}
 	}
